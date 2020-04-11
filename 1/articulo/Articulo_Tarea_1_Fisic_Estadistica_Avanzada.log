@@ -1,13 +1,13 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  9 APR 2020 17:52
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  11 APR 2020 11:49
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**/Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas/1/articulo/Articulo_Tarea_1_Fisic_Estadistica_Avanzada.tex
-(/Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas/1/articulo/Articulo_Tarea_1_Fisic_Estadistica_Avanzada.tex
+**/Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas_Fisica_Estadistica/1/articulo/Articulo_Tarea_1_Fisic_Estadistica_Avanzada.tex
+(/Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas_Fisica_Estadistica/1/articulo/Articulo_Tarea_1_Fisic_Estadistica_Avanzada.tex
 LaTeX2e <2018-04-01> patch level 2
 Babel <3.18> and hyphenation patterns for 84 language(s) loaded.
-(/Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas/1/articulo/revtex4-2.cls
+(/Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas_Fisica_Estadistica/1/articulo/revtex4-2.cls
 Document Class: revtex4-2 2018/12/26/16:06:17 4.2b (https://journals.aps.org/revtex/ for documentation)
  Copyright (c) 2019 American Physical Society.
  mailto:revtex@aps.org
@@ -63,13 +63,13 @@ Class revtex4-2 Info: Overriding \@vspace, \@vspacer, \@no@pgbk, \@newline, and 
 \widetext@top=\box39
 \widetext@bot=\box40
 Class revtex4-2 Info: Selecting society aps on input line 7581.
-(/Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas/1/articulo/aps4-2.rtx
+(/Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas_Fisica_Estadistica/1/articulo/aps4-2.rtx
 File: aps4-2 2018/12/26/16:06:17 4.2b (https://journals.aps.org/revtex/ for documentation)
 Class revtex4-2 Info: RevTeX society APS selected on input line 37.
 )
 Class revtex4-2 Info: Selecting journal pra on input line 7583.
 Class revtex4-2 Info: APS journal PRA selected on input line 7584.
- (/Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas/1/articulo/aps10pt4-2.rtx
+ (/Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas_Fisica_Estadistica/1/articulo/aps10pt4-2.rtx
 File: aps10pt4-2 2018/12/26/16:06:17 4.2b (https://journals.aps.org/revtex/ for documentation)
 Class revtex4-2 Info: RevTeX pointsize 10pt selected on input line 36.
 ) (/usr/local/texlive/2018/texmf-dist/tex/latex/textcase/textcase.sty
@@ -150,7 +150,7 @@ LaTeX Info: Redefining \cite on input line 694.
 \c@NAT@ctr=\count107
 )
 Class revtex4-2 Info: Repairing natbib's \BibitemShut on input line 7588.
- (/Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas/1/articulo/revsymb4-2.sty
+ (/Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas_Fisica_Estadistica/1/articulo/revsymb4-2.sty
 Package: revsymb4-2 2018/12/26/16:06:17 4.2b (https://journals.aps.org/revtex/ for documentation)
 LaTeX Info: Redefining \frak on input line 101.
 LaTeX Info: Redefining \Bbb on input line 117.
@@ -1417,7 +1417,7 @@ Package: catchfile 2016/05/16 v1.7 Catch the contents of a file (HO)
 )
 runsystem(uname -s > "Articulo_Tarea_1_Fisic_Estadistica_Avanzada.w18")...executed.
 
- (/Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas/1/articulo/Articulo_Tarea_1_Fisic_Estadistica_Avanzada.w18)
+ (/Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas_Fisica_Estadistica/1/articulo/Articulo_Tarea_1_Fisic_Estadistica_Avanzada.w18)
 runsystem(rm -- "Articulo_Tarea_1_Fisic_Estadistica_Avanzada.w18")...executed.
 
 ) (/usr/local/texlive/2018/texmf-dist/tex/generic/xstring/xstring.sty (/usr/local/texlive/2018/texmf-dist/tex/generic/xstring/xstring.tex
@@ -1586,7 +1586,7 @@ Class revtex4-2 Info: Robustifying \LaTeX's \boldmath command on input line 66.
 Class revtex4-2 Info: cite was not loaded (OK!) on input line 66.
 Class revtex4-2 Info: mcite was not loaded (OK!) on input line 66.
 Class revtex4-2 Info: multicol was not loaded (OK!) on input line 66.
-(/Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas/1/articulo/Articulo_Tarea_1_Fisic_Estadistica_Avanzada.aux)
+(/Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas_Fisica_Estadistica/1/articulo/Articulo_Tarea_1_Fisic_Estadistica_Avanzada.aux)
 \openout1 = `Articulo_Tarea_1_Fisic_Estadistica_Avanzada.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 66.
@@ -1642,7 +1642,7 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 66.
 LaTeX Info: Redefining \pageref on input line 66.
 LaTeX Info: Redefining \nameref on input line 66.
- (/Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas/1/articulo/Articulo_Tarea_1_Fisic_Estadistica_Avanzada.out) (/Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas/1/articulo/Articulo_Tarea_1_Fisic_Estadistica_Avanzada.out)
+ (/Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas_Fisica_Estadistica/1/articulo/Articulo_Tarea_1_Fisic_Estadistica_Avanzada.out) (/Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas_Fisica_Estadistica/1/articulo/Articulo_Tarea_1_Fisic_Estadistica_Avanzada.out)
 \@outlinefile=\write7
 \openout7 = `Articulo_Tarea_1_Fisic_Estadistica_Avanzada.out'.
 
@@ -1680,6 +1680,11 @@ Package babel Info: Redefining spanish shorthand "!
 (babel)             in language  on input line 88.
 Package babel Info: Redefining spanish shorthand "?
 (babel)             in language  on input line 88.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `\\' on input line 88.
+
 Package babel Info: Redefining spanish shorthand <<
 (babel)             in language  on input line 92.
 Package babel Info: Redefining spanish shorthand >>
@@ -1693,7 +1698,7 @@ Package babel Info: Redefining spanish shorthand "!
 Package babel Info: Redefining spanish shorthand "?
 (babel)             in language  on input line 92.
 LaTeX Font Info:    Try loading font information for U+msa on input line 99.
- (/usr/local/texlive/2018/texmf-dist/tex/latex/amsfonts/umsa.fd
+(/usr/local/texlive/2018/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
 LaTeX Font Info:    Try loading font information for U+msb on input line 99.
@@ -1871,7 +1876,7 @@ Package epstopdf Info: Source file: <figures/plot_CHO_finite_temp_several_beta.e
 Package epstopdf Info: Output file is already uptodate.
 
 
-pdfTeX warning: pdflatex (file /Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas/1/articulo/figures/plot_CHO_finite_temp_several_beta-eps-converted-to.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
+pdfTeX warning: pdflatex (file /Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas_Fisica_Estadistica/1/articulo/figures/plot_CHO_finite_temp_several_beta-eps-converted-to.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
 <figures/plot_CHO_finite_temp_several_beta-eps-converted-to.pdf, id=194, 578.16pt x 361.35pt>
 File: figures/plot_CHO_finite_temp_several_beta-eps-converted-to.pdf Graphic file (type pdf)
 <use figures/plot_CHO_finite_temp_several_beta-eps-converted-to.pdf>
@@ -1888,7 +1893,7 @@ Package epstopdf Info: Source file: <figures/plot_QHO_ground_state.eps>
 Package epstopdf Info: Output file is already uptodate.
 
 
-pdfTeX warning: pdflatex (file /Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas/1/articulo/figures/plot_QHO_ground_state-eps-converted-to.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
+pdfTeX warning: pdflatex (file /Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas_Fisica_Estadistica/1/articulo/figures/plot_QHO_ground_state-eps-converted-to.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
 <figures/plot_QHO_ground_state-eps-converted-to.pdf, id=197, 578.16pt x 361.35pt>
 File: figures/plot_QHO_ground_state-eps-converted-to.pdf Graphic file (type pdf)
 <use figures/plot_QHO_ground_state-eps-converted-to.pdf>
@@ -1930,7 +1935,7 @@ Package babel Info: Redefining spanish shorthand "!
 (babel)             in language  on input line 370.
 Package babel Info: Redefining spanish shorthand "?
 (babel)             in language  on input line 370.
-[5 </Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas/1/articulo/figures/plot_CHO_finite_temp_several_beta-eps-converted-to.pdf> </Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas/1/articulo/figures/plot_QHO_ground_state-eps-converted-to.pdf>]
+[5 </Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas_Fisica_Estadistica/1/articulo/figures/plot_CHO_finite_temp_several_beta-eps-converted-to.pdf> </Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas_Fisica_Estadistica/1/articulo/figures/plot_QHO_ground_state-eps-converted-to.pdf>]
 Package epstopdf Info: Source file: <figures/0_plot_QHO_finite_temp_beta_0_20.eps>
 (epstopdf)                    date: 2020-04-08 23:41:39
 (epstopdf)                    size: 155587 bytes
@@ -1942,7 +1947,7 @@ Package epstopdf Info: Source file: <figures/0_plot_QHO_finite_temp_beta_0_20.ep
 Package epstopdf Info: Output file is already uptodate.
 
 
-pdfTeX warning: pdflatex (file /Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas/1/articulo/figures/0_plot_QHO_finite_temp_beta_0_20-eps-converted-to.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
+pdfTeX warning: pdflatex (file /Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas_Fisica_Estadistica/1/articulo/figures/0_plot_QHO_finite_temp_beta_0_20-eps-converted-to.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
 <figures/0_plot_QHO_finite_temp_beta_0_20-eps-converted-to.pdf, id=291, 577.15625pt x 722.7pt>
 File: figures/0_plot_QHO_finite_temp_beta_0_20-eps-converted-to.pdf Graphic file (type pdf)
 <use figures/0_plot_QHO_finite_temp_beta_0_20-eps-converted-to.pdf>
@@ -1959,7 +1964,7 @@ Package epstopdf Info: Source file: <figures/0_plot_QHO_finite_temp_beta_1_0.eps
 Package epstopdf Info: Output file is already uptodate.
 
 
-pdfTeX warning: pdflatex (file /Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas/1/articulo/figures/0_plot_QHO_finite_temp_beta_1_0-eps-converted-to.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
+pdfTeX warning: pdflatex (file /Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas_Fisica_Estadistica/1/articulo/figures/0_plot_QHO_finite_temp_beta_1_0-eps-converted-to.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
 <figures/0_plot_QHO_finite_temp_beta_1_0-eps-converted-to.pdf, id=295, 578.16pt x 722.7pt>
 File: figures/0_plot_QHO_finite_temp_beta_1_0-eps-converted-to.pdf Graphic file (type pdf)
 <use figures/0_plot_QHO_finite_temp_beta_1_0-eps-converted-to.pdf>
@@ -1976,7 +1981,7 @@ Package epstopdf Info: Source file: <figures/0_plot_QHO_finite_temp_beta_5_0.eps
 Package epstopdf Info: Output file is already uptodate.
 
 
-pdfTeX warning: pdflatex (file /Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas/1/articulo/figures/0_plot_QHO_finite_temp_beta_5_0-eps-converted-to.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
+pdfTeX warning: pdflatex (file /Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas_Fisica_Estadistica/1/articulo/figures/0_plot_QHO_finite_temp_beta_5_0-eps-converted-to.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
 <figures/0_plot_QHO_finite_temp_beta_5_0-eps-converted-to.pdf, id=297, 578.16pt x 722.7pt>
 File: figures/0_plot_QHO_finite_temp_beta_5_0-eps-converted-to.pdf Graphic file (type pdf)
 <use figures/0_plot_QHO_finite_temp_beta_5_0-eps-converted-to.pdf>
@@ -2006,7 +2011,7 @@ Package babel Info: Redefining spanish shorthand "!
 (babel)             in language  on input line 406.
 Package babel Info: Redefining spanish shorthand "?
 (babel)             in language  on input line 406.
-[6 </Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas/1/articulo/figures/0_plot_QHO_finite_temp_beta_0_20-eps-converted-to.pdf>]
+[6 </Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas_Fisica_Estadistica/1/articulo/figures/0_plot_QHO_finite_temp_beta_0_20-eps-converted-to.pdf>]
 
 LaTeX Warning: A float is stuck (cannot be placed); try class option [floatfix] on input line 406.
 
@@ -2034,7 +2039,7 @@ Package babel Info: Redefining spanish shorthand "!
 (babel)             in language  on input line 408.
 Package babel Info: Redefining spanish shorthand "?
 (babel)             in language  on input line 408.
-[7 </Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas/1/articulo/figures/0_plot_QHO_finite_temp_beta_1_0-eps-converted-to.pdf> </Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas/1/articulo/figures/0_plot_QHO_finite_temp_beta_5_0-eps-converted-to.pdf>]
+[7 </Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas_Fisica_Estadistica/1/articulo/figures/0_plot_QHO_finite_temp_beta_1_0-eps-converted-to.pdf> </Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas_Fisica_Estadistica/1/articulo/figures/0_plot_QHO_finite_temp_beta_5_0-eps-converted-to.pdf>]
 Package babel Info: Redefining spanish shorthand <<
 (babel)             in language  on input line 411.
 Package babel Info: Redefining spanish shorthand >>
@@ -2059,7 +2064,7 @@ Package babel Info: Redefining spanish shorthand "!
 (babel)             in language  on input line 421.
 Package babel Info: Redefining spanish shorthand "?
 (babel)             in language  on input line 421.
- (/Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas/1/articulo/Articulo_Tarea_1_Fisic_Estadistica_Avanzada.bbl
+ (/Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas_Fisica_Estadistica/1/articulo/Articulo_Tarea_1_Fisic_Estadistica_Avanzada.bbl
 Package babel Info: Redefining spanish shorthand <<
 (babel)             in language  on input line 9.
 Package babel Info: Redefining spanish shorthand >>
@@ -2110,7 +2115,7 @@ Package babel Info: Redefining spanish shorthand "!
 (babel)             in language  on input line 436.
 Package babel Info: Redefining spanish shorthand "?
 (babel)             in language  on input line 436.
- (/Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas/1/articulo/_minted-Articulo_Tarea_1_Fisic_Estadistica_Avanzada/default-pyg-prefix.pygstyle) (/Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas/1/articulo/_minted-Articulo_Tarea_1_Fisic_Estadistica_Avanzada/default.pygstyle) (/Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas/1/articulo/_minted-Articulo_Tarea_1_Fisic_Estadistica_Avanzada/F18AEE9231DC7EA2A8F12BD4AC93BC05425CA7CB7F8D3B4300EBCA6B45A2DACA.pygtex
+ (/Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas_Fisica_Estadistica/1/articulo/_minted-Articulo_Tarea_1_Fisic_Estadistica_Avanzada/default-pyg-prefix.pygstyle) (/Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas_Fisica_Estadistica/1/articulo/_minted-Articulo_Tarea_1_Fisic_Estadistica_Avanzada/default.pygstyle) (/Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas_Fisica_Estadistica/1/articulo/_minted-Articulo_Tarea_1_Fisic_Estadistica_Avanzada/F18AEE9231DC7EA2A8F12BD4AC93BC05425CA7CB7F8D3B4300EBCA6B45A2DACA.pygtex
 LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <10> not available
 (Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 3.
 Package babel Info: Redefining spanish shorthand <<
@@ -2150,7 +2155,7 @@ Package babel Info: Redefining spanish shorthand "!
 (babel)             in language  on input line 440.
 Package babel Info: Redefining spanish shorthand "?
 (babel)             in language  on input line 440.
- (/Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas/1/articulo/_minted-Articulo_Tarea_1_Fisic_Estadistica_Avanzada/C5884043F9F8F83DFED61A825007300340A8A351C56AB921426DAC58687590FE.pygtex
+ (/Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas_Fisica_Estadistica/1/articulo/_minted-Articulo_Tarea_1_Fisic_Estadistica_Avanzada/C5884043F9F8F83DFED61A825007300340A8A351C56AB921426DAC58687590FE.pygtex
 Package babel Info: Redefining spanish shorthand <<
 (babel)             in language  on input line 16.
 Package babel Info: Redefining spanish shorthand >>
@@ -2328,21 +2333,21 @@ Package babel Info: Redefining spanish shorthand "?
 (babel)             in language  on input line 447.
  [16]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 447.
- (/Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas/1/articulo/Articulo_Tarea_1_Fisic_Estadistica_Avanzada.aux)
+ (/Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas_Fisica_Estadistica/1/articulo/Articulo_Tarea_1_Fisic_Estadistica_Avanzada.aux)
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 447.
 Package rerunfilecheck Info: File `Articulo_Tarea_1_Fisic_Estadistica_Avanzada.out' has not changed.
-(rerunfilecheck)             Checksum: B1180FF6672011F4FA1D7C500DB7E1A4;1158.
+(rerunfilecheck)             Checksum: 566FCA859CBF4A260AA33B4B97A3103C;1157.
  ) 
 Here is how much of TeX's memory you used:
- 21026 strings out of 492649
- 374670 string characters out of 6129622
+ 21027 strings out of 492649
+ 375321 string characters out of 6129622
  539844 words of memory out of 5000000
- 24554 multiletter control sequences out of 15000+600000
+ 24555 multiletter control sequences out of 15000+600000
  542001 words of font info for 67 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 39i,15n,46p,10588b,651s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 39i,15n,46p,10607b,651s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmitt10.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/latxfont/lasy10.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/latxfont/lasy9.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on /Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas/1/articulo/Articulo_Tarea_1_Fisic_Estadistica_Avanzada.pdf (16 pages, 475686 bytes).
+Output written on /Users/juanestebanaristizabalzuluaga/Desktop/Universidad/Semestre_X_(2020-I)/Fisica_Estadistica_Avanzada/Parte_II_Johans_Restrepo/0_Tareas_Fisica_Estadistica/1/articulo/Articulo_Tarea_1_Fisic_Estadistica_Avanzada.pdf (16 pages, 475787 bytes).
 PDF statistics:
  518 PDF objects out of 1000 (max. 8388607)
  381 compressed objects within 4 object streams
