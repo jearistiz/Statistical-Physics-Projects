@@ -1,0 +1,331 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{} \PYGZhy{}*\PYGZhy{} coding: utf\PYGZhy{}8 \PYGZhy{}*\PYGZhy{}}
+\PYG{k+kn}{from} \PYG{n+nn}{\PYGZus{}\PYGZus{}future\PYGZus{}\PYGZus{}} \PYG{k+kn}{import} \PYG{n}{division}
+\PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k+kn}{as} \PYG{n+nn}{np}
+\PYG{k+kn}{import} \PYG{n+nn}{matplotlib.pyplot} \PYG{k+kn}{as} \PYG{n+nn}{plt}
+\PYG{k+kn}{from} \PYG{n+nn}{time} \PYG{k+kn}{import} \PYG{n}{time}
+
+\PYG{k}{def} \PYG{n+nf}{psi\PYGZus{}0\PYGZus{}1}\PYG{p}{(}\PYG{n}{x\PYGZus{}limit} \PYG{o}{=} \PYG{l+m+mi}{5}\PYG{p}{,} \PYG{n}{N\PYGZus{}points\PYGZus{}x} \PYG{o}{=} \PYG{l+m+mi}{101}\PYG{p}{):}  \PYG{c+c1}{\PYGZsh{}creates first two energy eigenfunctions}
+    \PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{    Uso:    Devuelve diccionario \PYGZdq{}psi\PYGZdq{} que representa las autofunciones de energía. }
+\PYG{l+s+sd}{            Las llaves de \PYGZdq{}psi\PYGZdq{} están dadas por los elementos de un enmallado}
+\PYG{l+s+sd}{            generado en el intervalo [\PYGZhy{}x\PYGZus{}limit,x\PYGZus{}limit] y que tiene \PYGZdq{}N\PYGZus{}point\PYGZus{}x\PYGZdq{} puntos }
+\PYG{l+s+sd}{            igualmente espaciados. Los elementos asignados a cada llave x son listas }
+\PYG{l+s+sd}{            cuyo índice corresponde al nivel de energía para la autofunción en la posición }
+\PYG{l+s+sd}{            x. }
+\PYG{l+s+sd}{            En pocas palabras, psi[x][n] corresponde a la autofucnión de energía \PYGZbs{}psi\PYGZus{}\PYGZob{}n\PYGZcb{}(x).}
+\PYG{l+s+sd}{            Los valores accesibles para x son los elementos de grid\PYGZus{}x y los valores }
+\PYG{l+s+sd}{            accesibles para n son 0 y 1.}
+
+\PYG{l+s+sd}{    Recibe:}
+\PYG{l+s+sd}{        x\PYGZus{}limit: float      \PYGZhy{}\PYGZgt{}  los valores de x serán N\PYGZus{}points\PYGZus{}x igualmente espaciados entre }
+\PYG{l+s+sd}{                                [\PYGZhy{}x\PYGZus{}limit,x\PYGZus{}limit]}
+\PYG{l+s+sd}{        N\PYGZus{}ponts\PYGZus{}x: int      \PYGZhy{}\PYGZgt{}   }
+\PYG{l+s+sd}{    }
+\PYG{l+s+sd}{    Devuelve:}
+\PYG{l+s+sd}{        psi: dict           \PYGZhy{}\PYGZgt{}  psi[x][n] corresponde a la autofucnión de energía }
+\PYG{l+s+sd}{                                \PYGZbs{}psi\PYGZus{}\PYGZob{}n\PYGZcb{}(x) n = 0,1.}
+\PYG{l+s+sd}{        grid\PYGZus{}x: list        \PYGZhy{}\PYGZgt{}  lista con valores de x que se pueden usar en el diccionario psi. }
+\PYG{l+s+sd}{    \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+    \PYG{n}{N\PYGZus{}points\PYGZus{}x} \PYG{o}{=} \PYG{n+nb}{int}\PYG{p}{(}\PYG{n}{N\PYGZus{}points\PYGZus{}x}\PYG{p}{)}
+    \PYG{k}{if} \PYG{n}{N\PYGZus{}points\PYGZus{}x}\PYG{o}{\PYGZpc{}}\PYG{l+m+mi}{2} \PYG{o}{==}\PYG{l+m+mi}{0}\PYG{p}{:}
+        \PYG{n}{N\PYGZus{}points\PYGZus{}x} \PYG{o}{=} \PYG{n}{N\PYGZus{}points\PYGZus{}x} \PYG{o}{+} \PYG{l+m+mi}{1}
+    \PYG{n}{delta} \PYG{o}{=} \PYG{n}{x\PYGZus{}limit}\PYG{o}{/}\PYG{p}{(}\PYG{n}{N\PYGZus{}points\PYGZus{}x}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)}
+    \PYG{n}{grid\PYGZus{}x} \PYG{o}{=} \PYG{p}{[}\PYG{n}{i}\PYG{o}{*}\PYG{n}{delta} \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{n+nb}{int}\PYG{p}{((}\PYG{n}{N\PYGZus{}points\PYGZus{}x}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{),}\PYG{n+nb}{int}\PYG{p}{((}\PYG{n}{N\PYGZus{}points\PYGZus{}x}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{/}\PYG{l+m+mi}{2} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{))]}
+    \PYG{n}{psi} \PYG{o}{=} \PYG{p}{\PYGZob{}\PYGZcb{}}
+    \PYG{k}{for} \PYG{n}{x} \PYG{o+ow}{in} \PYG{n}{grid\PYGZus{}x}\PYG{p}{:}
+        \PYG{n}{psi}\PYG{p}{[}\PYG{n}{x}\PYG{p}{]} \PYG{o}{=} \PYG{p}{[}\PYG{n}{np}\PYG{o}{.}\PYG{n}{exp}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{n}{x}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{o}{/}\PYG{l+m+mf}{2.}\PYG{p}{)} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{o}{**}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{0.25}\PYG{p}{)]}
+        \PYG{n}{psi}\PYG{p}{[}\PYG{n}{x}\PYG{p}{]}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{o}{**}\PYG{l+m+mf}{0.5} \PYG{o}{*} \PYG{n}{x} \PYG{o}{*} \PYG{n}{psi}\PYG{p}{[}\PYG{n}{x}\PYG{p}{][}\PYG{l+m+mi}{0}\PYG{p}{])}
+    \PYG{k}{return} \PYG{n}{psi}\PYG{p}{,} \PYG{n}{grid\PYGZus{}x}
+
+\PYG{k}{def} \PYG{n+nf}{add\PYGZus{}energy\PYGZus{}level}\PYG{p}{(}\PYG{n}{psi}\PYG{p}{):}            \PYG{c+c1}{\PYGZsh{}adds new energy eigenfunction to psi}
+    \PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{    Uso:    Recibe diccionario generado por fucnión psi\PYGZus{}0\PYGZus{}1 y entrega diccionario con }
+\PYG{l+s+sd}{            autofunciones con un nivel de energía adicional.}
+
+\PYG{l+s+sd}{    Recibe:}
+\PYG{l+s+sd}{    psi: dict       \PYGZhy{}\PYGZgt{}  diccionario con autofunciones de energía psi[x][n] y máximo }
+\PYG{l+s+sd}{                        n = n\PYGZus{}max = len(psi[0])}
+\PYG{l+s+sd}{    }
+\PYG{l+s+sd}{    Devuelve:}
+\PYG{l+s+sd}{    psi: dict       \PYGZhy{}\PYGZgt{} diccionario actualizado con  máximo n = n\PYGZus{}max + 1 }
+\PYG{l+s+sd}{    \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+    \PYG{c+c1}{\PYGZsh{} Revisamos nivel de energía máximo disponible = n\PYGZhy{}1}
+    \PYG{n}{n} \PYG{o}{=} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{psi}\PYG{p}{[}\PYG{l+m+mf}{0.0}\PYG{p}{])}
+    
+    \PYG{c+c1}{\PYGZsh{} Actualizamos diccionario de autofunciones para que contenga nivel de energía }
+    \PYG{c+c1}{\PYGZsh{} inmediatamente superior al máximo accesible anteriormente (n)}
+    \PYG{k}{for} \PYG{n}{x} \PYG{o+ow}{in} \PYG{n}{psi}\PYG{o}{.}\PYG{n}{keys}\PYG{p}{():}
+        \PYG{n}{psi}\PYG{p}{[}\PYG{n}{x}\PYG{p}{]}\PYG{o}{.}\PYG{n}{append}\PYG{p}{((}\PYG{l+m+mf}{2.}\PYG{o}{/}\PYG{n}{n}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mf}{0.5} \PYG{o}{*} \PYG{n}{x} \PYG{o}{*} \PYG{n}{psi}\PYG{p}{[}\PYG{n}{x}\PYG{p}{][}\PYG{n}{n}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{]} \PYG{o}{\PYGZhy{}} 
+                            \PYG{p}{((}\PYG{n}{n}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{/}\PYG{n}{n}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mf}{0.5} \PYG{o}{*} \PYG{n}{psi}\PYG{p}{[}\PYG{n}{x}\PYG{p}{][}\PYG{n}{n}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{2}\PYG{p}{])}
+    \PYG{k}{return} \PYG{n}{psi}
+
+\PYG{k}{def} \PYG{n+nf}{add\PYGZus{}x\PYGZus{}value}\PYG{p}{(}\PYG{n}{psi}\PYG{p}{,}\PYG{n}{x}\PYG{p}{):}  \PYG{c+c1}{\PYGZsh{}adds new x value to psi}
+    \PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{    Uso:    Recibe diccionario generado por fucnión psi\PYGZus{}0\PYGZus{}1 y entrega diccionario con }
+\PYG{l+s+sd}{            autofunciones con una posición adicional dada por el valor de x.}
+
+\PYG{l+s+sd}{    Recibe:}
+\PYG{l+s+sd}{    psi: dict       \PYGZhy{}\PYGZgt{}  diccionario con autofunciones de energía: psi[x][n] }
+\PYG{l+s+sd}{    }
+\PYG{l+s+sd}{    Devuelve:}
+\PYG{l+s+sd}{    psi: dict       \PYGZhy{}\PYGZgt{}  diccionario actualizado con nueva posición accesible x para todos los}
+\PYG{l+s+sd}{                        valores de n accesibles anteriormete.}
+\PYG{l+s+sd}{    \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+    \PYG{c+c1}{\PYGZsh{} Añadimos primeros dos niveles de energía para la posición x (n=0 y n=1)}
+    \PYG{n}{psi}\PYG{p}{[}\PYG{n}{x}\PYG{p}{]} \PYG{o}{=} \PYG{p}{[}\PYG{n}{np}\PYG{o}{.}\PYG{n}{exp}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{n}{x}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{o}{/}\PYG{l+m+mf}{2.}\PYG{p}{)} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{o}{**}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{0.25}\PYG{p}{)]}
+    \PYG{n}{psi}\PYG{p}{[}\PYG{n}{x}\PYG{p}{]}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{o}{**}\PYG{l+m+mf}{0.5} \PYG{o}{*} \PYG{n}{x} \PYG{o}{*} \PYG{n}{psi}\PYG{p}{[}\PYG{n}{x}\PYG{p}{][}\PYG{l+m+mi}{0}\PYG{p}{])}
+    \PYG{c+c1}{\PYGZsh{}Añadimos niveles de energía superiores para la posición x:}
+    \PYG{n}{n\PYGZus{}max} \PYG{o}{=} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{psi}\PYG{p}{[}\PYG{l+m+mf}{0.0}\PYG{p}{])}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}
+    \PYG{k}{for} \PYG{n}{n} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{n}{n\PYGZus{}max}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{p}{):}
+                \PYG{n}{psi}\PYG{p}{[}\PYG{n}{x}\PYG{p}{]}\PYG{o}{.}\PYG{n}{append}\PYG{p}{((}\PYG{l+m+mf}{2.}\PYG{o}{/}\PYG{n}{n}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mf}{0.5} \PYG{o}{*} \PYG{n}{x} \PYG{o}{*} \PYG{n}{psi}\PYG{p}{[}\PYG{n}{x}\PYG{p}{][}\PYG{n}{n}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{]} \PYG{o}{\PYGZhy{}} 
+                                    \PYG{p}{((}\PYG{n}{n}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{/}\PYG{n}{n}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mf}{0.5} \PYG{o}{*} \PYG{n}{psi}\PYG{p}{[}\PYG{n}{x}\PYG{p}{][}\PYG{n}{n}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{2}\PYG{p}{])}
+    \PYG{k}{return} \PYG{n}{psi}
+
+\PYG{k}{def} \PYG{n+nf}{canonical\PYGZus{}ensemble\PYGZus{}prob}\PYG{p}{(}\PYG{n}{delta\PYGZus{}E}\PYG{p}{,}\PYG{n}{beta}\PYG{p}{):}
+    \PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{    Devuelve: factor de Boltzmann  para beta=1/T y delta\PYGZus{}E dados}
+\PYG{l+s+sd}{    \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+    \PYG{k}{return} \PYG{n}{np}\PYG{o}{.}\PYG{n}{exp}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{n}{beta} \PYG{o}{*} \PYG{n}{delta\PYGZus{}E}\PYG{p}{)}
+
+\PYG{k}{def} \PYG{n+nf}{boltzmann\PYGZus{}probability}\PYG{p}{(}\PYG{n}{En}\PYG{p}{,}\PYG{n}{beta}\PYG{p}{):}
+    \PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{    Recibe:}
+\PYG{l+s+sd}{        En: float       \PYGZhy{}\PYGZgt{} autovalor de energía }
+\PYG{l+s+sd}{        beta: float     \PYGZhy{}\PYGZgt{} inverso de temperatura en unidades reducidas beta = 1/T}
+
+\PYG{l+s+sd}{    Devuelve:}
+\PYG{l+s+sd}{        probabilidad de encontrar el oscilador armónico cuántico en nivel de energía \PYGZdq{}En\PYGZdq{} }
+\PYG{l+s+sd}{        a tmeperatura T.}
+\PYG{l+s+sd}{    \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+    \PYG{k}{return} \PYG{l+m+mf}{2.}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{sinh}\PYG{p}{(}\PYG{n}{beta}\PYG{o}{/}\PYG{l+m+mf}{2.}\PYG{p}{)}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{exp}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{n}{beta}\PYG{o}{*}\PYG{n}{En}\PYG{p}{)}
+
+\PYG{k}{def} \PYG{n+nf}{metropolis\PYGZus{}finite\PYGZus{}temp}\PYG{p}{(}\PYG{n}{x0}\PYG{o}{=}\PYG{l+m+mf}{0.0}\PYG{p}{,} \PYG{n}{delta\PYGZus{}x}\PYG{o}{=}\PYG{l+m+mf}{0.5}\PYG{p}{,} \PYG{n}{N}\PYG{o}{=}\PYG{l+m+mf}{1e3}\PYG{p}{,} 
+                            \PYG{n}{prob\PYGZus{}sampling}\PYG{o}{=}\PYG{p}{[}\PYG{n}{psi\PYGZus{}0\PYGZus{}1}\PYG{p}{()[}\PYG{l+m+mi}{0}\PYG{p}{],}\PYG{n}{canonical\PYGZus{}ensemble\PYGZus{}prob}\PYG{p}{],} \PYG{n}{beta}\PYG{o}{=}\PYG{l+m+mi}{5}\PYG{p}{):}
+    \PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{    Uso:    Algoritmo metrópolis para aproximar densidad de probabilidad de encontrar}
+\PYG{l+s+sd}{            al oscilador armónico cuántico (en presencia de baño térmico) en una posición x.}
+\PYG{l+s+sd}{    }
+\PYG{l+s+sd}{    Recibe: }
+\PYG{l+s+sd}{        x0: float       \PYGZhy{}\PYGZgt{} valor de x con el que el algoritmo inicia el muestreo.}
+\PYG{l+s+sd}{        delta: float    \PYGZhy{}\PYGZgt{} tamaño máximo del paso en cada iteración de \PYGZdq{}camino aleatorio\PYGZdq{} .}
+\PYG{l+s+sd}{        N: int          \PYGZhy{}\PYGZgt{} número de iteraciones para el algoritmo Metrópolis. }
+\PYG{l+s+sd}{        prob\PYGZus{}sampling[0]: dict      \PYGZhy{}\PYGZgt{}  diccionario con autofunciones de energía generado por }
+\PYG{l+s+sd}{                                        la función psi\PYGZus{}0\PYGZus{}1().}
+\PYG{l+s+sd}{        prob\PYGZus{}sampling[1]: func      \PYGZhy{}\PYGZgt{}  función que calcula factor de Boltzmann.}
+\PYG{l+s+sd}{        beta: float                 \PYGZhy{}\PYGZgt{}  inverso de temperatura en unidades reducidas beta = 1/T.}
+
+
+\PYG{l+s+sd}{    Devuelve:}
+\PYG{l+s+sd}{        x\PYGZus{}hist: list    \PYGZhy{}\PYGZgt{}  lista con la que se calcula el histograma que aproxima la densidad  }
+\PYG{l+s+sd}{                            de probabilidad de encontrar al oscilador armónico cuántico (en }
+\PYG{l+s+sd}{                            presencia de baño térmico) en una posición x.}
+\PYG{l+s+sd}{        n\PYGZus{}hist: list    \PYGZhy{}\PYGZgt{}  lista con la que se calcula el histograma que aproxima distribución}
+\PYG{l+s+sd}{                            de Boltzmann para el caso del oscilador armónico cuántico.}
+\PYG{l+s+sd}{        prob\PYGZus{}sampling[0]: dict      \PYGZhy{}\PYGZgt{}  diccionatrio de autofunciones de energía actualizado para }
+\PYG{l+s+sd}{                                        todos los valores de x\PYGZus{}hist y n\PYGZus{}hist. Se accede a ellos }
+\PYG{l+s+sd}{                                        mediante prob\PYGZus{}sampling[0][x][n].}
+\PYG{l+s+sd}{    \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+    \PYG{c+c1}{\PYGZsh{} Iniciamos listas que almacenen valores de niveles de energía y posiciones escogidos }
+    \PYG{c+c1}{\PYGZsh{} por el algoritmo}
+    \PYG{n}{x\PYGZus{}hist} \PYG{o}{=} \PYG{p}{[} \PYG{n}{x0} \PYG{p}{]}
+    \PYG{n}{n\PYGZus{}hist} \PYG{o}{=} \PYG{p}{[} \PYG{l+m+mi}{0} \PYG{p}{]}
+    \PYG{n}{prob\PYGZus{}sampling} \PYG{o}{=} \PYG{p}{[}\PYG{n}{prob\PYGZus{}sampling}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{o}{.}\PYG{n}{copy}\PYG{p}{(),}\PYG{n}{prob\PYGZus{}sampling}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]]}
+    \PYG{c+c1}{\PYGZsh{} Iniciamos iteraciones de algoritmo Metrópolis}
+    \PYG{k}{for} \PYG{n}{k} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{int}\PYG{p}{(}\PYG{n}{N}\PYG{p}{)):}
+        \PYG{c+c1}{\PYGZsh{} Iniciamos montecarlo espacial: P(x \PYGZhy{}\PYGZgt{} x\PYGZsq{})}
+        \PYG{n}{x\PYGZus{}new} \PYG{o}{=} \PYG{n}{x\PYGZus{}hist}\PYG{p}{[}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{]} \PYG{o}{+} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{uniform}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{n}{delta\PYGZus{}x}\PYG{p}{,}\PYG{n}{delta\PYGZus{}x}\PYG{p}{)}
+        \PYG{c+c1}{\PYGZsh{} Revisamos si la posición propuesta x\PYGZus{}new es accesible en el diccionario psi}
+        \PYG{c+c1}{\PYGZsh{} si no es accesible, agregamos dicha posición al diccionario con respectivos }
+        \PYG{c+c1}{\PYGZsh{} valores de autofunciones de energía.  Esto se hace con ayuda de la función }
+        \PYG{c+c1}{\PYGZsh{} add\PYGZus{}x\PYGZus{}value().}
+        \PYG{k}{try}\PYG{p}{:}
+            \PYG{n}{prob\PYGZus{}sampling}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{][}\PYG{n}{x\PYGZus{}new}\PYG{p}{][}\PYG{l+m+mi}{0}\PYG{p}{]}
+        \PYG{k}{except}\PYG{p}{:}
+            \PYG{n}{prob\PYGZus{}sampling}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{=} \PYG{n}{add\PYGZus{}x\PYGZus{}value}\PYG{p}{(}\PYG{n}{prob\PYGZus{}sampling}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],}\PYG{n}{x\PYGZus{}new}\PYG{p}{)}
+        \PYG{c+c1}{\PYGZsh{} Calculamos la probabilidad de aceptación para transiciones de posición}
+        \PYG{c+c1}{\PYGZsh{} definida por algoritmo Metrópolis y se escoge si se acepta o no. }
+        \PYG{n}{acceptance\PYGZus{}prob\PYGZus{}1} \PYG{o}{=} \PYG{p}{(} \PYG{n}{prob\PYGZus{}sampling}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{][}\PYG{n}{x\PYGZus{}new}\PYG{p}{][}\PYG{n}{n\PYGZus{}hist}\PYG{p}{[}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{]]} \PYG{o}{/} \PYG{n}{prob\PYGZus{}sampling}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{][}\PYG{n}{x\PYGZus{}hist}\PYG{p}{[}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{]][}\PYG{n}{n\PYGZus{}hist}\PYG{p}{[}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{]]} \PYG{p}{)}\PYG{o}{**}\PYG{l+m+mi}{2}
+        \PYG{k}{if} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{uniform}\PYG{p}{()} \PYG{o}{\PYGZlt{}} \PYG{n+nb}{min}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{acceptance\PYGZus{}prob\PYGZus{}1}\PYG{p}{):}
+            \PYG{n}{x\PYGZus{}hist}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{x\PYGZus{}new}\PYG{p}{)}
+        \PYG{k}{else}\PYG{p}{:}
+            \PYG{n}{x\PYGZus{}hist}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{x\PYGZus{}hist}\PYG{p}{[}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{])}
+
+        \PYG{c+c1}{\PYGZsh{} Iniciamos Montecarlo para nivel de energía P(n \PYGZhy{}\PYGZgt{} n\PYGZsq{})}
+        \PYG{n}{n\PYGZus{}new} \PYG{o}{=} \PYG{n}{n\PYGZus{}hist}\PYG{p}{[}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{]} \PYG{o}{+} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{choice}\PYG{p}{([}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{])}   
+        \PYG{c+c1}{\PYGZsh{} Chequeamos si el n propuesto es negativo}
+        \PYG{k}{if} \PYG{n}{n\PYGZus{}new} \PYG{o}{\PYGZlt{}} \PYG{l+m+mi}{0}\PYG{p}{:} 
+            \PYG{n}{n\PYGZus{}hist}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{n\PYGZus{}hist}\PYG{p}{[}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{])}
+        \PYG{k}{else}\PYG{p}{:}
+            \PYG{n}{current\PYGZus{}n\PYGZus{}max} \PYG{o}{=} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{prob\PYGZus{}sampling}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{][}\PYG{l+m+mi}{0}\PYG{p}{])}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}
+            \PYG{c+c1}{\PYGZsh{} Revisamos si el nivel propuesto n\PYGZus{}new es accesible en el diccionario psi}
+            \PYG{c+c1}{\PYGZsh{} si no es accesible, agregamos dicho nivel de energía para todas las posiciones}
+            \PYG{c+c1}{\PYGZsh{} del diccionario psi. Esto se hace con ayuda de la función add\PYGZus{}energy\PYGZus{}level().}
+            \PYG{k}{if} \PYG{n}{n\PYGZus{}new} \PYG{o}{\PYGZgt{}} \PYG{n}{current\PYGZus{}n\PYGZus{}max}\PYG{p}{:} 
+                \PYG{n}{prob\PYGZus{}sampling}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{=} \PYG{n}{add\PYGZus{}energy\PYGZus{}level}\PYG{p}{(}\PYG{n}{prob\PYGZus{}sampling}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{])}
+            \PYG{c+c1}{\PYGZsh{} Calculamos la probabilidad de aceptación para transiciones de posición}
+            \PYG{c+c1}{\PYGZsh{} definida por algoritmo Metrópolis y se escoge si se acepta o no. }
+            \PYG{n}{acceptance\PYGZus{}prob\PYGZus{}2} \PYG{o}{=} \PYG{p}{(} \PYG{n}{prob\PYGZus{}sampling}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{][}\PYG{n}{x\PYGZus{}hist}\PYG{p}{[}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{]][}\PYG{n}{n\PYGZus{}new}\PYG{p}{]} \PYG{o}{/} \PYG{n}{prob\PYGZus{}sampling}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{][}\PYG{n}{x\PYGZus{}hist}\PYG{p}{[}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{]][}\PYG{n}{n\PYGZus{}hist}\PYG{p}{[}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{]]} \PYG{p}{)}\PYG{o}{**}\PYG{l+m+mi}{2} \PYG{o}{*} \PYGZbs{}
+                                \PYG{n}{prob\PYGZus{}sampling}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{](} \PYG{n}{n\PYGZus{}new}\PYG{o}{\PYGZhy{}}\PYG{n}{n\PYGZus{}hist}\PYG{p}{[}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{],}  \PYG{n}{beta}\PYG{p}{)}
+            \PYG{k}{if} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{uniform}\PYG{p}{()} \PYG{o}{\PYGZlt{}} \PYG{n+nb}{min}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{acceptance\PYGZus{}prob\PYGZus{}2}\PYG{p}{):}
+                \PYG{n}{n\PYGZus{}hist}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{n\PYGZus{}new}\PYG{p}{)}
+            \PYG{k}{else}\PYG{p}{:}
+                \PYG{n}{n\PYGZus{}hist}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{n\PYGZus{}hist}\PYG{p}{[}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{])}
+    \PYG{k}{return} \PYG{n}{x\PYGZus{}hist}\PYG{p}{,} \PYG{n}{n\PYGZus{}hist}\PYG{p}{,} \PYG{n}{prob\PYGZus{}sampling}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}
+
+\PYG{k}{def} \PYG{n+nf}{CHO\PYGZus{}canonical\PYGZus{}ensemble}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,}\PYG{n}{beta}\PYG{o}{=}\PYG{l+m+mi}{5}\PYG{p}{,}\PYG{n}{plot}\PYG{o}{=}\PYG{n+nb+bp}{False}\PYG{p}{,}\PYG{n}{savefig}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{,}\PYG{n}{showplot}\PYG{o}{=}\PYG{n+nb+bp}{False}\PYG{p}{):}
+    \PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{    Uso:    calcula probabilidad teórica clásica de encontrar al osciladoe armónico }
+\PYG{l+s+sd}{            (presente en un baño térmico) en la posición x. Si plot=True grafica }
+\PYG{l+s+sd}{            dicha probabilidad.}
+\PYG{l+s+sd}{    }
+\PYG{l+s+sd}{    Recibe:}
+\PYG{l+s+sd}{        x: float            \PYGZhy{}\PYGZgt{} posición}
+\PYG{l+s+sd}{        beta: float         \PYGZhy{}\PYGZgt{} inverso de temperatura en unidades reducidas beta = 1/T.}
+\PYG{l+s+sd}{        plot: bool          \PYGZhy{}\PYGZgt{} escoge si grafica o no los histogramas.}
+\PYG{l+s+sd}{        showplot: bool      \PYGZhy{}\PYGZgt{} escoge si muestra o no la gráfica.}
+\PYG{l+s+sd}{        savefig: bool       \PYGZhy{}\PYGZgt{} escoge si guarda o no la figura graficada.}
+\PYG{l+s+sd}{    }
+\PYG{l+s+sd}{    Devuelve:}
+\PYG{l+s+sd}{        probabilidad teórica clásica en posición dada para temperatura T dada }
+\PYG{l+s+sd}{        o gráfica de la probabilidad teórica clásica.}
+\PYG{l+s+sd}{    \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+    \PYG{k}{if} \PYG{n}{plot}\PYG{o}{==}\PYG{n+nb+bp}{True}\PYG{p}{:}
+        \PYG{n}{x} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{linspace}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{3}\PYG{p}{,}\PYG{l+m+mi}{3}\PYG{p}{,}\PYG{l+m+mi}{201}\PYG{p}{)}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{,}\PYG{l+m+mi}{5}\PYG{p}{))}
+        \PYG{n}{pdf\PYGZus{}array} \PYG{o}{=} \PYG{p}{[]}
+        \PYG{k}{for} \PYG{n}{beta0} \PYG{o+ow}{in} \PYG{n+nb}{list}\PYG{p}{(}\PYG{n}{beta}\PYG{p}{):}
+            \PYG{n}{pdf\PYGZus{}array}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(} \PYG{p}{(}\PYG{n}{beta0}\PYG{o}{/}\PYG{p}{(}\PYG{l+m+mf}{2.}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{p}{))}\PYG{o}{**}\PYG{l+m+mf}{0.5} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{exp}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{n}{x}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{o}{*}\PYG{n}{beta0} \PYG{o}{/} \PYG{l+m+mf}{2.}\PYG{p}{)} \PYG{p}{)}
+            \PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,}\PYG{n}{pdf\PYGZus{}array}\PYG{p}{[}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{],}\PYG{n}{label}\PYG{o}{=}\PYG{l+s+sa}{u}\PYG{l+s+s1}{\PYGZsq{}\PYGZdl{}}\PYG{l+s+se}{\PYGZbs{}\PYGZbs{}}\PYG{l+s+s1}{beta = }\PYG{l+s+si}{\PYGZpc{}.1f}\PYG{l+s+s1}{\PYGZdl{}\PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{n}{beta0}\PYG{p}{)}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlim}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{3}\PYG{p}{,}\PYG{l+m+mi}{3}\PYG{p}{)}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}\PYGZdl{}x\PYGZdl{}\PYGZsq{}}\PYG{p}{)}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}\PYGZdl{}\PYGZbs{}pi\PYGZca{}\PYGZob{}(C)\PYGZcb{}(x;}\PYG{l+s+se}{\PYGZbs{}\PYGZbs{}}\PYG{l+s+s1}{beta)\PYGZdl{}\PYGZsq{}}\PYG{p}{)}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{(}\PYG{n}{loc}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}best\PYGZsq{}}\PYG{p}{)}
+        \PYG{k}{if} \PYG{n}{savefig}\PYG{o}{==}\PYG{n+nb+bp}{True}\PYG{p}{:}
+            \PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}plot\PYGZus{}CHO\PYGZus{}finite\PYGZus{}temp\PYGZus{}several\PYGZus{}beta.eps\PYGZsq{}}\PYG{p}{)}
+        \PYG{k}{if} \PYG{n}{showplot}\PYG{o}{==}\PYG{n+nb+bp}{True}\PYG{p}{:}
+            \PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{close}\PYG{p}{()}
+        \PYG{k}{return} \PYG{n}{pdf\PYGZus{}array}
+    \PYG{k}{else}\PYG{p}{:}
+        \PYG{k}{return} \PYG{p}{(}\PYG{n}{beta}\PYG{o}{/}\PYG{p}{(}\PYG{l+m+mf}{2.}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{p}{))}\PYG{o}{**}\PYG{l+m+mf}{0.5} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{exp}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{n}{x}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{o}{*}\PYG{n}{beta} \PYG{o}{/} \PYG{l+m+mf}{2.}\PYG{p}{)}
+
+\PYG{k}{def} \PYG{n+nf}{QHO\PYGZus{}canonical\PYGZus{}ensemble}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,}\PYG{n}{beta}\PYG{p}{):}
+    \PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{    Uso:    calcula probabilidad teórica cuántica de encontrar al osciladoe armónico }
+\PYG{l+s+sd}{            (presente en un baño térmico) en la posición x.}
+\PYG{l+s+sd}{    }
+\PYG{l+s+sd}{    Recibe:}
+\PYG{l+s+sd}{        x: float            \PYGZhy{}\PYGZgt{} posición}
+\PYG{l+s+sd}{        beta: float         \PYGZhy{}\PYGZgt{} inverso de temperatura en unidades reducidas beta = 1/T.}
+\PYG{l+s+sd}{    }
+\PYG{l+s+sd}{    Devuelve:}
+\PYG{l+s+sd}{        probabilidad teórica cuántica en posición dada para temperatura T dada. }
+\PYG{l+s+sd}{    \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+    \PYG{k}{return} \PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{tanh}\PYG{p}{(}\PYG{n}{beta}\PYG{o}{/}\PYG{l+m+mf}{2.}\PYG{p}{)}\PYG{o}{/}\PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mf}{0.5} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{exp}\PYG{p}{(}\PYG{o}{\PYGZhy{}} \PYG{n}{x}\PYG{o}{**}\PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{tanh}\PYG{p}{(}\PYG{n}{beta}\PYG{o}{/}\PYG{l+m+mf}{2.}\PYG{p}{))}
+
+\PYG{k}{def} \PYG{n+nf}{run\PYGZus{}metropolis}\PYG{p}{(}\PYG{n}{psi\PYGZus{}0\PYGZus{}1} \PYG{o}{=} \PYG{n}{psi\PYGZus{}0\PYGZus{}1}\PYG{p}{,} \PYG{n}{x\PYGZus{}limit} \PYG{o}{=} \PYG{l+m+mf}{5.}\PYG{p}{,} \PYG{n}{N\PYGZus{}points\PYGZus{}x} \PYG{o}{=} \PYG{l+m+mi}{51}\PYG{p}{,}
+                    \PYG{n}{x0} \PYG{o}{=} \PYG{l+m+mf}{0.0}\PYG{p}{,} \PYG{n}{delta\PYGZus{}x} \PYG{o}{=} \PYG{l+m+mf}{0.5}\PYG{p}{,} \PYG{n}{N\PYGZus{}metropolis} \PYG{o}{=} \PYG{n+nb}{int}\PYG{p}{(}\PYG{l+m+mf}{1e5}\PYG{p}{),}  
+                    \PYG{n}{canonical\PYGZus{}ensemble\PYGZus{}prob} \PYG{o}{=} \PYG{n}{canonical\PYGZus{}ensemble\PYGZus{}prob}\PYG{p}{,} \PYG{n}{beta} \PYG{o}{=} \PYG{l+m+mf}{5.}\PYG{p}{,}
+                    \PYG{n}{plot}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{,} \PYG{n}{showplot} \PYG{o}{=} \PYG{n+nb+bp}{True}\PYG{p}{,} \PYG{n}{savefig} \PYG{o}{=} \PYG{n+nb+bp}{True}\PYG{p}{,} \PYG{n}{legend\PYGZus{}loc} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}best\PYGZsq{}}\PYG{p}{,} \PYG{n}{x\PYGZus{}plot\PYGZus{}0}\PYG{o}{=}\PYG{l+m+mi}{7}\PYG{p}{):}
+    \PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{    Uso:    Corre algoritmo Metrópolis para el oscilador armónico cuántico en un baño térmico. }
+\PYG{l+s+sd}{            Grafica el histograma de posiciones obtenido contrastándolo con los resultados }
+\PYG{l+s+sd}{            teóricos cuántico y clásico. Grafica histograma de niveles de energía visitados por}
+\PYG{l+s+sd}{            el algoritmo.}
+
+\PYG{l+s+sd}{    Recibe:}
+\PYG{l+s+sd}{        psi\PYGZus{}0\PYGZus{}1: función    \PYGZhy{}\PYGZgt{}  función que inicializa las autofunciones del hamiltoniano.}
+\PYG{l+s+sd}{        x\PYGZus{}limit: float      \PYGZhy{}\PYGZgt{}  las autofunciones se inicializan en intervalo (\PYGZhy{}x\PYGZus{}limit,x\PYGZus{}limit).}
+\PYG{l+s+sd}{        N\PYGZus{}points\PYGZus{}x: int     \PYGZhy{}\PYGZgt{}  la rejilla para inicializar autofunciones tiene }
+\PYG{l+s+sd}{                                N\PYGZus{}points\PYGZus{}x puntos.}
+\PYG{l+s+sd}{        x0: float           \PYGZhy{}\PYGZgt{}  valor de x con el que el algoritmo inicia el muestreo.}
+\PYG{l+s+sd}{        delta\PYGZus{}x: float      \PYGZhy{}\PYGZgt{}  tamaño máximo del paso en cada iteración de \PYGZdq{}camino aleatorio\PYGZdq{}.}
+\PYG{l+s+sd}{        N\PYGZus{}metropolis: int   \PYGZhy{}\PYGZgt{}  número de iteraciones para algoritmo metrópolis.}
+\PYG{l+s+sd}{        beta: float         \PYGZhy{}\PYGZgt{}  inverso de temperatura del baño térmico en unidades reducidas}
+\PYG{l+s+sd}{                                beta = 1/T.}
+\PYG{l+s+sd}{        canonical\PYGZus{}ensemble\PYGZus{}prob: función   \PYGZhy{}\PYGZgt{}   función que genera factor de Boltzmann }
+\PYG{l+s+sd}{                                                exp(\PYGZhy{}B*deltaE).}
+\PYG{l+s+sd}{        plot: bool                      \PYGZhy{}\PYGZgt{}  escoge si grafica o no los histogramas}
+\PYG{l+s+sd}{        showplot: bool                  \PYGZhy{}\PYGZgt{}  escoge si muestra o no la gráfica}
+\PYG{l+s+sd}{        savefig: [bool,\PYGZsq{}name of fig\PYGZsq{}]   \PYGZhy{}\PYGZgt{}  escoge si guarda o no la figura y el nombre del }
+\PYG{l+s+sd}{                                            archivo.}
+\PYG{l+s+sd}{        legend\PYGZus{}loc: \PYGZsq{}position\PYGZsq{}          \PYGZhy{}\PYGZgt{}  posición de la legenda para la figura}
+\PYG{l+s+sd}{        x\PYGZus{}plot\PYGZus{}0: float                 \PYGZhy{}\PYGZgt{}  dominio de la gráfica en x será (\PYGZhy{}x\PYGZus{}plot,x\PYGZus{}plot)}
+\PYG{l+s+sd}{    }
+\PYG{l+s+sd}{    Devuelve:   }
+\PYG{l+s+sd}{        x\PYGZus{}hist: list        \PYGZhy{}\PYGZgt{}  Lista con valores de x (posiciones)  obtenidos mediante cadena}
+\PYG{l+s+sd}{                                de Markov. }
+\PYG{l+s+sd}{        n\PYGZus{}hist: list        \PYGZhy{}\PYGZgt{}  Lista con valores de n (niveles de energía) obtenidos mediante }
+\PYG{l+s+sd}{                                cadena de Markov.}
+\PYG{l+s+sd}{        psi\PYGZus{}final: dict     \PYGZhy{}\PYGZgt{}  Diccionario con autofunciones de energía \PYGZbs{}psi\PYGZus{}\PYGZob{}n\PYGZcb{}(x) = psi[x][n] }
+\PYG{l+s+sd}{                                    para valores de x y n en x\PYGZus{}hist y n\PYGZus{}hist.}
+\PYG{l+s+sd}{    \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+    \PYG{c+c1}{\PYGZsh{} Inicializamos autofunciones de energía en diccionario psi generado por función psi\PYGZus{}0\PYGZus{}1()}
+    \PYG{n}{psi}\PYG{p}{,} \PYG{n}{grid\PYGZus{}x} \PYG{o}{=} \PYG{n}{psi\PYGZus{}0\PYGZus{}1}\PYG{p}{(}\PYG{n}{x\PYGZus{}limit}\PYG{p}{,}\PYG{n}{N\PYGZus{}points\PYGZus{}x}\PYG{p}{)}
+    
+    \PYG{c+c1}{\PYGZsh{} Almacenamos probs. en una lista:  la amplitud de probabilidad psi de las autofunciones}
+    \PYG{c+c1}{\PYGZsh{}                                   y el factor de Boltzmann del ensamble canónico}
+    \PYG{n}{prob\PYGZus{}sampling} \PYG{o}{=} \PYG{p}{[}\PYG{n}{psi}\PYG{p}{,} \PYG{n}{canonical\PYGZus{}ensemble\PYGZus{}prob}\PYG{p}{]}
+
+    \PYG{c+c1}{\PYGZsh{} Ejecutamos algoritmo metropolis y medimos tiempo de cómputo}
+    \PYG{n}{t\PYGZus{}0} \PYG{o}{=} \PYG{n}{time}\PYG{p}{()}
+    \PYG{n}{x\PYGZus{}hist}\PYG{p}{,} \PYG{n}{n\PYGZus{}hist}\PYG{p}{,} \PYG{n}{psi\PYGZus{}final} \PYG{o}{=} \PYG{n}{metropolis\PYGZus{}finite\PYGZus{}temp}\PYG{p}{(}\PYG{n}{x0}\PYG{o}{=}\PYG{n}{x0}\PYG{p}{,} \PYG{n}{delta\PYGZus{}x}\PYG{o}{=}\PYG{n}{delta\PYGZus{}x}\PYG{p}{,}\PYG{n}{N}\PYG{o}{=}\PYG{n}{N\PYGZus{}metropolis}\PYG{p}{,} 
+                                                        \PYG{n}{prob\PYGZus{}sampling}\PYG{o}{=}\PYG{n}{prob\PYGZus{}sampling}\PYG{p}{,} \PYG{n}{beta}\PYG{o}{=}\PYG{n}{beta}\PYG{p}{)}
+    \PYG{n}{t\PYGZus{}1} \PYG{o}{=} \PYG{n}{time}\PYG{p}{()}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Metropolis algorithm (beta = }\PYG{l+s+si}{\PYGZpc{}.2f}\PYG{l+s+s1}{): }\PYG{l+s+si}{\PYGZpc{}.3f}\PYG{l+s+s1}{ seconds for }\PYG{l+s+si}{\PYGZpc{}.0E}\PYG{l+s+s1}{ iterations\PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{p}{(}\PYG{n}{beta}\PYG{p}{,}\PYG{n}{t\PYGZus{}1}\PYG{o}{\PYGZhy{}}\PYG{n}{t\PYGZus{}0}\PYG{p}{,}\PYG{n}{N\PYGZus{}metropolis}\PYG{p}{))}
+
+    \PYG{k}{if} \PYG{n}{plot}\PYG{o}{==}\PYG{n+nb+bp}{True}\PYG{p}{:}
+        \PYG{c+c1}{\PYGZsh{} Graficamos histograma para posiciones}
+        \PYG{n}{x\PYGZus{}plot} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{linspace}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{n}{x\PYGZus{}plot\PYGZus{}0}\PYG{p}{,}\PYG{n}{x\PYGZus{}plot\PYGZus{}0}\PYG{p}{,}\PYG{l+m+mi}{251}\PYG{p}{)}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{,}\PYG{l+m+mi}{5}\PYG{p}{))}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{x\PYGZus{}plot}\PYG{p}{,}\PYG{n}{CHO\PYGZus{}canonical\PYGZus{}ensemble}\PYG{p}{(}\PYG{n}{x\PYGZus{}plot}\PYG{p}{,}\PYG{n}{beta}\PYG{o}{=}\PYG{n}{beta}\PYG{p}{),}
+                    \PYG{n}{label}\PYG{o}{=}\PYG{l+s+sa}{u}\PYG{l+s+s1}{\PYGZsq{}\PYGZdl{}\PYGZbs{}pi\PYGZca{}\PYGZob{}(C)\PYGZcb{}(x;}\PYG{l+s+se}{\PYGZbs{}\PYGZbs{}}\PYG{l+s+s1}{beta)\PYGZdl{}\PYGZsq{}}\PYG{p}{)}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{x\PYGZus{}plot}\PYG{p}{,}\PYG{n}{QHO\PYGZus{}canonical\PYGZus{}ensemble}\PYG{p}{(}\PYG{n}{x\PYGZus{}plot}\PYG{p}{,}\PYG{n}{beta}\PYG{o}{=}\PYG{n}{beta}\PYG{p}{),}
+                    \PYG{n}{label}\PYG{o}{=}\PYG{l+s+sa}{u}\PYG{l+s+s1}{\PYGZsq{}\PYGZdl{}\PYGZbs{}pi\PYGZca{}\PYGZob{}(Q)\PYGZcb{}(x;}\PYG{l+s+se}{\PYGZbs{}\PYGZbs{}}\PYG{l+s+s1}{beta)\PYGZdl{}\PYGZsq{}}\PYG{p}{)}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{hist}\PYG{p}{(}\PYG{n}{x\PYGZus{}hist}\PYG{p}{,}\PYG{n}{bins}\PYG{o}{=}\PYG{n+nb}{int}\PYG{p}{(}\PYG{n}{N\PYGZus{}metropolis}\PYG{o}{**}\PYG{l+m+mf}{0.5}\PYG{p}{),}\PYG{n}{normed}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{,}
+                    \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Histograma Metrópolis}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{con }\PYG{l+s+si}{\PYGZpc{}.0E}\PYG{l+s+s1}{ iteraciones\PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{p}{(}\PYG{n}{N\PYGZus{}metropolis}\PYG{p}{))}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlim}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{n}{x\PYGZus{}plot\PYGZus{}0}\PYG{p}{,}\PYG{n}{x\PYGZus{}plot\PYGZus{}0}\PYG{p}{)}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+sa}{u}\PYG{l+s+s1}{\PYGZsq{}\PYGZdl{}x\PYGZdl{}\PYGZsq{}}\PYG{p}{)}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+sa}{u}\PYG{l+s+s1}{\PYGZsq{}\PYGZdl{}\PYGZbs{}pi(x;}\PYG{l+s+se}{\PYGZbs{}\PYGZbs{}}\PYG{l+s+s1}{beta)\PYGZdl{}\PYGZsq{}}\PYG{p}{)}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{(}\PYG{n}{loc}\PYG{o}{=}\PYG{n}{legend\PYGZus{}loc}\PYG{p}{,} \PYG{n}{title}\PYG{o}{=}\PYG{l+s+sa}{u}\PYG{l+s+s1}{\PYGZsq{}\PYGZdl{}}\PYG{l+s+se}{\PYGZbs{}\PYGZbs{}}\PYG{l+s+s1}{beta=}\PYG{l+s+si}{\PYGZpc{}.2f}\PYG{l+s+s1}{\PYGZdl{}\PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{n}{beta}\PYG{p}{,} \PYG{n}{fontsize}\PYG{o}{=}\PYG{l+m+mi}{12}\PYG{p}{)}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{tight\PYGZus{}layout}\PYG{p}{()}
+        \PYG{k}{if} \PYG{n}{savefig}\PYG{o}{==}\PYG{n+nb+bp}{True}\PYG{p}{:}
+            \PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}plot\PYGZus{}QHO\PYGZus{}finite\PYGZus{}temp\PYGZus{}beta\PYGZus{}}\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{\PYGZus{}}\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{.eps\PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{p}{(}\PYG{n}{beta}\PYG{p}{,(}\PYG{n}{beta}\PYG{o}{\PYGZhy{}}\PYG{n+nb}{int}\PYG{p}{(}\PYG{n}{beta}\PYG{p}{))}\PYG{o}{*}\PYG{l+m+mi}{100}\PYG{p}{))}
+        \PYG{k}{if} \PYG{n}{showplot}\PYG{o}{==}\PYG{n+nb+bp}{True}\PYG{p}{:}
+            \PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{close}\PYG{p}{()}
+
+        \PYG{c+c1}{\PYGZsh{} Graficamos histograma para niveles de energía}
+        \PYG{n}{n\PYGZus{}plot} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{arange}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{psi\PYGZus{}final}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]))} 
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{,}\PYG{l+m+mi}{5}\PYG{p}{))}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{hist}\PYG{p}{(}\PYG{n}{n\PYGZus{}hist}\PYG{p}{,}\PYG{n}{normed}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{,}\PYG{n}{bins}\PYG{o}{=}\PYG{n}{np}\PYG{o}{.}\PYG{n}{arange}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{psi\PYGZus{}final}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{])}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{0.5}\PYG{p}{,}
+                    \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Histograma Metrópolis}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{niveles de energía\PYGZsq{}}\PYG{p}{)}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{n\PYGZus{}plot}\PYG{p}{,}\PYG{n}{boltzmann\PYGZus{}probability}\PYG{p}{(}\PYG{n}{n\PYGZus{}plot}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{n}{beta}\PYG{p}{),}\PYG{l+s+s1}{\PYGZsq{}o\PYGZhy{}\PYGZsq{}}\PYG{p}{,}
+                    \PYG{n}{label}\PYG{o}{=}\PYG{l+s+sa}{u}\PYG{l+s+s1}{\PYGZsq{}\PYGZdl{}e\PYGZca{}\PYGZob{}\PYGZhy{}}\PYG{l+s+se}{\PYGZbs{}\PYGZbs{}}\PYG{l+s+s1}{beta E\PYGZus{}n\PYGZcb{}/Z(}\PYG{l+s+se}{\PYGZbs{}\PYGZbs{}}\PYG{l+s+s1}{beta)\PYGZdl{}\PYGZsq{}}\PYG{p}{)}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+sa}{u}\PYG{l+s+s1}{\PYGZsq{}\PYGZdl{}n\PYGZdl{}\PYGZsq{}}\PYG{p}{)}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+sa}{u}\PYG{l+s+s1}{\PYGZsq{}\PYGZdl{}\PYGZbs{}pi(n;}\PYG{l+s+se}{\PYGZbs{}\PYGZbs{}}\PYG{l+s+s1}{beta)\PYGZdl{}\PYGZsq{}}\PYG{p}{)}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{(}\PYG{n}{loc}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}best\PYGZsq{}}\PYG{p}{,} \PYG{n}{title}\PYG{o}{=}\PYG{l+s+sa}{u}\PYG{l+s+s1}{\PYGZsq{}\PYGZdl{}}\PYG{l+s+se}{\PYGZbs{}\PYGZbs{}}\PYG{l+s+s1}{beta=}\PYG{l+s+si}{\PYGZpc{}.2f}\PYG{l+s+s1}{\PYGZdl{}\PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{n}{beta}\PYG{p}{)}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{tight\PYGZus{}layout}\PYG{p}{()}
+        \PYG{k}{if} \PYG{n}{savefig}\PYG{o}{==}\PYG{n+nb+bp}{True}\PYG{p}{:}
+            \PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}plot\PYGZus{}QHO\PYGZus{}n\PYGZus{}hist\PYGZus{}beta\PYGZus{}}\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{\PYGZus{}}\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{.eps\PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{p}{(}\PYG{n}{beta}\PYG{p}{,(}\PYG{n}{beta}\PYG{o}{\PYGZhy{}}\PYG{n+nb}{int}\PYG{p}{(}\PYG{n}{beta}\PYG{p}{))}\PYG{o}{*}\PYG{l+m+mi}{100}\PYG{p}{))}
+        \PYG{k}{if} \PYG{n}{showplot}\PYG{o}{==}\PYG{n+nb+bp}{True}\PYG{p}{:}
+            \PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{close}\PYG{p}{()}
+
+    \PYG{k}{return} \PYG{n}{x\PYGZus{}hist}\PYG{p}{,} \PYG{n}{n\PYGZus{}hist}\PYG{p}{,} \PYG{n}{psi\PYGZus{}final}
+
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{o}{.}\PYG{n}{update}\PYG{p}{(\PYGZob{}}\PYG{l+s+s1}{\PYGZsq{}font.size\PYGZsq{}}\PYG{p}{:}\PYG{l+m+mi}{15}\PYG{p}{\PYGZcb{})}
+
+\PYG{c+c1}{\PYGZsh{} Corremos algoritmo metrópolis usando función run\PYGZus{}metropolis() para varios }
+\PYG{c+c1}{\PYGZsh{} valores de beta}
+\PYG{n}{beta\PYGZus{}array} \PYG{o}{=} \PYG{p}{[}\PYG{l+m+mf}{0.2}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{5}\PYG{p}{,} \PYG{l+m+mi}{60}\PYG{p}{]}
+\PYG{n}{legend\PYGZus{}loc} \PYG{o}{=}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}lower center\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}lower right\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}best\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}best\PYGZsq{}}\PYG{p}{]}
+\PYG{k}{for} \PYG{n}{i}\PYG{p}{,}\PYG{n}{beta} \PYG{o+ow}{in} \PYG{n+nb}{enumerate}\PYG{p}{(}\PYG{n}{beta\PYGZus{}array}\PYG{p}{):}
+    \PYG{n}{run\PYGZus{}metropolis}\PYG{p}{(}\PYG{n}{N\PYGZus{}metropolis}\PYG{o}{=}\PYG{l+m+mf}{1e6}\PYG{p}{,}\PYG{n}{beta}\PYG{o}{=}\PYG{n}{beta}\PYG{p}{,}\PYG{n}{showplot}\PYG{o}{=}\PYG{n+nb+bp}{False}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Corremos algoritmo para gráfica de límite de baja temperatura en el caso }
+\PYG{c+c1}{\PYGZsh{} clásico (figura 1 en el artículo)}
+\PYG{n}{beta\PYGZus{}array\PYGZus{}CHO} \PYG{o}{=} \PYG{p}{[}\PYG{l+m+mi}{5}\PYG{p}{,}\PYG{l+m+mi}{20}\PYG{p}{,}\PYG{l+m+mi}{60}\PYG{p}{,}\PYG{l+m+mi}{100}\PYG{p}{]}
+\PYG{n}{CHO\PYGZus{}canonical\PYGZus{}ensemble}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{n}{beta}\PYG{o}{=}\PYG{n}{beta\PYGZus{}array\PYGZus{}CHO}\PYG{p}{,}\PYG{n}{plot}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{,}\PYG{n}{showplot}\PYG{o}{=}\PYG{n+nb+bp}{False}\PYG{p}{)}
+\end{Verbatim}
