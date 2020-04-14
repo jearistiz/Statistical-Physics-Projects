@@ -80,8 +80,8 @@ def save_pi_x_csv(grid_x, x_weights, file_name, relevant_info, print_data=True):
     return pi_x_data
 
 x_max = 5.
-nx = 1001
-N_iter = 16
+nx = 101
+N_iter = 5
 beta_fin = 4
 beta_ini = beta_fin * 2**(-N_iter)
 potential, potential_string = harmonic_potential, 'harmonic_potential'

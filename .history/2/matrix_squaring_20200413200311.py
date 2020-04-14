@@ -60,7 +60,7 @@ def density_matrix_convolution_trotter(rho, grid_x, N_iter = 4, beta_ini = 1, pr
     for i in range(N_iter):
         rho = dx * np.dot(rho,rho)
         if print_steps==True:
-            print(u'Iteration %d) beta: 2^%d * beta_ini -> 2^%d * beta_ini'%(i, i, i+1))
+            print(u'Iteration %d) beta: 2^%d * beta_ini -> 2**%d * beta_ini'%(i, i, i+1))
     trace_rho = np.trace(rho)*dx
     return rho, trace_rho, beta_fin
 
@@ -80,8 +80,8 @@ def save_pi_x_csv(grid_x, x_weights, file_name, relevant_info, print_data=True):
     return pi_x_data
 
 x_max = 5.
-nx = 1001
-N_iter = 16
+nx = 100
+N_iter = 100
 beta_fin = 4
 beta_ini = beta_fin * 2**(-N_iter)
 potential, potential_string = harmonic_potential, 'harmonic_potential'
