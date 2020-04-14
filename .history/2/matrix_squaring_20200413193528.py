@@ -50,17 +50,21 @@ def rho_trotter(x_max = 5., nx = 101, beta=1, potential=harmonic_potential):
     rho = np.array([ [ rho_free(x , xp, beta) * np.exp(-0.5*beta*(potential(x)+potential(xp))) for x in grid_x] for xp in grid_x])
     return rho, grid_x, dx
 
-def density_matrix_convolution_trotter(rho, grid_x, N_iter = 4, beta_ini = 1, print_steps=True):
+def density_matrix_convolution_trotter(rho, grid_x, N_beta = 4, beta_ini = 1, print_steps=True):
     """
-    Uso:    
+    Uso:    entrega (N_beta-1) convoluciones de la matriz densidad rho(beta_ini), es decir,
+            entrega aproximación de rho(N_beta*beta_ini).
     """
     dx = grid_x[1] - grid_x[0]
-    beta_fin = beta_ini * 2 **  N_iter
-    print('beta_ini = %.3f'%beta_ini)
-    for i in range(N_iter):
-        rho = dx * np.dot(rho,rho)
+    N_conv = N_beta-1
+    beta_fin = beta_ini * N_beta
+    rho_1 = np.copy(rho)
+    for i in range(N_conv):
+        rho_1 = dx * np.dot(rho_1,rho)
+        #rho *= dx
+        beta_step = (i+2)*beta_ini
         if print_steps==True:
-            print(u'Iteration %d) beta: 2^%d * beta_ini -> 2^%d * beta_ini'%(i, i, i+1))
+            print('step %d) beta: %.2E -> %.2E'%(i, (i+1)*beta_ini, beta_step))
     trace_rho = np.trace(rho)*dx
     return rho, trace_rho, beta_fin
 
@@ -80,21 +84,21 @@ def save_pi_x_csv(grid_x, x_weights, file_name, relevant_info, print_data=True):
     return pi_x_data
 
 x_max = 5.
-nx = 1001
-N_iter = 16
+nx = 101
+N_beta = 2
 beta_fin = 4
-beta_ini = beta_fin * 2**(-N_iter)
+beta_ini = beta_fin/N_beta
 potential, potential_string = harmonic_potential, 'harmonic_potential'
 rho, grid_x, dx = rho_trotter(x_max = x_max, nx = nx, beta = beta_ini, potential = potential)
-rho, trace_rho, beta_fin_2 = density_matrix_convolution_trotter(rho, grid_x, N_iter = N_iter, beta_ini = beta_ini, print_steps=True)
-# checkpoint: trace(rho)=0 when N_beta>16 and nx~1000 or nx~100
+rho, trace_rho, beta_fin_2 = density_matrix_convolution_trotter(rho, grid_x, N_beta = N_beta, beta_ini = beta_ini, print_steps=True)
+# checkpoint: trace(rho)=0 when N_beta>16 and nx~1000 or nx~100 
 # parece que la diferencia entre los picos es siempre constante
 # cuando N_beta=4 el resultado es más óptimo
 print(trace_rho, beta_fin_2)
 rho_normalized = rho/trace_rho          #rho normalizado 
 x_weights = np.diag(rho_normalized)     #densidad de probabilidad dada por los elementos de la diagonal
-file_name = 'pi_x-%s-x_max_%.3f-nx_%d-N_iter_%d-beta_fin_%.3f.csv'%(potential_string,x_max,nx,N_iter,beta_fin)
-relevant_info = u'# %s   x_max = %.3f   nx = %d   N_iter = %d   beta_ini = %.3f   beta_fin = %.3f'%(potential_string,x_max,nx,N_iter,beta_fin,beta_ini)
+file_name = 'pi_x-%s-x_max_%.3f-nx_%d-N_beta_%d-beta_fin_%.3f.csv'%(potential_string,x_max,nx,N_beta,beta_fin)
+relevant_info = u'# %s   x_max = %.3f   nx = %d   N_beta = %d   beta_fin = %.3f'%(potential_string,x_max,nx,N_beta,beta_fin)
 save_pi_x_csv(grid_x, x_weights, file_name, relevant_info, print_data=0)
 
 # Figura preliminar

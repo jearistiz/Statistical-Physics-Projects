@@ -47,55 +47,56 @@ def rho_trotter(x_max = 5., nx = 101, beta=1, potential=harmonic_potential):
     """
     dx = 2. * x_max / (nx - 1)
     grid_x = np.array([i*dx for i in range(-int((nx-1)/2), int(nx/2 + 1))])
-    rho = np.array([ [ rho_free(x , xp, beta) * np.exp(-0.5*beta*(potential(x)+potential(xp))) for x in grid_x] for xp in grid_x])
-    return rho, grid_x, dx
+    rho = np.array([ [ rho_free(x , xp,beta) * np.exp(-0.5*beta*(potential(x)+potential(xp))) for x in grid_x] for xp in grid_x])
+    return rho, grid_x
 
-def density_matrix_convolution_trotter(rho, grid_x, N_iter = 4, beta_ini = 1, print_steps=True):
-    """
-    Uso:    
-    """
-    dx = grid_x[1] - grid_x[0]
-    beta_fin = beta_ini * 2 **  N_iter
-    print('beta_ini = %.3f'%beta_ini)
-    for i in range(N_iter):
-        rho = dx * np.dot(rho,rho)
-        if print_steps==True:
-            print(u'Iteration %d) beta: 2^%d * beta_ini -> 2^%d * beta_ini'%(i, i, i+1))
-    trace_rho = np.trace(rho)*dx
-    return rho, trace_rho, beta_fin
-
-def save_pi_x_csv(grid_x, x_weights, file_name, relevant_info, print_data=True):
-    # Guardamos datos de pi(x;beta) en archivo .csv usando pandas
-    pi_x_data = {'Position x': grid_x,
+def save_rho_csv(grid_x, x_weights, file_name, relevant_info, print_data=True):
+    # Guardamos datos en archivo .csv usando pandas
+    rho_data = {'Position x': grid_x,
                 'Prob. density': x_weights}
-    pi_x_data = pd.DataFrame(data=pi_x_data)
+    rho_data = pd.DataFrame(data=rho_data)
     with open(file_name,mode='w') as rho_csv:
         rho_csv.write(relevant_info+'\n')
     rho_csv.close()
     with open(file_name,mode='a') as rho_csv:
-        pi_x_data.to_csv(rho_csv)
+        rho_data.to_csv(rho_csv)
     rho_csv.close()
     if print_data==True:
-        print(pi_x_data)
-    return pi_x_data
+        print(rho_data)
+    return rho_data
+
+def density_matrix_convolution(rho, grid_x, potential=harmonic_potential, x_max = 5., nx = 101, N_beta = 4, beta_fin = 4):
+    dx = 2. * x_max / (nx - 1)
+    grid_x = np.array([i*dx for i in range(-int((nx-1)/2), int(nx/2 + 1))])
+    beta_ini = beta_fin/N_beta
+    for i in range(N_beta):
+        rho = np.dot(rho,rho)
+        rho *= dx
+        beta_ini *= 2.
+        print('%d) beta: %.2E -> %.2E'%(i, beta_ini/2,beta_ini))
+    return 0
+
 
 x_max = 5.
-nx = 1001
-N_iter = 16
+nx = 101
+N_beta = 4
 beta_fin = 4
-beta_ini = beta_fin * 2**(-N_iter)
+beta_ini = beta_fin/N_beta
 potential, potential_string = harmonic_potential, 'harmonic_potential'
-rho, grid_x, dx = rho_trotter(x_max = x_max, nx = nx, beta = beta_ini, potential = potential)
-rho, trace_rho, beta_fin_2 = density_matrix_convolution_trotter(rho, grid_x, N_iter = N_iter, beta_ini = beta_ini, print_steps=True)
-# checkpoint: trace(rho)=0 when N_beta>16 and nx~1000 or nx~100
+rho, grid_x = rho_trotter(beta_ini,potential=harmonic_potential)
+
+
+# checkpoint: trace(rho)=0 when N_beta>16 and nx~1000 or nx~100 
 # parece que la diferencia entre los picos es siempre constante
 # cuando N_beta=4 el resultado es más óptimo
-print(trace_rho, beta_fin_2)
-rho_normalized = rho/trace_rho          #rho normalizado 
-x_weights = np.diag(rho_normalized)     #densidad de probabilidad dada por los elementos de la diagonal
-file_name = 'pi_x-%s-x_max_%.3f-nx_%d-N_iter_%d-beta_fin_%.3f.csv'%(potential_string,x_max,nx,N_iter,beta_fin)
-relevant_info = u'# %s   x_max = %.3f   nx = %d   N_iter = %d   beta_ini = %.3f   beta_fin = %.3f'%(potential_string,x_max,nx,N_iter,beta_fin,beta_ini)
-save_pi_x_csv(grid_x, x_weights, file_name, relevant_info, print_data=0)
+print (dx)
+print(np.trace(rho))
+
+rho_normalized = rho/(np.trace(rho)*dx)     #rho normalizado 
+x_weights = np.diag(rho_normalized)           #densidad de probabilidad dada por los elementos de la diagonal
+file_name = 'rho-%s-x_max_%.3f-nx_%d-N_beta_%d-beta_fin_%.3f.csv'%(potential_string,x_max,nx,N_beta,beta_fin)
+relevant_info = u'# %s   x_max = %.3f   nx = %d   N_beta = %d   beta_fin = %.3f'%(potential_string,x_max,nx,N_beta,beta_fin)
+save_rho_csv(grid_x, x_weights, file_name, relevant_info, print_data=0)
 
 # Figura preliminar
 plt.figure()
