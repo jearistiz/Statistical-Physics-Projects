@@ -1,0 +1,225 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{} \PYGZhy{}*\PYGZhy{} coding: utf\PYGZhy{}8 \PYGZhy{}*\PYGZhy{}}
+\PYG{k+kn}{from} \PYG{n+nn}{\PYGZus{}\PYGZus{}future\PYGZus{}\PYGZus{}} \PYG{k+kn}{import} \PYG{n}{division}
+\PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k+kn}{as} \PYG{n+nn}{np}
+\PYG{k+kn}{import} \PYG{n+nn}{matplotlib.pyplot} \PYG{k+kn}{as} \PYG{n+nn}{plt}
+\PYG{k+kn}{from} \PYG{n+nn}{time} \PYG{k+kn}{import} \PYG{n}{time}
+\PYG{k+kn}{import} \PYG{n+nn}{pandas} \PYG{k+kn}{as} \PYG{n+nn}{pd}
+
+\PYG{k}{def} \PYG{n+nf}{rho\PYGZus{}free}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,}\PYG{n}{xp}\PYG{p}{,}\PYG{n}{beta}\PYG{p}{):}
+    \PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}Uso: devuelve elemento de matriz dsnsidad para el caso de una partícula libre en un toro infinito.\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+    \PYG{k}{return} \PYG{p}{(}\PYG{l+m+mf}{2.}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{o}{*}\PYG{n}{beta}\PYG{p}{)}\PYG{o}{**}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{0.5}\PYG{p}{)} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{exp}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{p}{(}\PYG{n}{x}\PYG{o}{\PYGZhy{}}\PYG{n}{xp}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mi}{2} \PYG{o}{/} \PYG{p}{(}\PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{beta}\PYG{p}{)} \PYG{p}{)}
+
+\PYG{k}{def} \PYG{n+nf}{harmonic\PYGZus{}potential}\PYG{p}{(}\PYG{n}{x}\PYG{p}{):}
+    \PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}Devuelve valor del potencial armónico para una posición x dada\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+    \PYG{k}{return} \PYG{l+m+mf}{0.5}\PYG{o}{*}\PYG{n}{x}\PYG{o}{**}\PYG{l+m+mi}{2}
+
+\PYG{k}{def} \PYG{n+nf}{anharmonic\PYGZus{}potential}\PYG{p}{(}\PYG{n}{x}\PYG{p}{):}
+    \PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}Devuelve valor de potencial anarmónico para una posición x dada\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+    \PYG{c+c1}{\PYGZsh{} return np.abs(x)*(1+np.cos(x)) \PYGZsh{}el resultado de este potencial es interesante}
+    \PYG{k}{return} \PYG{l+m+mf}{0.5}\PYG{o}{*}\PYG{n}{x}\PYG{o}{**}\PYG{l+m+mi}{2} \PYG{o}{\PYGZhy{}} \PYG{n}{x}\PYG{o}{**}\PYG{l+m+mi}{3} \PYG{o}{+} \PYG{n}{x}\PYG{o}{**}\PYG{l+m+mi}{4}
+
+\PYG{k}{def} \PYG{n+nf}{QHO\PYGZus{}canonical\PYGZus{}ensemble}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,}\PYG{n}{beta}\PYG{p}{):}
+    \PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{    Uso:    calcula probabilidad teórica cuántica de encontrar al oscilador armónico }
+\PYG{l+s+sd}{            (inmerso en un baño térmico a temperatura inversa beta) en la posición x.}
+\PYG{l+s+sd}{    }
+\PYG{l+s+sd}{    Recibe:}
+\PYG{l+s+sd}{        x: float            \PYGZhy{}\PYGZgt{} posición}
+\PYG{l+s+sd}{        beta: float         \PYGZhy{}\PYGZgt{} inverso de temperatura en unidades reducidas beta = 1/T.}
+\PYG{l+s+sd}{    }
+\PYG{l+s+sd}{    Devuelve:}
+\PYG{l+s+sd}{        probabilidad teórica cuántica en posición x para temperatura inversa beta. }
+\PYG{l+s+sd}{    \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+    \PYG{k}{return} \PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{tanh}\PYG{p}{(}\PYG{n}{beta}\PYG{o}{/}\PYG{l+m+mf}{2.}\PYG{p}{)}\PYG{o}{/}\PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mf}{0.5} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{exp}\PYG{p}{(}\PYG{o}{\PYGZhy{}} \PYG{n}{x}\PYG{o}{**}\PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{tanh}\PYG{p}{(}\PYG{n}{beta}\PYG{o}{/}\PYG{l+m+mf}{2.}\PYG{p}{))}
+
+\PYG{k}{def} \PYG{n+nf}{rho\PYGZus{}trotter}\PYG{p}{(}\PYG{n}{x\PYGZus{}max} \PYG{o}{=} \PYG{l+m+mf}{5.}\PYG{p}{,} \PYG{n}{nx} \PYG{o}{=} \PYG{l+m+mi}{101}\PYG{p}{,} \PYG{n}{beta}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{potential}\PYG{o}{=}\PYG{n}{harmonic\PYGZus{}potential}\PYG{p}{):}
+    \PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{    Uso:    devuelve matriz densidad en aproximación de Trotter para altas temperaturas}
+\PYG{l+s+sd}{            y bajo influencia del potencial \PYGZdq{}potential\PYGZdq{}.}
+
+\PYG{l+s+sd}{    Recibe:}
+\PYG{l+s+sd}{        x\PYGZus{}max: float    \PYGZhy{}\PYGZgt{} los valores de x estarán en el intervalo (\PYGZhy{}x\PYGZus{}max,x\PYGZus{}max).}
+\PYG{l+s+sd}{        nx: int         \PYGZhy{}\PYGZgt{} número de valores de x considerados (igualmente espaciados).}
+\PYG{l+s+sd}{        beta: float     \PYGZhy{}\PYGZgt{} inverso de temperatura en unidades reducidas.}
+\PYG{l+s+sd}{        potential: func \PYGZhy{}\PYGZgt{} potencial de interacción. Debe ser función de x.}
+
+\PYG{l+s+sd}{    Devuelve:}
+\PYG{l+s+sd}{        rho: numpy array, shape=(nx,nx)     \PYGZhy{}\PYGZgt{}  matriz densidad en aproximación de Trotter para}
+\PYG{l+s+sd}{                                                altas temperaturas y  potencial dado.}
+\PYG{l+s+sd}{        grid\PYGZus{}x: numpy array, shape=(nx,)    \PYGZhy{}\PYGZgt{}  valores de x en los que está evaluada rho.}
+\PYG{l+s+sd}{        dx: float                           \PYGZhy{}\PYGZgt{}  separación entre valores contiguos de grid\PYGZus{}x}
+\PYG{l+s+sd}{    \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+    \PYG{c+c1}{\PYGZsh{} Valor de la discretización de posiciones según x\PYGZus{}max y nx dados como input}
+    \PYG{n}{dx} \PYG{o}{=} \PYG{l+m+mf}{2.} \PYG{o}{*} \PYG{n}{x\PYGZus{}max} \PYG{o}{/} \PYG{p}{(}\PYG{n}{nx} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{)}
+    \PYG{c+c1}{\PYGZsh{} Lista de valores de x teniendo en cuenta discretización y x\PYGZus{}max}
+    \PYG{n}{grid\PYGZus{}x} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{([}\PYG{n}{i}\PYG{o}{*}\PYG{n}{dx} \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{n+nb}{int}\PYG{p}{((}\PYG{n}{nx}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{),} \PYG{n+nb}{int}\PYG{p}{(}\PYG{n}{nx}\PYG{o}{/}\PYG{l+m+mi}{2} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{))])}
+    \PYG{c+c1}{\PYGZsh{} Construcción de matriz densidad dada por aproximación de Trotter}
+    \PYG{n}{rho} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{([} \PYG{p}{[} \PYG{n}{rho\PYGZus{}free}\PYG{p}{(}\PYG{n}{x} \PYG{p}{,} \PYG{n}{xp}\PYG{p}{,} \PYG{n}{beta}\PYG{p}{)} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{exp}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{0.5}\PYG{o}{*}\PYG{n}{beta}\PYG{o}{*}\PYG{p}{(}\PYG{n}{potential}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}\PYG{o}{+}\PYG{n}{potential}\PYG{p}{(}\PYG{n}{xp}\PYG{p}{)))} \PYG{k}{for} \PYG{n}{x} \PYG{o+ow}{in} \PYG{n}{grid\PYGZus{}x}\PYG{p}{]} \PYG{k}{for} \PYG{n}{xp} \PYG{o+ow}{in} \PYG{n}{grid\PYGZus{}x}\PYG{p}{])}
+    \PYG{k}{return} \PYG{n}{rho}\PYG{p}{,} \PYG{n}{grid\PYGZus{}x}\PYG{p}{,} \PYG{n}{dx}
+
+\PYG{k}{def} \PYG{n+nf}{density\PYGZus{}matrix\PYGZus{}squaring}\PYG{p}{(}\PYG{n}{rho}\PYG{p}{,} \PYG{n}{grid\PYGZus{}x}\PYG{p}{,} \PYG{n}{N\PYGZus{}iter} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{beta\PYGZus{}ini} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{print\PYGZus{}steps}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{):}
+    \PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{    Uso:    devuelve matriz densidad luego de aplicarle algoritmo matrix squaring N\PYGZus{}iter veces.}
+\PYG{l+s+sd}{            En la primera iteración se usa matriz de densidad dada por el input rho (a }
+\PYG{l+s+sd}{            temperatura inversa beta\PYGZus{}ini); en las siguientes iteraciones se usa matriz densidad }
+\PYG{l+s+sd}{            generada por la iteración inmediatamente anterior. El sistema asociado a la matriz }
+\PYG{l+s+sd}{            densidad obtenida (al final de aplicar el algoritmo) está a temperatura inversa}
+\PYG{l+s+sd}{            beta\PYGZus{}fin = beta\PYGZus{}ini * 2**(N\PYGZus{}iter).}
+
+\PYG{l+s+sd}{    Recibe:}
+\PYG{l+s+sd}{        rho: numpy array, shape=(nx,nx)     \PYGZhy{}\PYGZgt{}  matriz densidad discretizada en valores dados}
+\PYG{l+s+sd}{                                                por x\PYGZus{}grid.}
+\PYG{l+s+sd}{        grid\PYGZus{}x: numpy array, shape=(nx,)    \PYGZhy{}\PYGZgt{}  valores de x en los que está evaluada rho.}
+\PYG{l+s+sd}{        N\PYGZus{}iter: int                         \PYGZhy{}\PYGZgt{}  número de iteraciones del algoritmo.}
+\PYG{l+s+sd}{        beta\PYGZus{}ini: float                     \PYGZhy{}\PYGZgt{}  valor de inverso de temperatura asociado a la}
+\PYG{l+s+sd}{                                                matriz densidad rho dada como input.}
+\PYG{l+s+sd}{        print\PYGZus{}steps: bool                   \PYGZhy{}\PYGZgt{}  decide si muestra valores de beta en cada }
+\PYG{l+s+sd}{                                                iteración.}
+\PYG{l+s+sd}{    }
+\PYG{l+s+sd}{    Devuelve:}
+\PYG{l+s+sd}{        rho: numpy array, shape=(nx,nx)     \PYGZhy{}\PYGZgt{}  matriz densidad de estado rho a temperatura }
+\PYG{l+s+sd}{                                                inversa igual a beta\PYGZus{}fin.}
+\PYG{l+s+sd}{        trace\PYGZus{}rho: float                    \PYGZhy{}\PYGZgt{}  traza de la matriz densidad a temperatura inversa}
+\PYG{l+s+sd}{                                                igual a beta\PYGZus{}fin. Por la definición que tomamos}
+\PYG{l+s+sd}{                                                de rho, ésta es equivalente a la función }
+\PYG{l+s+sd}{                                                partición a dicha temperatura. }
+\PYG{l+s+sd}{        beta\PYGZus{}fin: float                     \PYGZhy{}\PYGZgt{}  temperatura inversa del sistema asociado a rho.}
+\PYG{l+s+sd}{    \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+    \PYG{c+c1}{\PYGZsh{} Valor de discretixación de las posiciones}
+    \PYG{n}{dx} \PYG{o}{=} \PYG{n}{grid\PYGZus{}x}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]} \PYG{o}{\PYGZhy{}} \PYG{n}{grid\PYGZus{}x}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}
+    \PYG{c+c1}{\PYGZsh{} Cálculo del valor de beta\PYGZus{}fin según valores beta\PYGZus{}ini y N\PYGZus{}iter dados como input}
+    \PYG{n}{beta\PYGZus{}fin} \PYG{o}{=} \PYG{n}{beta\PYGZus{}ini} \PYG{o}{*} \PYG{l+m+mi}{2} \PYG{o}{**}  \PYG{n}{N\PYGZus{}iter}
+    \PYG{c+c1}{\PYGZsh{} Imprime infromación relevante}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{beta\PYGZus{}ini = }\PYG{l+s+si}{\PYGZpc{}.3f}\PYG{l+s+s1}{\PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{n}{beta\PYGZus{}ini}\PYG{p}{,}
+            \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+    \PYG{c+c1}{\PYGZsh{} Itera algoritmo matrix squaring}
+    \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{N\PYGZus{}iter}\PYG{p}{):}
+        \PYG{n}{rho} \PYG{o}{=} \PYG{n}{dx} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{dot}\PYG{p}{(}\PYG{n}{rho}\PYG{p}{,}\PYG{n}{rho}\PYG{p}{)}
+        \PYG{c+c1}{\PYGZsh{} Imprime información relevante}
+        \PYG{k}{if} \PYG{n}{print\PYGZus{}steps}\PYG{o}{==}\PYG{n+nb+bp}{True}\PYG{p}{:}
+            \PYG{k}{print}\PYG{p}{(}\PYG{l+s+sa}{u}\PYG{l+s+s1}{\PYGZsq{}Iteración }\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{)  2\PYGZca{}}\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{ * beta\PYGZus{}ini \PYGZhy{}\PYGZhy{}\PYGZgt{} 2\PYGZca{}}\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{ * beta\PYGZus{}ini\PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{p}{(}\PYG{n}{i}\PYG{p}{,} \PYG{n}{i}\PYG{p}{,} \PYG{n}{i}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{p}{))}
+    \PYG{c+c1}{\PYGZsh{} Calcula traza de rho}
+    \PYG{n}{trace\PYGZus{}rho} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{trace}\PYG{p}{(}\PYG{n}{rho}\PYG{p}{)}\PYG{o}{*}\PYG{n}{dx}
+    \PYG{k}{return} \PYG{n}{rho}\PYG{p}{,} \PYG{n}{trace\PYGZus{}rho}\PYG{p}{,} \PYG{n}{beta\PYGZus{}fin}
+
+\PYG{k}{def} \PYG{n+nf}{save\PYGZus{}pi\PYGZus{}x\PYGZus{}csv}\PYG{p}{(}\PYG{n}{grid\PYGZus{}x}\PYG{p}{,} \PYG{n}{x\PYGZus{}weights}\PYG{p}{,} \PYG{n}{file\PYGZus{}name}\PYG{p}{,} \PYG{n}{relevant\PYGZus{}info}\PYG{p}{,} \PYG{n}{print\PYGZus{}data}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{):}
+    \PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{    Uso: guarda datos de la distribución de probabilidad pi(x;beta) en un archivo .csv}
+
+\PYG{l+s+sd}{    Recibe:}
+\PYG{l+s+sd}{        grid\PYGZus{}x: numpy array, shape=(nx,)    \PYGZhy{}\PYGZgt{}  valores de x en los que está evaluada pi(x;beta).}
+\PYG{l+s+sd}{        x\PYGZus{}weights: numpy array, shape=(nx,) \PYGZhy{}\PYGZgt{}  valores de pi(x;beta) para cada x en grid\PYGZus{}x}
+\PYG{l+s+sd}{        file\PYGZus{}name: str                      \PYGZhy{}\PYGZgt{}  nombre del archivo en el que se guardarán datos.}
+\PYG{l+s+sd}{        relevant\PYGZus{}info: str                  \PYGZhy{}\PYGZgt{}  información que se agrega como comentario en }
+\PYG{l+s+sd}{                                                primera línea.}
+\PYG{l+s+sd}{        print\PYGZus{}data: bool                    \PYGZhy{}\PYGZgt{}  decide si imprime datos guardados, en pantalla.}
+\PYG{l+s+sd}{    }
+\PYG{l+s+sd}{    Devuelve:}
+\PYG{l+s+sd}{        pi\PYGZus{}x\PYGZus{}data: pd.DataFrame             \PYGZhy{}\PYGZgt{}  valores de pi(x;beta) para x en grid\PYGZus{}x en formato}
+\PYG{l+s+sd}{                                                \PYGZdq{}pandas\PYGZdq{}.}
+\PYG{l+s+sd}{    \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+    \PYG{c+c1}{\PYGZsh{} Almacena datos de probabilifad en diccionario: grid\PYGZus{}x para posiciones y x\PYGZus{}weights para}
+    \PYG{c+c1}{\PYGZsh{} valores de densidad de probabilidad. }
+    \PYG{n}{pi\PYGZus{}x\PYGZus{}data} \PYG{o}{=} \PYG{p}{\PYGZob{}}\PYG{l+s+s1}{\PYGZsq{}Position x\PYGZsq{}}\PYG{p}{:} \PYG{n}{grid\PYGZus{}x}\PYG{p}{,}
+                \PYG{l+s+s1}{\PYGZsq{}Prob. density\PYGZsq{}}\PYG{p}{:} \PYG{n}{x\PYGZus{}weights}\PYG{p}{\PYGZcb{}}
+    \PYG{c+c1}{\PYGZsh{} Pasamos datos a formato DataFrame de pandas.}
+    \PYG{n}{pi\PYGZus{}x\PYGZus{}data} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{(}\PYG{n}{data}\PYG{o}{=}\PYG{n}{pi\PYGZus{}x\PYGZus{}data}\PYG{p}{)}
+    \PYG{c+c1}{\PYGZsh{} Crea archivo .csv y agrega comentarios relevantes dados como input}
+    \PYG{k}{with} \PYG{n+nb}{open}\PYG{p}{(}\PYG{n}{file\PYGZus{}name}\PYG{p}{,}\PYG{n}{mode}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}w\PYGZsq{}}\PYG{p}{)} \PYG{k}{as} \PYG{n}{rho\PYGZus{}csv}\PYG{p}{:}
+        \PYG{n}{rho\PYGZus{}csv}\PYG{o}{.}\PYG{n}{write}\PYG{p}{(}\PYG{n}{relevant\PYGZus{}info}\PYG{o}{+}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{rho\PYGZus{}csv}\PYG{o}{.}\PYG{n}{close}\PYG{p}{()}
+    \PYG{c+c1}{\PYGZsh{} Usamos pandas para escribir en archivo en formato csv.}
+    \PYG{k}{with} \PYG{n+nb}{open}\PYG{p}{(}\PYG{n}{file\PYGZus{}name}\PYG{p}{,}\PYG{n}{mode}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}a\PYGZsq{}}\PYG{p}{)} \PYG{k}{as} \PYG{n}{rho\PYGZus{}csv}\PYG{p}{:}
+        \PYG{n}{pi\PYGZus{}x\PYGZus{}data}\PYG{o}{.}\PYG{n}{to\PYGZus{}csv}\PYG{p}{(}\PYG{n}{rho\PYGZus{}csv}\PYG{p}{)}
+    \PYG{n}{rho\PYGZus{}csv}\PYG{o}{.}\PYG{n}{close}\PYG{p}{()}
+    \PYG{c+c1}{\PYGZsh{} Imprime en pantalla datos de posiciones y probabilidades. }
+    \PYG{k}{if} \PYG{n}{print\PYGZus{}data}\PYG{o}{==}\PYG{n+nb+bp}{True}\PYG{p}{:}
+        \PYG{k}{print}\PYG{p}{(}\PYG{n}{pi\PYGZus{}x\PYGZus{}data}\PYG{p}{)}
+    \PYG{k}{return} \PYG{n}{pi\PYGZus{}x\PYGZus{}data}
+
+\PYG{k}{def} \PYG{n+nf}{run\PYGZus{}pi\PYGZus{}x\PYGZus{}sq\PYGZus{}trotter}\PYG{p}{(}\PYG{n}{x\PYGZus{}max}\PYG{o}{=}\PYG{l+m+mf}{5.}\PYG{p}{,} \PYG{n}{nx}\PYG{o}{=}\PYG{l+m+mi}{201}\PYG{p}{,} \PYG{n}{N\PYGZus{}iter}\PYG{o}{=}\PYG{l+m+mi}{7}\PYG{p}{,} \PYG{n}{beta\PYGZus{}fin}\PYG{o}{=}\PYG{l+m+mi}{4}\PYG{p}{,} \PYG{n}{potential}\PYG{o}{=}\PYG{n}{harmonic\PYGZus{}potential}\PYG{p}{,}
+                         \PYG{n}{potential\PYGZus{}string} \PYG{o}{=}  \PYG{l+s+s1}{\PYGZsq{}harmonic\PYGZus{}potential\PYGZsq{}}\PYG{p}{,} \PYG{n}{print\PYGZus{}steps}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{,}
+                         \PYG{n}{save\PYGZus{}data}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{,} \PYG{n}{plot}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{,} \PYG{n}{save\PYGZus{}plot}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{,} \PYG{n}{show\PYGZus{}plot}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{):}
+    \PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{    Uso:    corre algoritmo matrix squaring iterativamente (N\PYGZus{}iter veces). En la primera}
+\PYG{l+s+sd}{            iteración se usa una matriz densidad en aproximación de Trotter a temperatura}
+\PYG{l+s+sd}{            inversa beta\PYGZus{}ini = beta\PYGZus{}fin * 2**(\PYGZhy{}N\PYGZus{}iter) para potencial dado por potential;}
+\PYG{l+s+sd}{            en las siguientes iteraciones se usa matriz densidad generada por la iteración }
+\PYG{l+s+sd}{            inmediatamente anterior. Además ésta función guarda datos de pi(x;beta) vs. x}
+\PYG{l+s+sd}{            en archivo de texto y grafica pi(x;beta) comparándolo con teoría para el oscilador }
+\PYG{l+s+sd}{            armónico cuántico.}
+
+\PYG{l+s+sd}{    Recibe:}
+\PYG{l+s+sd}{        x\PYGZus{}max: float        \PYGZhy{}\PYGZgt{}  los valores de x estarán en el intervalo (\PYGZhy{}x\PYGZus{}max,x\PYGZus{}max).}
+\PYG{l+s+sd}{        nx: int             \PYGZhy{}\PYGZgt{}  número de valores de x considerados.}
+\PYG{l+s+sd}{        N\PYGZus{}iter: int         \PYGZhy{}\PYGZgt{}  número de iteraciones del algoritmo matrix squaring.}
+\PYG{l+s+sd}{        beta\PYGZus{}ini: float     \PYGZhy{}\PYGZgt{}  valor de inverso de temperatura que queremos tener al final de}
+\PYG{l+s+sd}{                                aplicar el algoritmo matrix squaring iterativamente. }
+\PYG{l+s+sd}{        potential: func     \PYGZhy{}\PYGZgt{}  potencial de interacción usado en aproximación de trotter. Debe }
+\PYG{l+s+sd}{                                ser función de x.}
+\PYG{l+s+sd}{        potential\PYGZus{}string: str   \PYGZhy{}\PYGZgt{}  nombre del potencial (con éste nombramos los archivos que}
+\PYG{l+s+sd}{                                    se generan).}
+\PYG{l+s+sd}{        print\PYGZus{}steps: bool   \PYGZhy{}\PYGZgt{}  decide si imprime los pasos del algoritmo matrix squaring.}
+\PYG{l+s+sd}{        save\PYGZus{}data: bool     \PYGZhy{}\PYGZgt{}  decide si guarda los datos en archivo .csv.}
+\PYG{l+s+sd}{        plot: bool          \PYGZhy{}\PYGZgt{}  decide si grafica.}
+\PYG{l+s+sd}{        save\PYGZus{}plot: bool     \PYGZhy{}\PYGZgt{}  decide si guarda la figura.}
+\PYG{l+s+sd}{        show\PYGZus{}plot: bool     \PYGZhy{}\PYGZgt{}  decide si muestra la figura en pantalla. }
+\PYG{l+s+sd}{    }
+\PYG{l+s+sd}{    Devuelve:}
+\PYG{l+s+sd}{        rho: numpy array, shape=(nx,nx)     \PYGZhy{}\PYGZgt{}  matriz densidad de estado rho a temperatura }
+\PYG{l+s+sd}{                                                inversa igual a beta\PYGZus{}fin.}
+\PYG{l+s+sd}{        trace\PYGZus{}rho: float                    \PYGZhy{}\PYGZgt{}  traza de la matriz densidad a temperatura inversa}
+\PYG{l+s+sd}{                                                igual a beta\PYGZus{}fin. Por la definición que tomamos}
+\PYG{l+s+sd}{                                                de \PYGZdq{}rho\PYGZdq{}, ésta es equivalente a la función }
+\PYG{l+s+sd}{                                                partición en dicha temperatura.}
+\PYG{l+s+sd}{        grid\PYGZus{}x: numpy array, shape=(nx,)    \PYGZhy{}\PYGZgt{}  valores de x en los que está evaluada rho.}
+\PYG{l+s+sd}{    \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+    \PYG{c+c1}{\PYGZsh{} Cálculo del valor de beta\PYGZus{}ini según valores beta\PYGZus{}fin y N\PYGZus{}iter dados como input}
+    \PYG{n}{beta\PYGZus{}ini} \PYG{o}{=} \PYG{n}{beta\PYGZus{}fin} \PYG{o}{*} \PYG{l+m+mi}{2}\PYG{o}{**}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{n}{N\PYGZus{}iter}\PYG{p}{)}
+    \PYG{c+c1}{\PYGZsh{} Cálculo de rho con aproximación de Trotter}
+    \PYG{n}{rho}\PYG{p}{,} \PYG{n}{grid\PYGZus{}x}\PYG{p}{,} \PYG{n}{dx} \PYG{o}{=} \PYG{n}{rho\PYGZus{}trotter}\PYG{p}{(}\PYG{n}{x\PYGZus{}max}\PYG{p}{,} \PYG{n}{nx}\PYG{p}{,} \PYG{n}{beta\PYGZus{}ini}\PYG{p}{,} \PYG{n}{potential}\PYG{p}{)}
+    \PYG{c+c1}{\PYGZsh{} Aproximación de rho con matrix squaring iterado N\PYGZus{}iter veces.}
+    \PYG{n}{rho}\PYG{p}{,} \PYG{n}{trace\PYGZus{}rho}\PYG{p}{,} \PYG{n}{beta\PYGZus{}fin\PYGZus{}2} \PYG{o}{=} \PYG{n}{density\PYGZus{}matrix\PYGZus{}squaring}\PYG{p}{(}\PYG{n}{rho}\PYG{p}{,} \PYG{n}{grid\PYGZus{}x}\PYG{p}{,} \PYG{n}{N\PYGZus{}iter}\PYG{p}{,} 
+                                                            \PYG{n}{beta\PYGZus{}ini}\PYG{p}{,} \PYG{n}{print\PYGZus{}steps}\PYG{p}{)}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZsq{}} \PYG{o}{+} \PYGZbs{}
+           \PYG{l+s+sa}{u}\PYG{l+s+s1}{\PYGZsq{}beta\PYGZus{}fin = }\PYG{l+s+si}{\PYGZpc{}.3f}\PYG{l+s+s1}{   Z(beta\PYGZus{}fin) = Tr(rho(beta\PYGZus{}fin)) = }\PYG{l+s+si}{\PYGZpc{}.3E}\PYG{l+s+s1}{ }\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{p}{(}\PYG{n}{beta\PYGZus{}fin\PYGZus{}2}\PYG{p}{,}\PYG{n}{trace\PYGZus{}rho}\PYG{p}{))}
+    \PYG{c+c1}{\PYGZsh{} Normalización de rho a 1 y cálculo de densidades de probabilidad para valores en grid\PYGZus{}x.}
+    \PYG{n}{rho\PYGZus{}normalized} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{copy}\PYG{p}{(}\PYG{n}{rho}\PYG{p}{)}\PYG{o}{/}\PYG{n}{trace\PYGZus{}rho}
+    \PYG{n}{x\PYGZus{}weights} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{diag}\PYG{p}{(}\PYG{n}{rho\PYGZus{}normalized}\PYG{p}{)}
+    \PYG{c+c1}{\PYGZsh{} Guarda datos en archivo .csv.}
+    \PYG{k}{if} \PYG{n}{save\PYGZus{}data}\PYG{o}{==}\PYG{n+nb+bp}{True}\PYG{p}{:}
+        \PYG{c+c1}{\PYGZsh{} Nombre del archivo .csv en el que guardamos valores de pi(x;beta\PYGZus{}fin).}
+        \PYG{n}{file\PYGZus{}name} \PYG{o}{=} \PYG{l+s+sa}{u}\PYG{l+s+s1}{\PYGZsq{}pi\PYGZus{}x\PYGZhy{}}\PYG{l+s+si}{\PYGZpc{}s}\PYG{l+s+s1}{\PYGZhy{}x\PYGZus{}max\PYGZus{}}\PYG{l+s+si}{\PYGZpc{}.3f}\PYG{l+s+s1}{\PYGZhy{}nx\PYGZus{}}\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{\PYGZhy{}N\PYGZus{}iter\PYGZus{}}\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{\PYGZhy{}beta\PYGZus{}fin\PYGZus{}}\PYG{l+s+si}{\PYGZpc{}.3f}\PYG{l+s+s1}{.csv\PYGZsq{}}\PYGZbs{}
+                                            \PYG{o}{\PYGZpc{}}\PYG{p}{(}\PYG{n}{potential\PYGZus{}string}\PYG{p}{,}\PYG{n}{x\PYGZus{}max}\PYG{p}{,}\PYG{n}{nx}\PYG{p}{,}\PYG{n}{N\PYGZus{}iter}\PYG{p}{,}\PYG{n}{beta\PYGZus{}fin}\PYG{p}{)}
+        \PYG{c+c1}{\PYGZsh{} Información relevante para agregar como comentario al archivo csv.}
+        \PYG{n}{relevant\PYGZus{}info} \PYG{o}{=} \PYG{l+s+sa}{u}\PYG{l+s+s1}{\PYGZsq{}\PYGZsh{} }\PYG{l+s+si}{\PYGZpc{}s}\PYG{l+s+s1}{   x\PYGZus{}max = }\PYG{l+s+si}{\PYGZpc{}.3f}\PYG{l+s+s1}{   nx = }\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{   \PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{p}{(}\PYG{n}{potential\PYGZus{}string}\PYG{p}{,}\PYG{n}{x\PYGZus{}max}\PYG{p}{,}\PYG{n}{nx}\PYG{p}{)} \PYG{o}{+} \PYGZbs{}
+                        \PYG{l+s+sa}{u}\PYG{l+s+s1}{\PYGZsq{}N\PYGZus{}iter = }\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{   beta\PYGZus{}ini = }\PYG{l+s+si}{\PYGZpc{}.3f}\PYG{l+s+s1}{   \PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{p}{(}\PYG{n}{N\PYGZus{}iter}\PYG{p}{,}\PYG{n}{beta\PYGZus{}ini}\PYG{p}{,)} \PYG{o}{+} \PYGZbs{}
+                        \PYG{l+s+sa}{u}\PYG{l+s+s1}{\PYGZsq{}beta\PYGZus{}fin = }\PYG{l+s+si}{\PYGZpc{}.3f}\PYG{l+s+s1}{\PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{n}{beta\PYGZus{}fin}
+        \PYG{c+c1}{\PYGZsh{} Guardamos valores  de pi(x;beta\PYGZus{}fin) en archivo csv.}
+        \PYG{n}{pi\PYGZus{}x\PYGZus{}data} \PYG{o}{=} \PYG{n}{save\PYGZus{}pi\PYGZus{}x\PYGZus{}csv}\PYG{p}{(}\PYG{n}{grid\PYGZus{}x}\PYG{p}{,} \PYG{n}{x\PYGZus{}weights}\PYG{p}{,} \PYG{n}{file\PYGZus{}name}\PYG{p}{,} \PYG{n}{relevant\PYGZus{}info}\PYG{p}{,} \PYG{n}{print\PYGZus{}data}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{)}
+    \PYG{c+c1}{\PYGZsh{} Gráfica y comparación con teoría}
+    \PYG{k}{if} \PYG{n}{plot} \PYG{o}{==} \PYG{n+nb+bp}{True}\PYG{p}{:}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{,}\PYG{l+m+mi}{5}\PYG{p}{))}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{grid\PYGZus{}x}\PYG{p}{,} \PYG{n}{x\PYGZus{}weights}\PYG{p}{,} \PYG{n}{label} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}Matrix squaring +}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{fórmula de Trotter.}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZdl{}N=}\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{\PYGZdl{} iteraciones}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZdl{}dx=}\PYG{l+s+si}{\PYGZpc{}.3E}\PYG{l+s+s1}{\PYGZdl{}\PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{p}{(}\PYG{n}{N\PYGZus{}iter}\PYG{p}{,}\PYG{n}{dx}\PYG{p}{))}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{grid\PYGZus{}x}\PYG{p}{,} \PYG{n}{QHO\PYGZus{}canonical\PYGZus{}ensemble}\PYG{p}{(}\PYG{n}{grid\PYGZus{}x}\PYG{p}{,}\PYG{n}{beta\PYGZus{}fin}\PYG{p}{),} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+sa}{u}\PYG{l+s+s1}{\PYGZsq{}Valor teórico QHO\PYGZsq{}}\PYG{p}{)}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+sa}{u}\PYG{l+s+s1}{\PYGZsq{}x\PYGZsq{}}\PYG{p}{)}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+sa}{u}\PYG{l+s+s1}{\PYGZsq{}\PYGZdl{}\PYGZbs{}pi\PYGZca{}\PYGZob{}(Q)\PYGZcb{}(x;}\PYG{l+s+se}{\PYGZbs{}\PYGZbs{}}\PYG{l+s+s1}{beta)\PYGZdl{}\PYGZsq{}}\PYG{p}{)}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{(}\PYG{n}{loc}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}best\PYGZsq{}}\PYG{p}{,}\PYG{n}{title}\PYG{o}{=}\PYG{l+s+sa}{u}\PYG{l+s+s1}{\PYGZsq{}\PYGZdl{}}\PYG{l+s+se}{\PYGZbs{}\PYGZbs{}}\PYG{l+s+s1}{beta=}\PYG{l+s+si}{\PYGZpc{}.2f}\PYG{l+s+s1}{\PYGZdl{}\PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{n}{beta\PYGZus{}fin}\PYG{p}{)}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{tight\PYGZus{}layout}\PYG{p}{()}
+        \PYG{k}{if} \PYG{n}{save\PYGZus{}plot}\PYG{o}{==}\PYG{n+nb+bp}{True}\PYG{p}{:}
+            \PYG{n}{plot\PYGZus{}name} \PYG{o}{=} \PYG{l+s+sa}{u}\PYG{l+s+s1}{\PYGZsq{}pi\PYGZus{}x\PYGZhy{}plot\PYGZhy{}}\PYG{l+s+si}{\PYGZpc{}s}\PYG{l+s+s1}{\PYGZhy{}x\PYGZus{}max\PYGZus{}}\PYG{l+s+si}{\PYGZpc{}.3f}\PYG{l+s+s1}{\PYGZhy{}nx\PYGZus{}}\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{\PYGZhy{}N\PYGZus{}iter\PYGZus{}}\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{\PYGZhy{}beta\PYGZus{}fin\PYGZus{}}\PYG{l+s+si}{\PYGZpc{}.3f}\PYG{l+s+s1}{.eps\PYGZsq{}}\PYGZbs{}
+                                            \PYG{o}{\PYGZpc{}}\PYG{p}{(}\PYG{n}{potential\PYGZus{}string}\PYG{p}{,}\PYG{n}{x\PYGZus{}max}\PYG{p}{,}\PYG{n}{nx}\PYG{p}{,}\PYG{n}{N\PYGZus{}iter}\PYG{p}{,}\PYG{n}{beta\PYGZus{}fin}\PYG{p}{)}
+            \PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{n}{plot\PYGZus{}name}\PYG{p}{)}
+        \PYG{k}{if} \PYG{n}{show\PYGZus{}plot}\PYG{o}{==}\PYG{n+nb+bp}{True}\PYG{p}{:}
+            \PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{close}\PYG{p}{()}
+    \PYG{k}{return} \PYG{n}{rho}\PYG{p}{,} \PYG{n}{trace\PYGZus{}rho}\PYG{p}{,} \PYG{n}{grid\PYGZus{}x}
+
+\PYG{c+c1}{\PYGZsh{} Agranda letra en texto de figuras generadas}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{o}{.}\PYG{n}{update}\PYG{p}{(\PYGZob{}}\PYG{l+s+s1}{\PYGZsq{}font.size\PYGZsq{}}\PYG{p}{:}\PYG{l+m+mi}{15}\PYG{p}{\PYGZcb{})}
+\PYG{c+c1}{\PYGZsh{} Corre el algoritmo}
+\PYG{n}{rho}\PYG{p}{,} \PYG{n}{trace\PYGZus{}rho}\PYG{p}{,} \PYG{n}{grid\PYGZus{}x} \PYG{o}{=} \PYG{n}{run\PYGZus{}pi\PYGZus{}x\PYGZus{}sq\PYGZus{}trotter}\PYG{p}{(} \PYG{n}{potential} \PYG{o}{=} \PYG{n}{harmonic\PYGZus{}potential}\PYG{p}{,}
+                                            \PYG{n}{potential\PYGZus{}string} \PYG{o}{=}  \PYG{l+s+s1}{\PYGZsq{}harmonic\PYGZus{}potential\PYGZsq{}}\PYG{p}{,}
+                                            \PYG{n}{save\PYGZus{}data}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{,} \PYG{n}{save\PYGZus{}plot}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{,} \PYG{n}{show\PYGZus{}plot}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{)}
+\end{Verbatim}
