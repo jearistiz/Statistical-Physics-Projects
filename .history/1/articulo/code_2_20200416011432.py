@@ -5,9 +5,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from time import time
 
-# Author: Juan Esteban Aristizabal-Zuluaga
-# date: 202004151200
-
 def psi_0_1(x_limit = 5, N_points_x = 101):  #creates first two energy eigenfunctions
     """
     Uso:    Devuelve diccionario "psi" que representa las autofunciones de energía. 

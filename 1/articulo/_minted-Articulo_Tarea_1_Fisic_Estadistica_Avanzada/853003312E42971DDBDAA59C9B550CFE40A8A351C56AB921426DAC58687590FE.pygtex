@@ -1,9 +1,13 @@
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{c+c1}{\PYGZsh{} \PYGZhy{}*\PYGZhy{} coding: utf\PYGZhy{}8 \PYGZhy{}*\PYGZhy{}}
 \PYG{k+kn}{from} \PYG{n+nn}{\PYGZus{}\PYGZus{}future\PYGZus{}\PYGZus{}} \PYG{k+kn}{import} \PYG{n}{division}
+\PYG{k+kn}{import} \PYG{n+nn}{os}
 \PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k+kn}{as} \PYG{n+nn}{np}
 \PYG{k+kn}{import} \PYG{n+nn}{matplotlib.pyplot} \PYG{k+kn}{as} \PYG{n+nn}{plt}
 \PYG{k+kn}{from} \PYG{n+nn}{time} \PYG{k+kn}{import} \PYG{n}{time}
+
+\PYG{c+c1}{\PYGZsh{} Author: Juan Esteban Aristizabal\PYGZhy{}Zuluaga}
+\PYG{c+c1}{\PYGZsh{} date: 202004151200}
 
 \PYG{k}{def} \PYG{n+nf}{psi\PYGZus{}0\PYGZus{}1}\PYG{p}{(}\PYG{n}{x\PYGZus{}limit} \PYG{o}{=} \PYG{l+m+mi}{5}\PYG{p}{,} \PYG{n}{N\PYGZus{}points\PYGZus{}x} \PYG{o}{=} \PYG{l+m+mi}{101}\PYG{p}{):}  \PYG{c+c1}{\PYGZsh{}creates first two energy eigenfunctions}
     \PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
@@ -25,7 +29,7 @@
 \PYG{l+s+sd}{    Devuelve:}
 \PYG{l+s+sd}{        psi: dict           \PYGZhy{}\PYGZgt{}  psi[x][n] corresponde a la autofucnión de energía }
 \PYG{l+s+sd}{                                \PYGZbs{}psi\PYGZus{}\PYGZob{}n\PYGZcb{}(x) n = 0,1.}
-\PYG{l+s+sd}{        grid\PYGZus{}x: list        \PYGZhy{}\PYGZgt{}  lista con valores de x que se pueden usar en el diccionario psi. }
+\PYG{l+s+sd}{        grid\PYGZus{}x: list        \PYGZhy{}\PYGZgt{}  lista con valores de x que se pueden usar en el diccionario psi.}
 \PYG{l+s+sd}{    \PYGZdq{}\PYGZdq{}\PYGZdq{}}
     \PYG{n}{N\PYGZus{}points\PYGZus{}x} \PYG{o}{=} \PYG{n+nb}{int}\PYG{p}{(}\PYG{n}{N\PYGZus{}points\PYGZus{}x}\PYG{p}{)}
     \PYG{k}{if} \PYG{n}{N\PYGZus{}points\PYGZus{}x}\PYG{o}{\PYGZpc{}}\PYG{l+m+mi}{2} \PYG{o}{==}\PYG{l+m+mi}{0}\PYG{p}{:}
@@ -122,7 +126,7 @@
 \PYG{l+s+sd}{                            presencia de baño térmico) en una posición x.}
 \PYG{l+s+sd}{        n\PYGZus{}hist: list    \PYGZhy{}\PYGZgt{}  lista con la que se calcula el histograma que aproxima distribución}
 \PYG{l+s+sd}{                            de Boltzmann para el caso del oscilador armónico cuántico.}
-\PYG{l+s+sd}{        prob\PYGZus{}sampling[0]: dict      \PYGZhy{}\PYGZgt{}  diccionatrio de autofunciones de energía actualizado para }
+\PYG{l+s+sd}{        prob\PYGZus{}sampling[0]: dict      \PYGZhy{}\PYGZgt{}  diccionatrio de autofunciones de energía actualizado para}
 \PYG{l+s+sd}{                                        todos los valores de x\PYGZus{}hist y n\PYGZus{}hist. Se accede a ellos }
 \PYG{l+s+sd}{                                        mediante prob\PYGZus{}sampling[0][x][n].}
 \PYG{l+s+sd}{    \PYGZdq{}\PYGZdq{}\PYGZdq{}}
@@ -202,7 +206,8 @@
         \PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}\PYGZdl{}\PYGZbs{}pi\PYGZca{}\PYGZob{}(C)\PYGZcb{}(x;}\PYG{l+s+se}{\PYGZbs{}\PYGZbs{}}\PYG{l+s+s1}{beta)\PYGZdl{}\PYGZsq{}}\PYG{p}{)}
         \PYG{n}{plt}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{(}\PYG{n}{loc}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}best\PYGZsq{}}\PYG{p}{)}
         \PYG{k}{if} \PYG{n}{savefig}\PYG{o}{==}\PYG{n+nb+bp}{True}\PYG{p}{:}
-            \PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}plot\PYGZus{}CHO\PYGZus{}finite\PYGZus{}temp\PYGZus{}several\PYGZus{}beta.eps\PYGZsq{}}\PYG{p}{)}
+            \PYG{n}{script\PYGZus{}dir} \PYG{o}{=} \PYG{n}{os}\PYG{o}{.}\PYG{n}{path}\PYG{o}{.}\PYG{n}{dirname}\PYG{p}{(}\PYG{n}{os}\PYG{o}{.}\PYG{n}{path}\PYG{o}{.}\PYG{n}{abspath}\PYG{p}{(}\PYG{n+nv+vm}{\PYGZus{}\PYGZus{}file\PYGZus{}\PYGZus{}}\PYG{p}{))} \PYG{c+c1}{\PYGZsh{}path completa para script}
+            \PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{n}{script\PYGZus{}dir} \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{}/plot\PYGZus{}CHO\PYGZus{}finite\PYGZus{}temp\PYGZus{}several\PYGZus{}beta.eps\PYGZsq{}}\PYG{p}{)}
         \PYG{k}{if} \PYG{n}{showplot}\PYG{o}{==}\PYG{n+nb+bp}{True}\PYG{p}{:}
             \PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
         \PYG{n}{plt}\PYG{o}{.}\PYG{n}{close}\PYG{p}{()}
@@ -291,7 +296,9 @@
         \PYG{n}{plt}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{(}\PYG{n}{loc}\PYG{o}{=}\PYG{n}{legend\PYGZus{}loc}\PYG{p}{,} \PYG{n}{title}\PYG{o}{=}\PYG{l+s+sa}{u}\PYG{l+s+s1}{\PYGZsq{}\PYGZdl{}}\PYG{l+s+se}{\PYGZbs{}\PYGZbs{}}\PYG{l+s+s1}{beta=}\PYG{l+s+si}{\PYGZpc{}.2f}\PYG{l+s+s1}{\PYGZdl{}\PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{n}{beta}\PYG{p}{,} \PYG{n}{fontsize}\PYG{o}{=}\PYG{l+m+mi}{12}\PYG{p}{)}
         \PYG{n}{plt}\PYG{o}{.}\PYG{n}{tight\PYGZus{}layout}\PYG{p}{()}
         \PYG{k}{if} \PYG{n}{savefig}\PYG{o}{==}\PYG{n+nb+bp}{True}\PYG{p}{:}
-            \PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}plot\PYGZus{}QHO\PYGZus{}finite\PYGZus{}temp\PYGZus{}beta\PYGZus{}}\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{\PYGZus{}}\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{.eps\PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{p}{(}\PYG{n}{beta}\PYG{p}{,(}\PYG{n}{beta}\PYG{o}{\PYGZhy{}}\PYG{n+nb}{int}\PYG{p}{(}\PYG{n}{beta}\PYG{p}{))}\PYG{o}{*}\PYG{l+m+mi}{100}\PYG{p}{))}
+            \PYG{n}{script\PYGZus{}dir} \PYG{o}{=} \PYG{n}{os}\PYG{o}{.}\PYG{n}{path}\PYG{o}{.}\PYG{n}{dirname}\PYG{p}{(}\PYG{n}{os}\PYG{o}{.}\PYG{n}{path}\PYG{o}{.}\PYG{n}{abspath}\PYG{p}{(}\PYG{n+nv+vm}{\PYGZus{}\PYGZus{}file\PYGZus{}\PYGZus{}}\PYG{p}{))} \PYG{c+c1}{\PYGZsh{}path completa para script}
+            \PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{n}{script\PYGZus{}dir} \PYG{o}{+} 
+                        \PYG{l+s+s1}{\PYGZsq{}/plot\PYGZus{}QHO\PYGZus{}finite\PYGZus{}temp\PYGZus{}beta\PYGZus{}}\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{\PYGZus{}}\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{.eps\PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{p}{(}\PYG{n}{beta}\PYG{p}{,(}\PYG{n}{beta}\PYG{o}{\PYGZhy{}}\PYG{n+nb}{int}\PYG{p}{(}\PYG{n}{beta}\PYG{p}{))}\PYG{o}{*}\PYG{l+m+mi}{100}\PYG{p}{))}
         \PYG{k}{if} \PYG{n}{showplot}\PYG{o}{==}\PYG{n+nb+bp}{True}\PYG{p}{:}
             \PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
         \PYG{n}{plt}\PYG{o}{.}\PYG{n}{close}\PYG{p}{()}
@@ -308,7 +315,8 @@
         \PYG{n}{plt}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{(}\PYG{n}{loc}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}best\PYGZsq{}}\PYG{p}{,} \PYG{n}{title}\PYG{o}{=}\PYG{l+s+sa}{u}\PYG{l+s+s1}{\PYGZsq{}\PYGZdl{}}\PYG{l+s+se}{\PYGZbs{}\PYGZbs{}}\PYG{l+s+s1}{beta=}\PYG{l+s+si}{\PYGZpc{}.2f}\PYG{l+s+s1}{\PYGZdl{}\PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{n}{beta}\PYG{p}{)}
         \PYG{n}{plt}\PYG{o}{.}\PYG{n}{tight\PYGZus{}layout}\PYG{p}{()}
         \PYG{k}{if} \PYG{n}{savefig}\PYG{o}{==}\PYG{n+nb+bp}{True}\PYG{p}{:}
-            \PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}plot\PYGZus{}QHO\PYGZus{}n\PYGZus{}hist\PYGZus{}beta\PYGZus{}}\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{\PYGZus{}}\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{.eps\PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{p}{(}\PYG{n}{beta}\PYG{p}{,(}\PYG{n}{beta}\PYG{o}{\PYGZhy{}}\PYG{n+nb}{int}\PYG{p}{(}\PYG{n}{beta}\PYG{p}{))}\PYG{o}{*}\PYG{l+m+mi}{100}\PYG{p}{))}
+            \PYG{n}{script\PYGZus{}dir} \PYG{o}{=} \PYG{n}{os}\PYG{o}{.}\PYG{n}{path}\PYG{o}{.}\PYG{n}{dirname}\PYG{p}{(}\PYG{n}{os}\PYG{o}{.}\PYG{n}{path}\PYG{o}{.}\PYG{n}{abspath}\PYG{p}{(}\PYG{n+nv+vm}{\PYGZus{}\PYGZus{}file\PYGZus{}\PYGZus{}}\PYG{p}{))} \PYG{c+c1}{\PYGZsh{}path completa para script}
+            \PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{n}{script\PYGZus{}dir}\PYG{o}{+}\PYG{l+s+s1}{\PYGZsq{}/plot\PYGZus{}QHO\PYGZus{}n\PYGZus{}hist\PYGZus{}beta\PYGZus{}}\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{\PYGZus{}}\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{.eps\PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{p}{(}\PYG{n}{beta}\PYG{p}{,(}\PYG{n}{beta}\PYG{o}{\PYGZhy{}}\PYG{n+nb}{int}\PYG{p}{(}\PYG{n}{beta}\PYG{p}{))}\PYG{o}{*}\PYG{l+m+mi}{100}\PYG{p}{))}
         \PYG{k}{if} \PYG{n}{showplot}\PYG{o}{==}\PYG{n+nb+bp}{True}\PYG{p}{:}
             \PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
         \PYG{n}{plt}\PYG{o}{.}\PYG{n}{close}\PYG{p}{()}

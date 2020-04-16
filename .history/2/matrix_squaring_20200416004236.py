@@ -229,4 +229,4 @@ plt.rcParams.update({'font.size':15})
 # Corre el algoritmo
 rho, trace_rho, grid_x = run_pi_x_sq_trotter( potential = harmonic_potential,
                                             potential_string =  'harmonic_potential',
-                                            save_data=True, save_plot=True, show_plot=True)
+                                            save_data=True, save_plot=True, show_plot=1)

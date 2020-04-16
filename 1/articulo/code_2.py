@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 from time import time
+
+# Author: Juan Esteban Aristizabal-Zuluaga
+# date: 202004151200
 
 def psi_0_1(x_limit = 5, N_points_x = 101):  #creates first two energy eigenfunctions
     """
@@ -24,7 +28,7 @@ def psi_0_1(x_limit = 5, N_points_x = 101):  #creates first two energy eigenfunc
     Devuelve:
         psi: dict           ->  psi[x][n] corresponde a la autofucnión de energía 
                                 \psi_{n}(x) n = 0,1.
-        grid_x: list        ->  lista con valores de x que se pueden usar en el diccionario psi. 
+        grid_x: list        ->  lista con valores de x que se pueden usar en el diccionario psi.
     """
     N_points_x = int(N_points_x)
     if N_points_x%2 ==0:
@@ -121,7 +125,7 @@ def metropolis_finite_temp(x0=0.0, delta_x=0.5, N=1e3,
                             presencia de baño térmico) en una posición x.
         n_hist: list    ->  lista con la que se calcula el histograma que aproxima distribución
                             de Boltzmann para el caso del oscilador armónico cuántico.
-        prob_sampling[0]: dict      ->  diccionatrio de autofunciones de energía actualizado para 
+        prob_sampling[0]: dict      ->  diccionatrio de autofunciones de energía actualizado para
                                         todos los valores de x_hist y n_hist. Se accede a ellos 
                                         mediante prob_sampling[0][x][n].
     """
@@ -201,7 +205,8 @@ def CHO_canonical_ensemble(x,beta=5,plot=False,savefig=True,showplot=False):
         plt.ylabel('$\pi^{(C)}(x;\\beta)$')
         plt.legend(loc='best')
         if savefig==True:
-            plt.savefig('plot_CHO_finite_temp_several_beta.eps')
+            script_dir = os.path.dirname(os.path.abspath(__file__)) #path completa para script
+            plt.savefig(script_dir + '/plot_CHO_finite_temp_several_beta.eps')
         if showplot==True:
             plt.show()
         plt.close()
@@ -290,7 +295,9 @@ def run_metropolis(psi_0_1 = psi_0_1, x_limit = 5., N_points_x = 51,
         plt.legend(loc=legend_loc, title=u'$\\beta=%.2f$'%beta, fontsize=12)
         plt.tight_layout()
         if savefig==True:
-            plt.savefig('plot_QHO_finite_temp_beta_%d_%d.eps'%(beta,(beta-int(beta))*100))
+            script_dir = os.path.dirname(os.path.abspath(__file__)) #path completa para script
+            plt.savefig(script_dir + 
+                        '/plot_QHO_finite_temp_beta_%d_%d.eps'%(beta,(beta-int(beta))*100))
         if showplot==True:
             plt.show()
         plt.close()
@@ -307,7 +314,8 @@ def run_metropolis(psi_0_1 = psi_0_1, x_limit = 5., N_points_x = 51,
         plt.legend(loc='best', title=u'$\\beta=%.2f$'%beta)
         plt.tight_layout()
         if savefig==True:
-            plt.savefig('plot_QHO_n_hist_beta_%d_%d.eps'%(beta,(beta-int(beta))*100))
+            script_dir = os.path.dirname(os.path.abspath(__file__)) #path completa para script
+            plt.savefig(script_dir+'/plot_QHO_n_hist_beta_%d_%d.eps'%(beta,(beta-int(beta))*100))
         if showplot==True:
             plt.show()
         plt.close()

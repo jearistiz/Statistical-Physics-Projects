@@ -196,7 +196,7 @@ def run_pi_x_sq_trotter(x_max=5., nx=201, N_iter=7, beta_fin=4, potential=harmon
     script_dir = os.path.dirname(os.path.abspath(__file__)) #path completa para este script
     if save_data==True:
         # Nombre del archivo .csv en el que guardamos valores de pi(x;beta_fin).
-        file_name = script_dir+u'/pi_x-%s-x_max_%.3f-nx_%d-N_iter_%d-beta_fin_%.3f.csv'\
+        file_name = script_dir + u'/pi_x-%s-x_max_%.3f-nx_%d-N_iter_%d-beta_fin_%.3f.csv'\
                                             %(potential_string,x_max,nx,N_iter,beta_fin)
         # Información relevante para agregar como comentario al archivo csv.
         relevant_info = [   'pi(x;beta_fin) computed using matrix squaring algorithm and' + \
@@ -216,7 +216,7 @@ def run_pi_x_sq_trotter(x_max=5., nx=201, N_iter=7, beta_fin=4, potential=harmon
         plt.legend(loc='best',title=u'$\\beta=%.2f$'%beta_fin)
         plt.tight_layout()
         if save_plot==True:
-            plot_name = script_dir+u'/pi_x-plot-%s-x_max_%.3f-nx_%d-N_iter_%d-beta_fin_%.3f.eps'\
+            plot_name = u'pi_x-plot-%s-x_max_%.3f-nx_%d-N_iter_%d-beta_fin_%.3f.eps'\
                                             %(potential_string,x_max,nx,N_iter,beta_fin)
             plt.savefig(plot_name)
         if show_plot==True:
@@ -229,4 +229,4 @@ plt.rcParams.update({'font.size':15})
 # Corre el algoritmo
 rho, trace_rho, grid_x = run_pi_x_sq_trotter( potential = harmonic_potential,
                                             potential_string =  'harmonic_potential',
-                                            save_data=True, save_plot=True, show_plot=True)
+                                            save_data=True, save_plot=True, show_plot=1)

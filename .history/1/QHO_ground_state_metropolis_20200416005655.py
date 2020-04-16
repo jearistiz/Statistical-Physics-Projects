@@ -1,12 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
-import os 
 import numpy as np
 import matplotlib.pyplot as plt
 from time import time
-
-# Author: Juan Esteban Aristizabal-Zuluaga
-# date: 202004151200
 
 def QHO_ground(x):
     """
@@ -90,7 +86,7 @@ def run_metropolis(N=1e5, x0=0.0, delta_x=0.5, prob_amplitude_sampling=QHO_groun
         plt.legend(loc='lower right')
         if savefig[0]==True:
             script_dir = os.path.dirname(os.path.abspath(__file__)) #path completa para script
-            plt.savefig(script_dir+'/'+savefig[1])
+            plt.savefig(savefig[1])
         if showplot==True:
             plt.show()
         plt.close()

@@ -5,9 +5,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from time import time
 
-# Author: Juan Esteban Aristizabal-Zuluaga
-# date: 202004151200
-
 def psi_0_1(x_limit = 5, N_points_x = 101):  #creates first two energy eigenfunctions
     """
     Uso:    Devuelve diccionario "psi" que representa las autofunciones de energía. 
@@ -314,8 +311,7 @@ def run_metropolis(psi_0_1 = psi_0_1, x_limit = 5., N_points_x = 51,
         plt.legend(loc='best', title=u'$\\beta=%.2f$'%beta)
         plt.tight_layout()
         if savefig==True:
-            script_dir = os.path.dirname(os.path.abspath(__file__)) #path completa para script
-            plt.savefig(script_dir+'/plot_QHO_n_hist_beta_%d_%d.eps'%(beta,(beta-int(beta))*100))
+            plt.savefig('plot_QHO_n_hist_beta_%d_%d.eps'%(beta,(beta-int(beta))*100))
         if showplot==True:
             plt.show()
         plt.close()

@@ -69,6 +69,6 @@ x_max = 3
 x_plot = np.linspace(-x_max,x_max,N_plot)
 plt.hist(pathss_x[:,0], bins=int(np.sqrt(n_steps/append_every)), normed=True)
 plt.plot(x_plot,QHO_canonical_ensemble(x_plot,beta))
-script_dir = os.path.dirname(os.path.abspath(__file__)) #path completa para este script
-plt.savefig(script_dir+'/prueba.eps')
+script_dir = os.path.dirname(os.path.abspath(__file__))
+plt.savefig(os+'/prueba.eps')
 plt.show()
