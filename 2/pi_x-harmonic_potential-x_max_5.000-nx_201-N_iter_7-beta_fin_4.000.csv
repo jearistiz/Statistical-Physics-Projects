@@ -1,5 +1,6 @@
+# pi(x;beta_fin) computed using matrix squaring algorithm and Trotter approximation. Parameters:
 # harmonic_potential   x_max = 5.000   nx = 201   N_iter = 7   beta_ini = 0.031   beta_fin = 4.000
-,Position x,Prob. density
+,position_x,prob_density
 0,-5.0,1.1374787951885818e-11
 1,-4.95,2.1611679767977803e-11
 2,-4.9,3.899185438483e-11

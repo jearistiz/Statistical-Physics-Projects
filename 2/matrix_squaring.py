@@ -5,6 +5,9 @@ import matplotlib.pyplot as plt
 from time import time
 import pandas as pd
 
+# Author: Juan Esteban Aristizabal-Zuluaga
+# date: 20200414
+
 def rho_free(x,xp,beta):
     """Uso: devuelve elemento de matriz dsnsidad para el caso de una partícula libre en un toro infinito."""
     return (2.*np.pi*beta)**(-0.5) * np.exp(-(x-xp)**2 / (2 * beta) )
@@ -110,8 +113,9 @@ def save_pi_x_csv(grid_x, x_weights, file_name, relevant_info, print_data=True):
         grid_x: numpy array, shape=(nx,)    ->  valores de x en los que está evaluada pi(x;beta).
         x_weights: numpy array, shape=(nx,) ->  valores de pi(x;beta) para cada x en grid_x
         file_name: str                      ->  nombre del archivo en el que se guardarán datos.
-        relevant_info: str                  ->  información que se agrega como comentario en 
-                                                primera línea.
+        relevant_info: list of str          ->  información que se agrega como comentario en 
+                                                primeras líneas. Cada elemento de esta lista 
+                                                se agrega como una nueva línea.
         print_data: bool                    ->  decide si imprime datos guardados, en pantalla.
     
     Devuelve:
@@ -120,13 +124,14 @@ def save_pi_x_csv(grid_x, x_weights, file_name, relevant_info, print_data=True):
     """
     # Almacena datos de probabilifad en diccionario: grid_x para posiciones y x_weights para
     # valores de densidad de probabilidad. 
-    pi_x_data = {'Position x': grid_x,
-                'Prob. density': x_weights}
+    pi_x_data = {'position_x': grid_x,
+                'prob_density': x_weights}
     # Pasamos datos a formato DataFrame de pandas.
     pi_x_data = pd.DataFrame(data=pi_x_data)
     # Crea archivo .csv y agrega comentarios relevantes dados como input
     with open(file_name,mode='w') as rho_csv:
-        rho_csv.write(relevant_info+'\n')
+        for info in list(relevant_info):
+            rho_csv.write('# '+info+'\n')
     rho_csv.close()
     # Usamos pandas para escribir en archivo en formato csv.
     with open(file_name,mode='a') as rho_csv:
@@ -192,9 +197,11 @@ def run_pi_x_sq_trotter(x_max=5., nx=201, N_iter=7, beta_fin=4, potential=harmon
         file_name = u'pi_x-%s-x_max_%.3f-nx_%d-N_iter_%d-beta_fin_%.3f.csv'\
                                             %(potential_string,x_max,nx,N_iter,beta_fin)
         # Información relevante para agregar como comentario al archivo csv.
-        relevant_info = u'# %s   x_max = %.3f   nx = %d   '%(potential_string,x_max,nx) + \
-                        u'N_iter = %d   beta_ini = %.3f   '%(N_iter,beta_ini,) + \
-                        u'beta_fin = %.3f'%beta_fin
+        relevant_info = [   'pi(x;beta_fin) computed using matrix squaring algorithm and' + \
+                            ' Trotter approximation. Parameters:',
+                            u'%s   x_max = %.3f   nx = %d   '%(potential_string,x_max,nx) + \
+                            u'N_iter = %d   beta_ini = %.3f   '%(N_iter,beta_ini,) + \
+                            u'beta_fin = %.3f'%beta_fin ]
         # Guardamos valores  de pi(x;beta_fin) en archivo csv.
         pi_x_data = save_pi_x_csv(grid_x, x_weights, file_name, relevant_info, print_data=0)
     # Gráfica y comparación con teoría
@@ -220,4 +227,4 @@ plt.rcParams.update({'font.size':15})
 # Corre el algoritmo
 rho, trace_rho, grid_x = run_pi_x_sq_trotter( potential = harmonic_potential,
                                             potential_string =  'harmonic_potential',
-                                            save_data=True, save_plot=True, show_plot=True)
+                                            save_data=True, save_plot=True, show_plot=1)
