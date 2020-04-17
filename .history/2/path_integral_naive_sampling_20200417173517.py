@@ -70,11 +70,6 @@ x_max = 3
 x_plot = np.linspace(-x_max,x_max,N_plot)
 
 
-script_dir = os.path.dirname(os.path.abspath(__file__)) #path completa para este script
-msq_file=script_dir+'/'+'pi_x-harmonic_potential-x_max_5.000-nx_201-N_iter_7-beta_fin_4.000.csv'
-matrix_squaring_data = pd.read_csv(msq_file, index_col=0, comment='#')
-print(matrix_squaring_data)
-
 # Agranda letra en texto de figuras generadas
 plt.rc('text', usetex=True)
 plt.rcParams.update({'font.size':15,'text.latex.unicode':True})
@@ -84,13 +79,13 @@ fig, ax1 = plt.subplots()
 ax1.set_xlabel(u'$x$')
 ax1.set_ylabel(u'$\pi^{(Q)} (x;\\beta)$')
 lns1 = ax1.plot(x_plot,QHO_canonical_ensemble(x_plot,beta),label=u'Teórico')
-lns2 = ax1.plot(    matrix_squaring_data['position_x'],matrix_squaring_data['prob_density'],
-                    label = u'Algoritmo Matrix\nSquaring') 
-lns3 = ax1.hist(pathss_x[:,0], bins=int(np.sqrt(n_steps/append_every)), normed=True,
-                        label=u'Integral de camino\nnaive sampling')                 
+lns2 = ax1.hist(pathss_x[:,0], bins=int(np.sqrt(n_steps/append_every)), normed=True,
+                        label=u'Integral de camino\nnaive sampling')
 ax1.tick_params(axis='y')
 ax1.set_ylim(bottom=0)
 plt.legend(loc='best')
+
+np.random.triangular
 
 ax2 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
 
@@ -98,20 +93,20 @@ ax2.set_ylabel(u'$\\tau$')  # we already handled the x-label with ax1
 beta_plot = np.linspace(0,beta,N+1)
 path_plot = list(pathss_x[-1])
 path_plot.append(pathss_x[-1][0])
-lns4 = ax2.plot(path_plot, beta_plot,'o-',c='k',label=u'Path')
+lns3 = ax2.plot(path_plot, beta_plot,'o-',c='k',label=u'Path')
 ax2.tick_params(axis='y')
-N_ticks = N + 1
-beta_ticks = np.linspace(0,beta,N_ticks)
+beta_ticks = np.linspace(0,beta,11)
 ax2.set_yticks(beta_ticks)
 ax2.set_yticklabels(u'$%.2f$'%b for b in beta_ticks)
 ax2.set_ylim(bottom=0)
 
 # Solution for having two legends
-leg = lns1  + lns2 + [lns3[2][0]] + lns4
+leg = lns1  + [lns2[2][0]] + lns3
 labs = [l.get_label() for l in leg]
 ax1.legend(leg, labs, loc='best',title=u'$\\beta=%.2f$'%beta, fontsize=12)
 
 fig.tight_layout()  # otherwise the right y-label is slightly clipped
-plt.savefig(script_dir+'/path-plot-prueba.eps')
+script_dir = os.path.dirname(os.path.abspath(__file__)) #path completa para este script
+plt.savefig(script_dir+'/prueba.eps')
 
 plt.show()

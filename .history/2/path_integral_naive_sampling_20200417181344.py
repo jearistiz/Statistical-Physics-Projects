@@ -92,6 +92,8 @@ ax1.tick_params(axis='y')
 ax1.set_ylim(bottom=0)
 plt.legend(loc='best')
 
+np.random.triangular
+
 ax2 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
 
 ax2.set_ylabel(u'$\\tau$')  # we already handled the x-label with ax1
@@ -113,5 +115,7 @@ ax1.legend(leg, labs, loc='best',title=u'$\\beta=%.2f$'%beta, fontsize=12)
 
 fig.tight_layout()  # otherwise the right y-label is slightly clipped
 plt.savefig(script_dir+'/path-plot-prueba.eps')
+
+
 
 plt.show()

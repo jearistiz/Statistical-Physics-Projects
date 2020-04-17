@@ -84,13 +84,15 @@ fig, ax1 = plt.subplots()
 ax1.set_xlabel(u'$x$')
 ax1.set_ylabel(u'$\pi^{(Q)} (x;\\beta)$')
 lns1 = ax1.plot(x_plot,QHO_canonical_ensemble(x_plot,beta),label=u'Teórico')
-lns2 = ax1.plot(    matrix_squaring_data['position_x'],matrix_squaring_data['prob_density'],
+lns3 = ax1.plot(    matrix_squaring_data['position_x'],matrix_squaring_data['prob_density'],
                     label = u'Algoritmo Matrix\nSquaring') 
-lns3 = ax1.hist(pathss_x[:,0], bins=int(np.sqrt(n_steps/append_every)), normed=True,
+lns2 = ax1.hist(pathss_x[:,0], bins=int(np.sqrt(n_steps/append_every)), normed=True,
                         label=u'Integral de camino\nnaive sampling')                 
 ax1.tick_params(axis='y')
 ax1.set_ylim(bottom=0)
 plt.legend(loc='best')
+
+np.random.triangular
 
 ax2 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
 
@@ -113,5 +115,7 @@ ax1.legend(leg, labs, loc='best',title=u'$\\beta=%.2f$'%beta, fontsize=12)
 
 fig.tight_layout()  # otherwise the right y-label is slightly clipped
 plt.savefig(script_dir+'/path-plot-prueba.eps')
+
+
 
 plt.show()

@@ -114,4 +114,6 @@ ax1.legend(leg, labs, loc='best',title=u'$\\beta=%.2f$'%beta, fontsize=12)
 fig.tight_layout()  # otherwise the right y-label is slightly clipped
 plt.savefig(script_dir+'/path-plot-prueba.eps')
 
+
+
 plt.show()
