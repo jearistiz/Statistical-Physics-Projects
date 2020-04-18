@@ -36,8 +36,7 @@ def QHO_canonical_ensemble(x,beta):
     """
     return (np.tanh(beta/2.)/np.pi)**0.5 * np.exp(- x**2 * np.tanh(beta/2.))
 
-def path_naive_sampling( N_path = 10,beta = 4., N_iter = int(1e5), delta = 0.5, 
-                         potential = harmonic_potential, append_every = 1 ):
+def path_naive_sampling(N_path = 10,beta = 4., N_iter = int(1e5), delta = 0.5, potential = harmonic_potential, append_every = 1):
     """
     Uso: 
     """
@@ -67,25 +66,22 @@ def path_naive_sampling( N_path = 10,beta = 4., N_iter = int(1e5), delta = 0.5,
     return pathss_x
 
 def figures_fn( pathss_x, beta = 4 , N_plot = 201, x_max = 3, N_iter=int(1e5), append_every=1,
-                N_beta_ticks = 11, msq_file='file.csv', file_name='path-plot-prueba', 
-                show_theory=True, show_matrix_squaring=True, show_path=True, save_plot=True,
-                show_plot=True):
-    
-    script_dir=os.path.dirname(os.path.abspath(__file__))
-    x_plot = np.linspace(-x_max,x_max,N_plot)
+                N_beta_ticks = 11, script_dir=os.path.dirname(os.path.abspath(__file__)), 
+                msq_file='file.csv', file_name='path-plot-prueba', 
+                show_path=True, show_matrix_squaring=True, save_plot=True, show_plot=True):
 
-    # Agranda letra en texto en figuras generadas
+    x_plot = np.linspace(-x_max,x_max,N_plot)
+    
+
+    # Agranda letra en texto de figuras generadas
     plt.rc('text', usetex=True) #usa latex en texto de figuras
     plt.rcParams.update({'font.size':15,'text.latex.unicode':True})
 
-    # Crea figura
     fig, ax1 = plt.subplots()
 
-    # Grafica histograma, teórico y si se pide un camino aleatorio
     ax1.set_xlabel(u'$x$')
     ax1.set_ylabel(u'$\pi^{(Q)} (x;\\beta)$')
-    if show_theory:
-        lns1 = ax1.plot(x_plot,QHO_canonical_ensemble(x_plot,beta),label=u'Teórico')
+    lns1 = ax1.plot(x_plot,QHO_canonical_ensemble(x_plot,beta),label=u'Teórico')
     if show_matrix_squaring:
         msq_file = script_dir + '/' + msq_file
         matrix_squaring_data = pd.read_csv(msq_file, index_col=0, comment='#')
@@ -121,14 +117,7 @@ def figures_fn( pathss_x, beta = 4 , N_plot = 201, x_max = 3, N_iter=int(1e5), a
         ax2.set_xlim(-x_max,x_max)
 
         # Solution for having legends that share two different scales
-        if show_theory and show_matrix_squaring:
-            leg = lns1  + lns2 + [lns3[2][0]] + lns4
-        if show_theory and not show_matrix_squaring:
-            leg = lns1 + [lns3[2][0]] + lns4
-        if not show_theory and show_matrix_squaring:
-            leg = lns2 + [lns3[2][0]] + lns4
-        if not show_theory and  not show_matrix_squaring:
-            leg = [lns3[2][0]] + lns4
+        leg = lns1  + lns2 + [lns3[2][0]] + lns4
         labs = [l.get_label() for l in leg]
         ax1.legend(leg, labs, loc='best',title=u'$\\beta=%.2f$'%beta, fontsize=12)
 
@@ -142,21 +131,22 @@ def figures_fn( pathss_x, beta = 4 , N_plot = 201, x_max = 3, N_iter=int(1e5), a
 
 N_path = 10
 beta = 4.
-N_iter = int(1e4)
+N_iter = int(1e5)
 delta = 0.5
 potential, potential_string = harmonic_potential, 'harmonic_potential'
 append_every = 1
+pathss_x = path_naive_sampling(N_iter=int(1e4))
+
+script_dir = os.path.dirname(os.path.abspath(__file__)) #path completa para este script
 msq_file = 'pi_x-ms-harmonic_potential-x_max_5.000-nx_201-N_iter_7-beta_fin_4.000.csv'
+
 N_plot = 201
 x_max = 3
 x_plot = np.linspace(-x_max,x_max,N_plot)
 plot_file_name = 'pi_x-pi-plot-%s-x_max_%.3f-N_path_%d-N_iter_%d-beta_fin_%.3f'\
                                             %(potential_string,x_max,N_path,N_iter,beta)
 
-pathss_x = path_naive_sampling( N_path = N_path, beta = beta, N_iter = N_iter, delta = 0.5, 
-                                potential = harmonic_potential, append_every = 1 )
-
-figures_fn( pathss_x, beta = beta , N_plot = N_plot, x_max = x_max, N_iter=N_iter, 
-            append_every=1, N_beta_ticks = N_path+1, msq_file=msq_file,
-            file_name=plot_file_name, show_theory=True , show_matrix_squaring=True,
-            show_path=True, save_plot=True, show_plot=True)
+figures_fn( pathss_x, beta = beta , N_plot = N_plot, x_max = x_max, N_iter=N_iter,
+                N_beta_ticks = N_path+1, 
+                msq_file=msq_file, file_name=plot_file_name, 
+                show_path=True, show_matrix_squaring=True, save_plot=True, show_plot=True)

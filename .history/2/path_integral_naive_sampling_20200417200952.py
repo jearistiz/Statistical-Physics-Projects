@@ -142,7 +142,7 @@ def figures_fn( pathss_x, beta = 4 , N_plot = 201, x_max = 3, N_iter=int(1e5), a
 
 N_path = 10
 beta = 4.
-N_iter = int(1e4)
+N_iter = int(1e5)
 delta = 0.5
 potential, potential_string = harmonic_potential, 'harmonic_potential'
 append_every = 1
@@ -158,5 +158,5 @@ pathss_x = path_naive_sampling( N_path = N_path, beta = beta, N_iter = N_iter, d
 
 figures_fn( pathss_x, beta = beta , N_plot = N_plot, x_max = x_max, N_iter=N_iter, 
             append_every=1, N_beta_ticks = N_path+1, msq_file=msq_file,
-            file_name=plot_file_name, show_theory=True , show_matrix_squaring=True,
-            show_path=True, save_plot=True, show_plot=True)
+            file_name=plot_file_name, show_path=True, show_matrix_squaring=True,
+             save_plot=True, show_plot=True)
