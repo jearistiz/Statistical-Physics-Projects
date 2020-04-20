@@ -233,7 +233,7 @@ if run_algorithm:
                                                 potential_string =  'harmonic_potential',
                                                 save_data=True, save_plot=True, show_plot=True)
 
-# Borrador: cálculo de la energía interna
+# Cálculo de la energía interna
 calculate_avg_energy = True
 script_dir = os.path.dirname(os.path.abspath(__file__)) #path completa para este script
 script_dir+'/'+'partition_function.csv'

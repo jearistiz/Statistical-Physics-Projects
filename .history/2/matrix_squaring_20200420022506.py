@@ -227,19 +227,17 @@ def run_pi_x_sq_trotter(x_max=5., nx=201, N_iter=7, beta_fin=4, potential=harmon
 # Agranda letra en texto de figuras generadas
 plt.rcParams.update({'font.size':15})
 # Corre el algoritmo
-run_algorithm = False
-if run_algorithm:
-    rho, trace_rho, grid_x = run_pi_x_sq_trotter( potential = harmonic_potential,
-                                                potential_string =  'harmonic_potential',
-                                                save_data=True, save_plot=True, show_plot=True)
+# rho, trace_rho, grid_x = run_pi_x_sq_trotter( potential = harmonic_potential,
+#                                             potential_string =  'harmonic_potential',
+#                                             save_data=True, save_plot=True, show_plot=True)
 
-# Borrador: cálculo de la energía interna
-calculate_avg_energy = True
+# Cálculo de la energía interna
+avg_energy = False
 script_dir = os.path.dirname(os.path.abspath(__file__)) #path completa para este script
 script_dir+'/'+'partition_function.csv'
 Z_file_name = script_dir+'/'+'partition_function.csv'
 t_0 = time()
-if calculate_avg_energy:
+if avg_energy:
     beta_array = np.linspace(10,2,300)
     Z = []
     for beta_fin in beta_array:
@@ -252,7 +250,7 @@ if calculate_avg_energy:
     Z_data = pd.DataFrame(Z_data)
     Z_data.to_csv(Z_file_name)
 t_1= time()
-print('<E(beta)>   -->   %.3f sec.'%(t_1-t_0))
+print('<E(beta)>   -->   %.3f sec.'%(t_0-t_1))
 
 # READ DATA IS OK
 Z_file_read =  pd.read_csv(Z_file_name, index_col=0, comment='#')
@@ -266,12 +264,12 @@ Z_read = Z_read.to_numpy()
 E_avg = np.gradient(-np.log(Z_read),beta_read)
 def Z_QHO(beta):
     return 0.5/np.sinh(beta/2)
-def E_QHO_avg_theo(beta):
-    return 0.5/np.tanh(0.5*beta)
+E_avg_theo = np.gradient(-np.log(Z_QHO(beta_read)),beta_read)
 
 plt.figure()
-plt.plot(temp_read,E_avg,label=u'$< E > Path Integral$')
-plt.plot(temp_read,E_QHO_avg_theo(beta_read),label=u'$< E > theory$')
+plt.plot(temp_read,E_avg,'o-',label=u'$< E > Path Integral$')
+plt.plot(temp_read,E_avg_theo,'^-',label=u'$< E > theory$')
+plt.plot(temp_read,0.5*np.coth(0.5/temp_read),'s-',label=u'$< E > theory 2$')
 plt.plot(temp_read,Z_read,'v-',label=u'$ Z(T) $')
 plt.legend(loc='best')
 plt.xlabel(u'$T$')

@@ -227,34 +227,27 @@ def run_pi_x_sq_trotter(x_max=5., nx=201, N_iter=7, beta_fin=4, potential=harmon
 # Agranda letra en texto de figuras generadas
 plt.rcParams.update({'font.size':15})
 # Corre el algoritmo
-run_algorithm = False
-if run_algorithm:
-    rho, trace_rho, grid_x = run_pi_x_sq_trotter( potential = harmonic_potential,
-                                                potential_string =  'harmonic_potential',
-                                                save_data=True, save_plot=True, show_plot=True)
+# rho, trace_rho, grid_x = run_pi_x_sq_trotter( potential = harmonic_potential,
+#                                             potential_string =  'harmonic_potential',
+#                                             save_data=True, save_plot=True, show_plot=True)
 
-# Borrador: cálculo de la energía interna
-calculate_avg_energy = True
+# beta_array = np.linspace(7,0.25,300)
+# Z = []
+# for beta_fin in beta_array:
+#     rho, trace_rho, grid_x = run_pi_x_sq_trotter(x_max=7, nx=301, beta_fin = beta_fin, potential = harmonic_potential,
+#                                                 potential_string =  'harmonic_potential', print_steps=False,
+#                                                 save_data=False, save_plot=False, show_plot=False)
+#     Z.append(trace_rho)
+
+# Z_data = {'beta':beta_array.copy(),'temperature':1./beta_array.copy(),'Z':Z}
+# Z_data = pd.DataFrame(Z_data)
+
 script_dir = os.path.dirname(os.path.abspath(__file__)) #path completa para este script
 script_dir+'/'+'partition_function.csv'
 Z_file_name = script_dir+'/'+'partition_function.csv'
-t_0 = time()
-if calculate_avg_energy:
-    beta_array = np.linspace(10,2,300)
-    Z = []
-    for beta_fin in beta_array:
-        rho, trace_rho, grid_x = run_pi_x_sq_trotter(x_max=7, nx=301, beta_fin = beta_fin, potential = harmonic_potential,
-                                                    potential_string =  'harmonic_potential', print_steps=False,
-                                                    save_data=False, save_plot=False, show_plot=False)
-        Z.append(trace_rho)
 
-    Z_data = {'beta':beta_array.copy(),'temperature':1./beta_array.copy(),'Z':Z}
-    Z_data = pd.DataFrame(Z_data)
-    Z_data.to_csv(Z_file_name)
-t_1= time()
-print('<E(beta)>   -->   %.3f sec.'%(t_1-t_0))
+# Z_data.to_csv(Z_file_name)
 
-# READ DATA IS OK
 Z_file_read =  pd.read_csv(Z_file_name, index_col=0, comment='#')
 beta_read = Z_file_read['beta']
 beta_read = beta_read.to_numpy()
@@ -262,17 +255,14 @@ temp_read = Z_file_read['temperature']
 temp_read = temp_read.to_numpy()
 Z_read = Z_file_read['Z']
 Z_read = Z_read.to_numpy()
-
-E_avg = np.gradient(-np.log(Z_read),beta_read)
-def Z_QHO(beta):
-    return 0.5/np.sinh(beta/2)
-def E_QHO_avg_theo(beta):
-    return 0.5/np.tanh(0.5*beta)
+###### FINISH THIS 
+temp_read = np.linspace(-5,5,100)
+x2 = temp_read**2
+E_avg = np.gradient(x2,temp_read) #np.gradient(-np.log(Z_read),beta_read)
 
 plt.figure()
-plt.plot(temp_read,E_avg,label=u'$< E > Path Integral$')
-plt.plot(temp_read,E_QHO_avg_theo(beta_read),label=u'$< E > theory$')
-plt.plot(temp_read,Z_read,'v-',label=u'$ Z(T) $')
+plt.plot(E_avg,temp_read,label=u'$< E >$')
+#plt.plot(Z_read,temp_read,label=u'$ Z(T) $')
 plt.legend(loc='best')
 plt.xlabel(u'$T$')
 plt.ylabel(u'$< E >$ or $Z(T)$')

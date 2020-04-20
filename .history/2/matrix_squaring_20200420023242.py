@@ -233,7 +233,7 @@ if run_algorithm:
                                                 potential_string =  'harmonic_potential',
                                                 save_data=True, save_plot=True, show_plot=True)
 
-# Borrador: cálculo de la energía interna
+# Cálculo de la energía interna
 calculate_avg_energy = True
 script_dir = os.path.dirname(os.path.abspath(__file__)) #path completa para este script
 script_dir+'/'+'partition_function.csv'
@@ -252,7 +252,7 @@ if calculate_avg_energy:
     Z_data = pd.DataFrame(Z_data)
     Z_data.to_csv(Z_file_name)
 t_1= time()
-print('<E(beta)>   -->   %.3f sec.'%(t_1-t_0))
+print('<E(beta)>   -->   %.3f sec.'%(t_0-t_1))
 
 # READ DATA IS OK
 Z_file_read =  pd.read_csv(Z_file_name, index_col=0, comment='#')
