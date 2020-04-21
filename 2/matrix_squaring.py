@@ -124,7 +124,7 @@ def save_csv(data, data_headers=None, file_name='file.csv', relevant_info=None, 
             nombre file_name. relevant_info agrega comentarios en primeras líneas del archivo. 
 
     Recibe:
-        data: array of arrays, shape=(nx,ny)  ->  cada lista es una columna del archivo.
+        data: array of arrays, shape=(nx,ny)  ->  cada columna es una columna del archivo.
         data_headers:  numpy array, shape=(nx,)     ->  nombres de las columnas
         file_name: str                      ->  nombre del archivo en el que se guardarán datos.
         relevant_info: list of str          ->  información que se agrega como comentario en 
@@ -138,18 +138,21 @@ def save_csv(data, data_headers=None, file_name='file.csv', relevant_info=None, 
     """
     # Almacena datos de probabilifad en diccionario: grid_x para posiciones y x_weights para
     # valores de densidad de probabilidad.
+    data = np.array(data)
+    number_of_columns = len(data.transpose())
     if file_name=='file.csv':
         script_dir = os.path.dirname(os.path.abspath(__file__)) #path completa para este script
         file_name = script_dir + '/' + file_name
-    if len(data_headers)!=len(data) or data_headers is None:
-        data_headers = range(len(data))
+    if data_headers is None:
+        data_pdDF = pd.DataFrame(data)
+        print(  'Nota: no se especificaron headers.\n'+
+                'Los headers usados en el archivo serán los números 0, 1, 2,...')
+    elif len(data_headers)!=number_of_columns:
+        data_pdDF = pd.DataFrame(data)
         print(  'Nota: no hay suficientes headers en data_headers para función save_csv().\n'+
                 'Los headers usados en el archivo serán los números 0, 1, 2,...')
-    data_dict = {}
-    for i,column in enumerate(data):
-        data_dict[data_headers[i]] = column
-    # Pasamos datos a formato DataFrame de pandas.
-    data_pdDF = pd.DataFrame(data=data_dict)
+    else:
+        data_pdDF = pd.DataFrame(data,columns=data_headers)
     # Crea archivo CSV y agrega comentarios relevantes dados como input
     if relevant_info is not None:
         with open(file_name,mode='w') as file_csv:
@@ -284,7 +287,7 @@ def Z_several_values(   temp_min=1./10, temp_max=1/2., N_temp=10, save_Z_csv=Tru
                              save_plot, show_plot)
         Z.append(trace_rho)
 
-    Z_data = [beta_array.copy(),1./beta_array.copy(),Z.copy()]
+    Z_data = np.array([beta_array.copy(),1./beta_array.copy(),Z.copy()],dtype=float)
 
     if save_Z_csv == True:
         if Z_file_name is None:
@@ -298,7 +301,7 @@ def Z_several_values(   temp_min=1./10, temp_max=1/2., N_temp=10, save_Z_csv=Tru
                               'beta_min = %.3f   N_temp = %d   '%(1./temp_max,N_temp) +\
                               'x_max = %.3f   nx = %d   N_iter = %d'%(x_max,nx, N_iter)]
         Z_data_headers = ['beta','temperature','Z']
-        Z_data = save_csv(  Z_data, Z_data_headers, Z_file_name, relevant_info_Z,
+        Z_data = save_csv(  Z_data.transpose(), Z_data_headers, Z_file_name, relevant_info_Z,
                             print_data = False  )
 
     if print_Z_data == True:
@@ -420,7 +423,7 @@ E_plot_name = None #script_dir + 'E.eps'
 # Parámetros físicos para calcular Z y <E>
 temp_min = 1./10
 temp_max = 1./2
-N_temp = 300
+N_temp = 10
 potential, potential_string = harmonic_potential,  'harmonic_potential'
 
 # Más parámetros técnicos
