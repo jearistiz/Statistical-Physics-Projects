@@ -61,10 +61,15 @@ def rho_trotter(x_max = 5., nx = 101, beta=1, potential=harmonic_potential):
         grid_x: numpy array, shape=(nx,)    ->  valores de x en los que está evaluada rho.
         dx: float                           ->  separación entre valores contiguos de grid_x
     """
+    nx = int(nx)
+    # Si nx es par lo cambiamos al impar más cercano para incluir al 0 en valores de x
+    if nx%2 == 0:
+        nx = nx + 1
     # Valor de la discretización de posiciones según x_max y nx dados como input
-    dx = 2. * x_max / (nx - 1)
+    dx = 2 * x_max/(nx-1)
     # Lista de valores de x teniendo en cuenta discretización y x_max
-    grid_x = np.array([i*dx for i in range(-int((nx-1)/2), int(nx/2 + 1))])
+    grid_x = [i*dx for i in range(-int((nx-1)/2),int((nx-1)/2 + 1))]
+
     # Construcción de matriz densidad dada por aproximación de Trotter
     rho = np.array([ [ rho_free(x , xp, beta) * np.exp(-0.5*beta*(potential(x)+potential(xp))) for x in grid_x] for xp in grid_x])
     return rho, grid_x, dx
@@ -118,10 +123,12 @@ def density_matrix_squaring(rho, grid_x, N_iter = 1, beta_ini = 1, print_steps=T
     trace_rho = np.trace(rho)*dx
     return rho, trace_rho, beta_fin
 
-def save_csv(data, data_headers=None, file_name='file.csv', relevant_info=None, print_data=True):
+def save_csv(   data, data_headers=None, data_index=None, file_name=None, 
+                relevant_info=None, print_data=True     ):
     """
-    Uso:    data debe contener listas que serán las columnas de un archivo CSV que se guardará con
-            nombre file_name. relevant_info agrega comentarios en primeras líneas del archivo. 
+    Uso:    data debe contener listas que serán las columnas de un archivo CSV que se guardará 
+            con nombre file_name. relevant_info agrega comentarios en primeras líneas del
+            archivo.
 
     Recibe:
         data: array of arrays, shape=(nx,ny)  ->  cada columna es una columna del archivo.
@@ -139,20 +146,18 @@ def save_csv(data, data_headers=None, file_name='file.csv', relevant_info=None, 
     # Almacena datos de probabilifad en diccionario: grid_x para posiciones y x_weights para
     # valores de densidad de probabilidad.
     data = np.array(data)
+    number_of_rows = len(data)
     number_of_columns = len(data.transpose())
-    if file_name=='file.csv':
+
+    if file_name==None:
         script_dir = os.path.dirname(os.path.abspath(__file__)) #path completa para este script
-        file_name = script_dir + '/' + file_name
-    if data_headers is None:
-        data_pdDF = pd.DataFrame(data)
-        print(  'Nota: no se especificaron headers.\n'+
-                'Los headers usados en el archivo serán los números 0, 1, 2,...')
-    elif len(data_headers)!=number_of_columns:
-        data_pdDF = pd.DataFrame(data)
-        print(  'Nota: no hay suficientes headers en data_headers para función save_csv().\n'+
-                'Los headers usados en el archivo serán los números 0, 1, 2,...')
+        file_name = script_dir + '/' + 'file_name.csv'
+    
+    if len(data_headers)!=number_of_columns or len(data_index)!=number_of_rows:
+        raise Exception('No hay suficientes elementos en data_headers o data index en save_csv(.)')
     else:
-        data_pdDF = pd.DataFrame(data,columns=data_headers)
+        data_pdDF = pd.DataFrame(data, columns=data_headers, index=data_index)
+
     # Crea archivo CSV y agrega comentarios relevantes dados como input
     if relevant_info is not None:
         with open(file_name,mode='w') as file_csv:
@@ -214,13 +219,16 @@ def run_pi_x_sq_trotter(x_max=5., nx=201, N_iter=7, beta_fin=4, potential=harmon
     beta_ini = beta_fin * 2**(-N_iter)
     # Cálculo de rho con aproximación de Trotter
     rho, grid_x, dx = rho_trotter(x_max, nx, beta_ini, potential)
+    grid_x = np.array(grid_x)
     # Aproximación de rho con matrix squaring iterado N_iter veces.
     rho, trace_rho, beta_fin_2 = density_matrix_squaring(   rho, grid_x, N_iter, 
                                                             beta_ini, print_steps   )
-    print(  '----------------------------------------------------------------' +
-            '--------------------------------------------------------\n'
+    print(  '---------------------------------------------------------' +
+            '---------------------------------------------------------\n'
             u'Matrix squaring: beta_ini = %.3f --> beta_fin = %.3f'%(beta_ini, beta_fin_2) +
-            u'   N_iter = %d   Z(beta_fin) = Tr(rho(beta_fin)) = %.3E'%(N_iter,trace_rho))
+            u'   N_iter = %d   Z(beta_fin) = Tr(rho(beta_fin)) = %.3E \n'%(N_iter,trace_rho) + 
+            '---------------------------------------------------------' +
+            '---------------------------------------------------------')
     # Normalización de rho a 1 y cálculo de densidades de probabilidad para valores en grid_x.
     rho_normalized = np.copy(rho)/trace_rho
     x_weights = np.diag(rho_normalized)
@@ -243,7 +251,7 @@ def run_pi_x_sq_trotter(x_max=5., nx=201, N_iter=7, beta_fin=4, potential=harmon
         # Guardamos valores  de pi(x;beta_fin) en archivo csv.
         pi_x_data = [grid_x.copy(),x_weights.copy()]
         pi_x_data_headers = ['position_x','prob_density']
-        pi_x_data = save_csv(pi_x_data,pi_x_data_headers,csv_file_name,relevant_info,print_data=0)
+        pi_x_data = save_csv(pi_x_data,pi_x_data_headers,None,csv_file_name,relevant_info,print_data=0)
 
     # Gráfica y comparación con teoría
     if plot == True:
@@ -297,11 +305,12 @@ def Z_several_values(   temp_min=1./10, temp_max=1/2., N_temp=10, save_Z_csv=Tru
                             'nx_%d-N_iter_%d.csv'%(nx, N_iter)
             Z_file_name = script_dir + '/' + Z_file_name
         if relevant_info_Z is None:
-            relevant_info_Z = ['%s   beta_max = %.3f   '%(potential_string,1./temp_min) +\
-                              'beta_min = %.3f   N_temp = %d   '%(1./temp_max,N_temp) +\
-                              'x_max = %.3f   nx = %d   N_iter = %d'%(x_max,nx, N_iter)]
+            relevant_info_Z = [ 'Partition function at several temperatures',
+                                '%s   beta_max = %.3f   '%(potential_string,1./temp_min) + \
+                                'beta_min = %.3f   N_temp = %d   '%(1./temp_max,N_temp) + \
+                                'x_max = %.3f   nx = %d   N_iter = %d'%(x_max,nx, N_iter)   ]
         Z_data_headers = ['beta','temperature','Z']
-        Z_data = save_csv(  Z_data.transpose(), Z_data_headers, Z_file_name, relevant_info_Z,
+        Z_data = save_csv(  Z_data.transpose(), Z_data_headers, None, Z_file_name, relevant_info_Z,
                             print_data = False  )
 
     if print_Z_data == True:
@@ -363,34 +372,170 @@ def average_energy( read_Z_data=True, generate_Z_data=False, Z_file_name = None,
         plt.close()
     return E_avg, beta_read.to_numpy()
 
+def calc_error(x,xp,dx):
+    """
+    Uso: calcula error ponderado por el número de 
+    """
+    x, xp = np.array(x), np.array(xp)
+    N = len( x )
+    if N != len(xp):
+        raise Exception( 'x and xp must have same lenght.' )
+    else:        
+        return np.sum(np.abs(x-xp))*dx
+
+def optimization(   generate_opt_data = True, read_opt_data=False, beta_fin=4, x_max=5, 
+                    potential=harmonic_potential, potential_string='harmonic_potential',
+                    nx_min=50, nx_max=1000, nx_sampling=50, N_iter_min=1, N_iter_max=20,
+                    save_opt_data = False, opt_data_file_name = None, plot = True,
+                    show_plot = True, save_plot = True, opt_plot_file_name = None):
+    """
+    
+    """
+    if generate_opt_data:
+        N_iter_min = int(N_iter_min)
+        N_iter_max = int(N_iter_max)
+        nx_min = int(nx_min)
+        nx_max = int(nx_max)
+
+        if nx_min%2==1:
+            nx_min -= 1
+        if nx_max%2==0:
+            nx_max += 1
+        
+        nx_values = range(nx_max,nx_min,-1*nx_sampling)
+        N_iter_values = range(N_iter_max,N_iter_min-1,-1)
+
+        dx_grid = [2*x_max/(nx-1) for nx in nx_values]
+        beta_ini_grid = [beta_fin * 2**(-N_iter) for N_iter in N_iter_values]
+        error = []
+
+        for N_iter in N_iter_values:
+            row = []
+            for nx in nx_values:
+                rho,trace_rho,grid_x = \
+                    run_pi_x_sq_trotter( x_max, nx, N_iter, beta_fin, potential, potential_string,
+                                        False, False, None, None, False, False, False   )
+                grid_x = np.array(grid_x)
+                dx = grid_x[1]-grid_x[0]
+                rho_normalized = np.copy(rho)/trace_rho
+                pi_x = np.diag(rho_normalized)
+                theoretical_pi_x = QHO_canonical_ensemble(grid_x,beta_fin)
+                error_comp_theo = calc_error(pi_x,theoretical_pi_x,dx)
+                row.append(error_comp_theo)
+            error.append(row)
+        error = np.array(error)
+
+    elif read_opt_data:
+        error =  pd.read_csv(opt_data_file_name, index_col=0, comment='#')
+        dx_grid = error.columns.to_numpy()
+        beta_ini_grid = error.index.to_numpy()
+        error = error.to_numpy()
+    
+    #print(error)
+
+    try:
+        error = np.where(np.isinf(error),-np.Inf,error)
+        error = np.where(np.isnan(error),-np.Inf,error)
+        nan_value = 1.1*max(error)
+    except:
+        nan_value = 0
+
+    error = np.nan_to_num(error, nan = nan_value, posinf=nan_value, neginf = nan_value)
+    DX, BETA_INI = np.meshgrid(dx_grid, beta_ini_grid)
+    
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+
+    if generate_opt_data:
+        if save_opt_data:
+            if opt_data_file_name is None:
+                opt_data_file_name = \
+                    '/pi_x-ms-opt-%s-beta_fin_%.3f'%(potential_string, beta_fin)+\
+                    '-x_max_%.3f-nx_min_%d-nx_max_%d'%(x_max, nx_min, nx_max)+\
+                    '-nx_sampling_%d-N_iter_min_%d'%(nx_sampling, N_iter_min)+\
+                    '-N_iter_max_%d.csv'%(N_iter_max)
+                opt_data_file_name = script_dir + opt_data_file_name
+            
+            relevant_info=\
+                ['Optimization of parameters dx and beta_ini of matrix squaring algorithm',
+                '%s   beta_fin = %.3f   '%(potential_string, beta_fin)+\
+                'x_max = %.3f   nx_min = %d   nx_max = %d   '%(x_max, nx_min, nx_max)+\
+                'nx_sampling = %d N_iter_min = %d   '%(nx_sampling, N_iter_min)+\
+                'N_iter_max = %d'%(N_iter_max)]
+            
+            save_csv(error, dx_grid, beta_ini_grid, opt_data_file_name, relevant_info)
+
+    if plot:
+        fig, ax = plt.subplots(1, 1)
+
+        cp = plt.contourf(DX,BETA_INI,error)
+        plt.colorbar(cp)
+        
+        ax.set_ylabel(u'$\\beta_{ini}$')
+        ax.set_xlabel('$dx$')
+        plt.tight_layout()
+        
+        if save_plot:
+            if opt_plot_file_name is None:
+                opt_plot_file_name = \
+                    '/pi_x-ms-opt-plot-%s-beta_fin_%.3f'%(potential_string, beta_fin)+\
+                    '-x_max_%.3f-nx_min_%d-nx_max_%d'%(x_max, nx_min, nx_max)+\
+                    '-nx_sampling_%d-N_iter_min_%d'%(nx_sampling, N_iter_min)+\
+                    '-N_iter_max_%d.eps'%(N_iter_max)
+                opt_plot_file_name = script_dir + opt_plot_file_name
+            else:
+                plt.savefig(opt_plot_file_name)
+        if show_plot:
+            plt.show()
+        plt.close()
+
+    return error, dx_grid, beta_ini_grid
+
+
+#################################################################################################
+# PANEL DE CONTROL
+#
+# Decide si corre algoritmo matrix squaring
+run_ms_algorithm = False
+# Decide si corre algoritmo para cálculo de energía interna
+run_avg_energy = False
+# Decide si corre algoritmo para optimización de dx y beta_ini
+run_optimization = True
+#
+#
+#################################################################################################
+
+
+
+#################################################################################################
+# PARÁMETROS GENERALES PARA LAS FIGURAS
+#
 # Usar latex en texto de figuras y agrandar tamaño de fuente
 plt.rc('text', usetex=True) 
 plt.rcParams.update({'font.size':15,'text.latex.unicode':True})
 # Obtenemos path para guardar archivos en el mismo directorio donde se ubica el script
 script_dir = os.path.dirname(os.path.abspath(__file__))
+#
+#################################################################################################
+
+
 
 #################################################################################################
-# Corre algoritmo matrix squaring
+# CORRE ALGORITMO MATRIX SQUARING
 #
-#
-
-# Decide si corre esta parte del algoritmo 
-run_ms_algorithm = False
-
 # Parámetros físicos del algoritmo
 x_max = 5.
 nx = 201
 N_iter = 7
 beta_fin = 4
 potential, potential_string =  harmonic_potential, 'harmonic_potential'
-
+#
 # Parámetros técnicos
-print_steps = True
-save_data = True
+print_steps = False
+save_data = False
 file_name = None
 relevant_info = None
 plot = True
-save_plot = True
+save_plot = False
 show_plot = True
 if run_ms_algorithm:
     rho, trace_rho, grid_x = \
@@ -404,13 +549,8 @@ if run_ms_algorithm:
 
 
 #################################################################################################
-# Algoritmo para cálculo de energía interna
+# CORRE ALGORITMO PARA CÁLCULO DE ENERGÍA INTERNA
 #
-#
-
-# Decide si corre esta parte del algoritmo 
-calculate_avg_energy = True
-
 # Parámetros técnicos función partición y cálculo de energía 
 read_Z_data = False
 generate_Z_data = True
@@ -419,13 +559,13 @@ plot_energy = True
 save_plot_E = True
 show_plot_E = True
 E_plot_name = None #script_dir + 'E.eps'
-
+#
 # Parámetros físicos para calcular Z y <E>
 temp_min = 1./10
 temp_max = 1./2
 N_temp = 10
 potential, potential_string = harmonic_potential,  'harmonic_potential'
-
+#
 # Más parámetros técnicos
 save_Z_csv = True
 relevant_info_Z = None
@@ -440,13 +580,54 @@ relevant_info_pi_x = None
 plot_pi_x = False
 save_plot_pi_x = False
 show_plot_pi_x = False
-
-if calculate_avg_energy:
+#
+if run_avg_energy:
     average_energy( read_Z_data, generate_Z_data, Z_file_name, plot_energy, save_plot_E,
                     show_plot_E, E_plot_name,
                     temp_min, temp_max, N_temp, save_Z_csv, relevant_info_Z, print_Z_data,
                     x_max, nx, N_iter, potential, potential_string, print_steps, save_pi_x_data,
                     pi_x_file_name, relevant_info_pi_x,plot_pi_x, save_plot_pi_x, show_plot_pi_x)
+#
+#
+#################################################################################################
+
+#################################################################################################
+# CORRE ALGORITMO PARA CÁLCULO DE ENERGÍA INTERNA
+#
+# Parámetros físicos
+beta_fin = 4
+x_max = 5
+potential, potential_string =  harmonic_potential, 'harmonic_potential'
+nx_min = 10
+nx_max = 300
+nx_sampling = 30
+N_iter_min = 8
+N_iter_max = 20
+# Parámetros técnicos
+generate_opt_data = False
+read_opt_data = True
+save_opt_data = True
+opt_data_file_name = script_dir + '/pi_x-ms-opt-harmonic_potential-beta_fin_4.000-x_max_5.000-nx_min_10-nx_max_1001-nx_sampling_50-N_iter_min_1-N_iter_max_20.csv'  #None
+plot_opt = True
+show_opt_plot = True
+save_plot_opt = True
+opt_plot_file_name = script_dir + '/pi_x-ms-opt-plot-harmonic_potential-beta_fin_4.000-x_max_5.000-nx_min_10-nx_max_1001-nx_sampling_50-N_iter_min_1-N_iter_max_20.eps'  #None
+if run_optimization:
+    t_0 = time()
+    error, dx_grid, beta_ini_grid = \
+        optimization(   generate_opt_data, read_opt_data, beta_fin, x_max, potential, 
+                        potential_string, nx_min, nx_max, nx_sampling, N_iter_min,
+                        N_iter_max, save_opt_data, opt_data_file_name, plot_opt,
+                        show_opt_plot, save_plot_opt, opt_plot_file_name   )
+    t_1 = time()
+    print(  '-----------------------------------------' +
+            '-----------------------------------------\n' +
+            'Optimization:  beta_fin=%.3f,   x_max=%.3f,   potential=%s\n \
+                nx_min=%d, nx_max=%d,   N_iter_min=%d,   N_iter_max=%d\n               \
+                    computation time = %.3f sec.\n'%(beta_fin,x_max,potential_string,nx_min,
+                                                    nx_max,N_iter_min,N_iter_max,t_1-t_0) +
+            '-----------------------------------------' +
+            '-----------------------------------------')
 #
 #
 #################################################################################################

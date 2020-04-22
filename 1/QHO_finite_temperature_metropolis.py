@@ -33,7 +33,7 @@ def psi_0_1(x_limit = 5, N_points_x = 101):  #creates first two energy eigenfunc
     N_points_x = int(N_points_x)
     if N_points_x%2 ==0:
         N_points_x = N_points_x + 1
-    delta = x_limit/(N_points_x-1)
+    delta = 2 * x_limit/(N_points_x-1)
     grid_x = [i*delta for i in range(-int((N_points_x-1)/2),int((N_points_x-1)/2 + 1))]
     psi = {}
     for x in grid_x:

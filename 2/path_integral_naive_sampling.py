@@ -193,12 +193,17 @@ def save_csv(data, data_headers=None, file_name='file.csv', relevant_info=None, 
         file_name = script_dir + '/' + file_name
     if data_headers is None:
         data_pdDF = pd.DataFrame(data)
-        print(  'Nota: no se especificaron headers.\n'+
-                'Los headers usados en el archivo serán los números 0, 1, 2,...')
+        print(  '--------------------------------------------------------------\n'
+                'Nota: no se especificaron headers en save_csv().\n' +
+                'Los headers usados en el archivo serán los números 0, 1, 2,...'
+                '--------------------------------------------------------------'  )
+                
     elif len(data_headers)!=number_of_columns:
         data_pdDF = pd.DataFrame(data)
-        print(  'Nota: no hay suficientes headers en data_headers para función save_csv().\n'+
-                'Los headers usados en el archivo serán los números 0, 1, 2,...')
+        print(  '-------------------------------------------------------------------------\n'
+                'Nota: no hay suficientes headers en data_headers en save_csv().\n'+
+                'Los headers usados en el archivo serán los números 0, 1, 2,...'
+                '-------------------------------------------------------------------------'  )
     else:
         data_pdDF = pd.DataFrame(data,columns=data_headers)
     # Crea archivo CSV y agrega comentarios relevantes dados como input
@@ -231,9 +236,10 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 #
 #
 
+
 # Parámetros físicos
 N_path = 10
-N_iter = int(1e5)
+N_iter = int(1e6)
 beta = 4.
 delta = 0.5
 append_every = 1
@@ -255,6 +261,7 @@ msq_file = 'pi_x-ms-harmonic_potential-beta_fin_4.000-x_max_5.000-nx_201-N_iter_
 # camino_i = [x_i[0], x_i[1], x_i[2], ..., x_i[N_path-1]]
 pathss_x = path_naive_sampling( N_path = N_path, beta = beta, N_iter = N_iter, delta = delta, 
                                 potential = harmonic_potential, append_every = append_every )
+pathss_x = np.round(pathss_x,5)   #Tamaño en memoria es menor y no afecta los cálculos
 
 # guarda pathss_x en archivo CSV
 csv_file_name =     script_dir + '/' + \
