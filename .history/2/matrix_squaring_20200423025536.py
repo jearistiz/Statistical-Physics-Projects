@@ -607,7 +607,7 @@ def optimization(generate_opt_data=True, read_opt_data=False, beta_fin=4, x_max=
         fig, ax = plt.subplots(1, 1)
 
         DX, BETA_INI = np.meshgrid(dx_grid, beta_ini_grid)
-        cp = plt.pcolormesh(DX,BETA_INI,error)
+        cp = plt.contourf(DX,BETA_INI,error)
         plt.colorbar(cp)
         
         ax.set_ylabel(u'$\\beta_{ini}$')
@@ -760,12 +760,12 @@ N_iter_max = 20
 generate_opt_data = True
 read_opt_data = False
 save_opt_data = True
-opt_data_file_name = None
+opt_data_file_name = 'opt-test1.csv'#None
 opt_relevant_info = None
 plot_opt = True
 show_opt_plot = True
 save_plot_opt = True
-opt_plot_file_name = None
+opt_plot_file_name = 'opt-test1.png'
 
 if run_optimization:
     error, dx_grid, beta_ini_grid, comp_time = \

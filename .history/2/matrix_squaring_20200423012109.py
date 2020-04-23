@@ -158,6 +158,12 @@ def save_csv(data, data_headers=None, data_index=None, file_name=None,
         guarda archivo con datos e inforamación relevante en primera línea.
     """
 
+    # Almacena datos de probabilifad en diccionario: grid_x para posiciones y x_weights para
+    # valores de densidad de probabilidad.
+    data = np.array(data)
+    number_of_rows = len(data)
+    number_of_columns = len(data.transpose())
+
     if file_name==None:
         #path completa para este script
         script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -263,7 +269,7 @@ def run_pi_x_sq_trotter(x_max=5., nx=201, N_iter=7, beta_fin=4, potential=harmon
                              + u'/pi_x-ms-%s-beta_fin_%.3f-x_max_%.3f-nx_%d-N_iter_%d.csv'
                              %(potential_string,beta_fin,x_max,nx,N_iter))
         else:
-            csv_file_name = script_dir + '/' + file_name + '.csv'
+            csv_file_name = script_dir + '/'+ file_name 
         
         # Información relevante para agregar como comentario al archivo csv.
         if relevant_info is None:
@@ -362,14 +368,12 @@ def Z_several_values(temp_min=1./10, temp_max=1/2., N_temp=10, save_Z_csv=True,
     # Guarda datos de Z en archivo CSV.
     if save_Z_csv == True:
 
-        script_dir = os.path.dirname(os.path.abspath(__file__))
-        
         if Z_file_name is None:
+            script_dir = os.path.dirname(os.path.abspath(__file__))
             Z_file_name = ('Z-ms-%s-beta_max_%.3f-'%(potential_string,1./temp_min)
                            + 'beta_min_%.3f-N_temp_%d-x_max_%.3f-'%(1./temp_max,N_temp,x_max)
                            + 'nx_%d-N_iter_%d.csv'%(nx, N_iter))
-        
-        Z_file_name = script_dir + '/' + Z_file_name
+            Z_file_name = script_dir + '/' + Z_file_name
         
         if relevant_info_Z is None:
             relevant_info_Z = ['Partition function at several temperatures',
@@ -457,8 +461,8 @@ def average_energy(read_Z_data=True, generate_Z_data=False, Z_file_name = None,
         plt.xlabel(u'$T$')
         plt.ylabel(u'$\langle E \\rangle$')
         if save_plot_E:
-            script_dir = os.path.dirname(os.path.abspath(__file__))
             if E_plot_name is None:
+                script_dir = os.path.dirname(os.path.abspath(__file__))
                 E_plot_name = ('E-ms-plot-%s-beta_max_%.3f-'%(potential_string,1./temp_min)
                                + 'beta_min_%.3f-N_temp_%d-x_max_%.3f-'%(1./temp_max,N_temp,x_max)
                                + 'nx_%d-N_iter_%d.eps'%(nx, N_iter))
@@ -485,8 +489,8 @@ def calc_error(x,xp,dx):
 def optimization(generate_opt_data=True, read_opt_data=False, beta_fin=4, x_max=5, 
                  potential=harmonic_potential, potential_string='harmonic_potential',
                  nx_min=50, nx_max=1000, nx_sampling=50, N_iter_min=1, N_iter_max=20,
-                 save_opt_data=False, opt_data_file_name=None, opt_relevant_info=None,
-                 plot=True, show_plot=True, save_plot=True, opt_plot_file_name=None):
+                 save_opt_data=False, opt_data_file_name=None, plot=True,
+                 show_plot=True, save_plot=True, opt_plot_file_name=None):
     """
     Uso:    calcula diferentes valores de error usando calc_error() para encontrar valores de
             dx y beta_ini óptimos para correr el alcoritmo (óptimos = que minimicen error)
@@ -516,9 +520,7 @@ def optimization(generate_opt_data=True, read_opt_data=False, beta_fin=4, x_max=
         dx_grid: list, shape=(ndx,)         -> valores de dx para los que se calcula error.
         beta-ini_grid: list, shape=(nb,)    -> valores de beta_ini para los que se calcula error.
     """
-    
-    t_0 = time()
-    
+
     # Decide si genera o lee datos.
     if generate_opt_data:
         N_iter_min = int(N_iter_min)
@@ -557,6 +559,7 @@ def optimization(generate_opt_data=True, read_opt_data=False, beta_fin=4, x_max=
                 error_comp_theo = calc_error(pi_x,theoretical_pi_x,dx)
                 row.append(error_comp_theo)
             error.append(row)
+        error = np.array(error)
 
     elif read_opt_data:
         error =  pd.read_csv(opt_data_file_name, index_col=0, comment='#')
@@ -565,18 +568,17 @@ def optimization(generate_opt_data=True, read_opt_data=False, beta_fin=4, x_max=
         error = error.to_numpy()
 
     else:
-        raise Exception('Escoja si generar o leer datos en optimization(.)')
-
+        raise Exception('Escoga si generar o leer datos en optimization(.)')
+    
     # Toma valores de error  en cálculo de Z (nan e inf) y los remplaza por
     # el valor de mayor error en el gráfico.
     try:
-        error = np.where(np.isinf(error),0,error)
-        error = np.where(np.isnan(error),0,error)
-        nan_value = 1.3*np.max(error)
-        error = np.where(error==0, float('nan'), error)
+        error = np.where(np.isinf(error),-np.Inf,error)
+        error = np.where(np.isnan(error),-np.Inf,error)
+        nan_value = 1.1*max(error)
     except:
         nan_value = 0
-    error = np.nan_to_num(error, nan=nan_value, posinf=nan_value, neginf=nan_value)
+    error = np.nan_to_num(error, nan = nan_value, posinf=nan_value, neginf = nan_value)
     
     script_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -584,30 +586,27 @@ def optimization(generate_opt_data=True, read_opt_data=False, beta_fin=4, x_max=
     if generate_opt_data and save_opt_data:
         
         if opt_data_file_name is None:
-            opt_data_file_name = ('pi_x-ms-opt-%s-beta_fin_%.3f'%(potential_string, beta_fin)
+            opt_data_file_name = ('/pi_x-ms-opt-%s-beta_fin_%.3f'%(potential_string, beta_fin)
                                   + '-x_max_%.3f-nx_min_%d-nx_max_%d'%(x_max, nx_min, nx_max)
                                   + '-nx_sampling_%d-N_iter_min_%d'%(nx_sampling, N_iter_min)
                                   + '-N_iter_max_%d.csv'%(N_iter_max))
+            opt_data_file_name = script_dir + opt_data_file_name
         
-        opt_data_file_name = script_dir + '/' + opt_data_file_name
-        if opt_relevant_info is None:
-            opt_relevant_info = ['Optimization of parameters dx and beta_ini of matrix squaring'
+        relevant_info = ['Optimization of parameters dx and beta_ini of matrix squaring'
                          + ' algorithm', '%s   beta_fin = %.3f   '%(potential_string, beta_fin)
                          + 'x_max = %.3f   nx_min = %d   nx_max = %d   '%(x_max, nx_min, nx_max)
                          + 'nx_sampling = %d N_iter_min = %d   '%(nx_sampling, N_iter_min)
                          + 'N_iter_max = %d'%(N_iter_max)]
         
-        save_csv(error, dx_grid, beta_ini_grid, opt_data_file_name, opt_relevant_info)
-    
-    t_1 = time()
+        save_csv(error, dx_grid, beta_ini_grid, opt_data_file_name, relevant_info)
 
-    # Grafica.
+    # Grafica 
     if plot:
 
         fig, ax = plt.subplots(1, 1)
 
         DX, BETA_INI = np.meshgrid(dx_grid, beta_ini_grid)
-        cp = plt.pcolormesh(DX,BETA_INI,error)
+        cp = plt.contourf(DX,BETA_INI,error)
         plt.colorbar(cp)
         
         ax.set_ylabel(u'$\\beta_{ini}$')
@@ -615,35 +614,33 @@ def optimization(generate_opt_data=True, read_opt_data=False, beta_fin=4, x_max=
         plt.tight_layout()
         
         if save_plot:
-            
             if opt_plot_file_name is None:
                 opt_plot_file_name = \
-                   ('pi_x-ms-opt-plot-%s-beta_fin_%.3f'%(potential_string, beta_fin)
+                   ('/pi_x-ms-opt-plot-%s-beta_fin_%.3f'%(potential_string, beta_fin)
                     + '-x_max_%.3f-nx_min_%d-nx_max_%d'%(x_max, nx_min, nx_max)
                     + '-nx_sampling_%d-N_iter_min_%d'%(nx_sampling, N_iter_min)
                     + '-N_iter_max_%d.eps'%(N_iter_max))
-            
-            opt_plot_file_name = script_dir + '/' + opt_plot_file_name
-
-            plt.savefig(opt_plot_file_name)
+                opt_plot_file_name = script_dir + opt_plot_file_name
+            else:
+                plt.savefig(opt_plot_file_name)
 
         if show_plot:
             plt.show()
 
         plt.close()
-    comp_time = t_1 - t_0
-    return error, dx_grid, beta_ini_grid, comp_time
+
+    return error, dx_grid, beta_ini_grid
 
 
 #################################################################################################
 # PANEL DE CONTROL
 #
 # Decide si corre algoritmo matrix squaring
-run_ms_algorithm = False
+run_ms_algorithm = True
 # Decide si corre algoritmo para cálculo de energía interna
 run_avg_energy = False
 # Decide si corre algoritmo para optimización de dx y beta_ini
-run_optimization = True
+run_optimization = False
 #
 #
 #################################################################################################
@@ -676,11 +673,11 @@ potential, potential_string =  harmonic_potential, 'harmonic_potential'
 
 # Parámetros técnicos
 print_steps = False
-save_data = False
-file_name = None
+save_data = True #False
+file_name = 'test1' #None
 relevant_info = None
 plot = True
-save_plot = False
+save_plot = True #False
 show_plot = True
 
 if run_ms_algorithm:
@@ -706,7 +703,7 @@ Z_file_name = None
 plot_energy = True
 save_plot_E = True
 show_plot_E = True
-E_plot_name = None  
+E_plot_name = None #script_dir + 'E.eps'
 
 # Parámetros físicos para calcular Z y <E>
 temp_min = 1./10
@@ -751,34 +748,35 @@ beta_fin = 4
 x_max = 5
 potential, potential_string =  harmonic_potential, 'harmonic_potential'
 nx_min = 10
-nx_max = 310
-nx_sampling = 60
+nx_max = 300
+nx_sampling = 30
 N_iter_min = 8
 N_iter_max = 20
 
 # Parámetros técnicos
 generate_opt_data = True
-read_opt_data = False
+read_opt_data = True
 save_opt_data = True
-opt_data_file_name = None
-opt_relevant_info = None
+opt_data_file_name = None #script_dir + '/pi_x-ms-opt-harmonic_potential-beta_fin_4.000-x_max_5.000-nx_min_10-nx_max_1001-nx_sampling_50-N_iter_min_1-N_iter_max_20.csv'
 plot_opt = True
 show_opt_plot = True
 save_plot_opt = True
-opt_plot_file_name = None
+opt_plot_file_name = None #script_dir + '/pi_x-ms-opt-plot-harmonic_potential-beta_fin_4.000-x_max_5.000-nx_min_10-nx_max_1001-nx_sampling_50-N_iter_min_1-N_iter_max_20.eps'
 
 if run_optimization:
-    error, dx_grid, beta_ini_grid, comp_time = \
+    t_0 = time()
+    error, dx_grid, beta_ini_grid = \
         optimization(generate_opt_data, read_opt_data, beta_fin, x_max, potential, 
                      potential_string, nx_min, nx_max, nx_sampling, N_iter_min,
-                     N_iter_max, save_opt_data, opt_data_file_name,opt_relevant_info,
-                     plot_opt, show_opt_plot, save_plot_opt, opt_plot_file_name)
+                     N_iter_max, save_opt_data, opt_data_file_name, plot_opt,
+                     show_opt_plot, save_plot_opt, opt_plot_file_name)
+    t_1 = time()
     print('-----------------------------------------'
           + '-----------------------------------------\n'
           + 'Optimization:  beta_fin=%.3f,   x_max=%.3f,   potential=%s\n \
-              nx_min=%d, nx_max=%d,   N_iter_min=%d,   N_iter_max=%d\n \
-              computation time = %.3f sec.\n'%(beta_fin,x_max,potential_string,nx_min,
-                                              nx_max,N_iter_min,N_iter_max,comp_time)
+             nx_min=%d, nx_max=%d,   N_iter_min=%d,   N_iter_max=%d\n \
+             computation time = %.3f sec.\n'%(beta_fin,x_max,potential_string,nx_min,
+                                              nx_max,N_iter_min,N_iter_max,t_1-t_0)
           + '-----------------------------------------'
           + '-----------------------------------------')
 

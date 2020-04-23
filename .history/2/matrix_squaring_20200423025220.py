@@ -601,13 +601,13 @@ def optimization(generate_opt_data=True, read_opt_data=False, beta_fin=4, x_max=
     
     t_1 = time()
 
-    # Grafica.
+    # Grafica 
     if plot:
 
         fig, ax = plt.subplots(1, 1)
 
         DX, BETA_INI = np.meshgrid(dx_grid, beta_ini_grid)
-        cp = plt.pcolormesh(DX,BETA_INI,error)
+        cp = plt.contourf(DX,BETA_INI,error)
         plt.colorbar(cp)
         
         ax.set_ylabel(u'$\\beta_{ini}$')
@@ -757,15 +757,16 @@ N_iter_min = 8
 N_iter_max = 20
 
 # Parámetros técnicos
-generate_opt_data = True
-read_opt_data = False
+generate_opt_data = False
+read_opt_data = True
 save_opt_data = True
-opt_data_file_name = None
-opt_relevant_info = None
+opt_data_file_name = script_dir + '/' + 'pi_x-ms-opt-harmonic_potential-beta_fin_4.000-x_max_5.000-nx_min_10-nx_max_1001-nx_sampling_50-N_iter_min_1-N_iter_max_20.csv'
+opt_relevant_info = ['Optimization of parameters dx and beta_ini of matrix squaring algorithm',
+                     'harmonic_potential   beta_fin = 4.000   x_max = 5.000   nx_min = 10   nx_max = 1001   nx_sampling = 50 N_iter_min = 1   N_iter_max = 20']
 plot_opt = True
 show_opt_plot = True
 save_plot_opt = True
-opt_plot_file_name = None
+opt_plot_file_name =  'pi_x-ms-opt-plot-harmonic_potential-beta_fin_4.000-x_max_5.000-nx_min_10-nx_max_1001-nx_sampling_50-N_iter_min_1-N_iter_max_20.png'
 
 if run_optimization:
     error, dx_grid, beta_ini_grid, comp_time = \

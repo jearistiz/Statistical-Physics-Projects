@@ -485,8 +485,8 @@ def calc_error(x,xp,dx):
 def optimization(generate_opt_data=True, read_opt_data=False, beta_fin=4, x_max=5, 
                  potential=harmonic_potential, potential_string='harmonic_potential',
                  nx_min=50, nx_max=1000, nx_sampling=50, N_iter_min=1, N_iter_max=20,
-                 save_opt_data=False, opt_data_file_name=None, opt_relevant_info=None,
-                 plot=True, show_plot=True, save_plot=True, opt_plot_file_name=None):
+                 save_opt_data=False, opt_data_file_name=None, plot=True,
+                 show_plot=True, save_plot=True, opt_plot_file_name=None):
     """
     Uso:    calcula diferentes valores de error usando calc_error() para encontrar valores de
             dx y beta_ini óptimos para correr el alcoritmo (óptimos = que minimicen error)
@@ -516,9 +516,7 @@ def optimization(generate_opt_data=True, read_opt_data=False, beta_fin=4, x_max=
         dx_grid: list, shape=(ndx,)         -> valores de dx para los que se calcula error.
         beta-ini_grid: list, shape=(nb,)    -> valores de beta_ini para los que se calcula error.
     """
-    
-    t_0 = time()
-    
+
     # Decide si genera o lee datos.
     if generate_opt_data:
         N_iter_min = int(N_iter_min)
@@ -557,6 +555,7 @@ def optimization(generate_opt_data=True, read_opt_data=False, beta_fin=4, x_max=
                 error_comp_theo = calc_error(pi_x,theoretical_pi_x,dx)
                 row.append(error_comp_theo)
             error.append(row)
+        #error = np.array(error)
 
     elif read_opt_data:
         error =  pd.read_csv(opt_data_file_name, index_col=0, comment='#')
@@ -566,6 +565,10 @@ def optimization(generate_opt_data=True, read_opt_data=False, beta_fin=4, x_max=
 
     else:
         raise Exception('Escoja si generar o leer datos en optimization(.)')
+    
+    #print(error)
+
+    error = np.array(error)
 
     # Toma valores de error  en cálculo de Z (nan e inf) y los remplaza por
     # el valor de mayor error en el gráfico.
@@ -590,24 +593,22 @@ def optimization(generate_opt_data=True, read_opt_data=False, beta_fin=4, x_max=
                                   + '-N_iter_max_%d.csv'%(N_iter_max))
         
         opt_data_file_name = script_dir + '/' + opt_data_file_name
-        if opt_relevant_info is None:
-            opt_relevant_info = ['Optimization of parameters dx and beta_ini of matrix squaring'
+        
+        relevant_info = ['Optimization of parameters dx and beta_ini of matrix squaring'
                          + ' algorithm', '%s   beta_fin = %.3f   '%(potential_string, beta_fin)
                          + 'x_max = %.3f   nx_min = %d   nx_max = %d   '%(x_max, nx_min, nx_max)
                          + 'nx_sampling = %d N_iter_min = %d   '%(nx_sampling, N_iter_min)
                          + 'N_iter_max = %d'%(N_iter_max)]
         
-        save_csv(error, dx_grid, beta_ini_grid, opt_data_file_name, opt_relevant_info)
-    
-    t_1 = time()
+        save_csv(error, dx_grid, beta_ini_grid, opt_data_file_name, relevant_info)
 
-    # Grafica.
+    # Grafica 
     if plot:
 
         fig, ax = plt.subplots(1, 1)
 
         DX, BETA_INI = np.meshgrid(dx_grid, beta_ini_grid)
-        cp = plt.pcolormesh(DX,BETA_INI,error)
+        cp = plt.contourf(DX,BETA_INI,error)
         plt.colorbar(cp)
         
         ax.set_ylabel(u'$\\beta_{ini}$')
@@ -631,8 +632,8 @@ def optimization(generate_opt_data=True, read_opt_data=False, beta_fin=4, x_max=
             plt.show()
 
         plt.close()
-    comp_time = t_1 - t_0
-    return error, dx_grid, beta_ini_grid, comp_time
+
+    return error, dx_grid, beta_ini_grid
 
 
 #################################################################################################
@@ -760,25 +761,26 @@ N_iter_max = 20
 generate_opt_data = True
 read_opt_data = False
 save_opt_data = True
-opt_data_file_name = None
-opt_relevant_info = None
+opt_data_file_name = 'opt-test-1.csv'  # '/pi_x-ms-opt-harmonic_potential-beta_fin_4.000-x_max_5.000-nx_min_10-nx_max_1001-nx_sampling_50-N_iter_min_1-N_iter_max_20.csv'
 plot_opt = True
 show_opt_plot = True
 save_plot_opt = True
-opt_plot_file_name = None
+opt_plot_file_name = 'opt-test-1.png'  # '/pi_x-ms-opt-plot-harmonic_potential-beta_fin_4.000-x_max_5.000-nx_min_10-nx_max_1001-nx_sampling_50-N_iter_min_1-N_iter_max_20.eps'
 
 if run_optimization:
-    error, dx_grid, beta_ini_grid, comp_time = \
+    t_0 = time()
+    error, dx_grid, beta_ini_grid = \
         optimization(generate_opt_data, read_opt_data, beta_fin, x_max, potential, 
                      potential_string, nx_min, nx_max, nx_sampling, N_iter_min,
-                     N_iter_max, save_opt_data, opt_data_file_name,opt_relevant_info,
-                     plot_opt, show_opt_plot, save_plot_opt, opt_plot_file_name)
+                     N_iter_max, save_opt_data, opt_data_file_name, plot_opt,
+                     show_opt_plot, save_plot_opt, opt_plot_file_name)
+    t_1 = time()
     print('-----------------------------------------'
           + '-----------------------------------------\n'
           + 'Optimization:  beta_fin=%.3f,   x_max=%.3f,   potential=%s\n \
               nx_min=%d, nx_max=%d,   N_iter_min=%d,   N_iter_max=%d\n \
               computation time = %.3f sec.\n'%(beta_fin,x_max,potential_string,nx_min,
-                                              nx_max,N_iter_min,N_iter_max,comp_time)
+                                              nx_max,N_iter_min,N_iter_max,t_1-t_0)
           + '-----------------------------------------'
           + '-----------------------------------------')
 
