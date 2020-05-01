@@ -1,0 +1,155 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{from} \PYG{n+nn}{matrix\PYGZus{}squaring} \PYG{k+kn}{import} \PYG{o}{*}
+
+
+
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}}
+\PYG{c+c1}{\PYGZsh{} PANEL DE CONTROL}
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}}
+
+\PYG{c+c1}{\PYGZsh{} Decide si corre algoritmo matrix squaring con aproximación de trotter}
+\PYG{n}{run\PYGZus{}ms\PYGZus{}algorithm} \PYG{o}{=} \PYG{n+nb+bp}{True}
+
+\PYG{c+c1}{\PYGZsh{} Decide si corre algoritmo para cálculo de energía interna}
+\PYG{n}{run\PYGZus{}avg\PYGZus{}energy} \PYG{o}{=} \PYG{n+nb+bp}{True}
+
+\PYG{c+c1}{\PYGZsh{} Decide si corre algoritmo para optimización de dx y beta\PYGZus{}ini}
+\PYG{n}{run\PYGZus{}optimization} \PYG{o}{=} \PYG{n+nb+bp}{False}
+
+
+
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}}
+\PYG{c+c1}{\PYGZsh{} PARÁMETROS GENERALES PARA LAS FIGURAS}
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}}
+
+\PYG{c+c1}{\PYGZsh{} Usar latex en texto de figuras y agrandar tamaño de fuente}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rc}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}text\PYGZsq{}}\PYG{p}{,} \PYG{n}{usetex}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{)} 
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{o}{.}\PYG{n}{update}\PYG{p}{(\PYGZob{}}\PYG{l+s+s1}{\PYGZsq{}font.size\PYGZsq{}}\PYG{p}{:}\PYG{l+m+mi}{15}\PYG{p}{,}\PYG{l+s+s1}{\PYGZsq{}text.latex.unicode\PYGZsq{}}\PYG{p}{:}\PYG{n+nb+bp}{True}\PYG{p}{\PYGZcb{})}
+
+\PYG{c+c1}{\PYGZsh{} Obtenemos path para guardar archivos en el mismo directorio donde se ubica el script}
+\PYG{n}{script\PYGZus{}dir} \PYG{o}{=} \PYG{n}{os}\PYG{o}{.}\PYG{n}{path}\PYG{o}{.}\PYG{n}{dirname}\PYG{p}{(}\PYG{n}{os}\PYG{o}{.}\PYG{n}{path}\PYG{o}{.}\PYG{n}{abspath}\PYG{p}{(}\PYG{n+nv+vm}{\PYGZus{}\PYGZus{}file\PYGZus{}\PYGZus{}}\PYG{p}{))}
+
+
+
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}}
+\PYG{c+c1}{\PYGZsh{} CORRE ALGORITMO MATRIX SQUARING}
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}}
+
+\PYG{k}{if} \PYG{n}{run\PYGZus{}ms\PYGZus{}algorithm}\PYG{p}{:}
+    
+    \PYG{c+c1}{\PYGZsh{} Parámetros físicos del algoritmo}
+    \PYG{n}{physical\PYGZus{}kwargs} \PYG{o}{=} \PYG{p}{\PYGZob{}}
+        \PYG{l+s+s1}{\PYGZsq{}beta\PYGZus{}fin\PYGZsq{}}\PYG{p}{:} \PYG{l+m+mi}{4}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}x\PYGZus{}max\PYGZsq{}}\PYG{p}{:} \PYG{l+m+mf}{5.}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}nx\PYGZsq{}}\PYG{p}{:} \PYG{l+m+mi}{201}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}N\PYGZus{}iter\PYGZsq{}}\PYG{p}{:} \PYG{l+m+mi}{9}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}potential\PYGZsq{}}\PYG{p}{:} \PYG{n}{harmonic\PYGZus{}potential}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}potential\PYGZus{}string\PYGZsq{}}\PYG{p}{:} \PYG{l+s+s1}{\PYGZsq{}harmonic\PYGZus{}potential\PYGZsq{}}\PYG{p}{,}
+        \PYG{p}{\PYGZcb{}}
+
+    \PYG{c+c1}{\PYGZsh{} Parámetros técnicos (generar archivos y figuras, etc.)}
+    \PYG{n}{technical\PYGZus{}kwargs} \PYG{o}{=} \PYG{p}{\PYGZob{}}
+        \PYG{l+s+s1}{\PYGZsq{}print\PYGZus{}steps\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{False}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}save\PYGZus{}data\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{True}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}csv\PYGZus{}file\PYGZus{}name\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{None}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}relevant\PYGZus{}info\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{None}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}plot\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{True}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}plot\PYGZus{}QHO\PYGZus{}theory\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{True}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}save\PYGZus{}plot\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{True}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}show\PYGZus{}plot\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{False}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}plot\PYGZus{}file\PYGZus{}name\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{None}\PYG{p}{,}
+        \PYG{p}{\PYGZcb{}}
+
+    \PYG{n}{kwargs} \PYG{o}{=} \PYG{p}{\PYGZob{}}\PYG{o}{**}\PYG{n}{physical\PYGZus{}kwargs}\PYG{p}{,} \PYG{o}{**}\PYG{n}{technical\PYGZus{}kwargs}\PYG{p}{\PYGZcb{}}
+
+    \PYG{n}{rho}\PYG{p}{,} \PYG{n}{trace\PYGZus{}rho}\PYG{p}{,} \PYG{n}{grid\PYGZus{}x} \PYG{o}{=} \PYG{n}{run\PYGZus{}pi\PYGZus{}x\PYGZus{}sq\PYGZus{}trotter}\PYG{p}{(}\PYG{o}{**}\PYG{n}{kwargs}\PYG{p}{)}
+
+
+
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}}
+\PYG{c+c1}{\PYGZsh{} CORRE ALGORITMO PARA CÁLCULO DE ENERGÍA INTERNA}
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}}
+
+\PYG{k}{if} \PYG{n}{run\PYGZus{}avg\PYGZus{}energy}\PYG{p}{:}
+
+    \PYG{c+c1}{\PYGZsh{} Parámetros técnicos función partición y cálculo de energía }
+    \PYG{n}{technical\PYGZus{}Z\PYGZus{}kwargs} \PYG{o}{=} \PYG{p}{\PYGZob{}}
+        \PYG{l+s+s1}{\PYGZsq{}read\PYGZus{}Z\PYGZus{}data\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{False}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}generate\PYGZus{}Z\PYGZus{}data\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{True}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}Z\PYGZus{}file\PYGZus{}name\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{None}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}plot\PYGZus{}energy\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{True}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}save\PYGZus{}plot\PYGZus{}E\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{True}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}show\PYGZus{}plot\PYGZus{}E\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{False}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}E\PYGZus{}plot\PYGZus{}name\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{None}\PYG{p}{,}
+        \PYG{p}{\PYGZcb{}}
+
+    \PYG{c+c1}{\PYGZsh{} Parámetros físicos para calcular Z y \PYGZlt{}E\PYGZgt{}}
+    \PYG{n}{physical\PYGZus{}kwargs} \PYG{o}{=} \PYG{p}{\PYGZob{}}
+        \PYG{l+s+s1}{\PYGZsq{}temp\PYGZus{}min\PYGZsq{}}\PYG{p}{:} \PYG{l+m+mf}{1.}\PYG{o}{/}\PYG{l+m+mi}{10}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}temp\PYGZus{}max\PYGZsq{}}\PYG{p}{:} \PYG{l+m+mf}{1.}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}N\PYGZus{}temp\PYGZsq{}}\PYG{p}{:} \PYG{l+m+mi}{300}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}potential\PYGZsq{}}\PYG{p}{:} \PYG{n}{harmonic\PYGZus{}potential}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}potential\PYGZus{}string\PYGZsq{}}\PYG{p}{:} \PYG{l+s+s1}{\PYGZsq{}harmonic\PYGZus{}potential\PYGZsq{}}\PYG{p}{,}
+        \PYG{p}{\PYGZcb{}}
+
+    \PYG{c+c1}{\PYGZsh{} Más parámetros técnicos}
+    \PYG{n}{more\PYGZus{}technical\PYGZus{}kwargs} \PYG{o}{=} \PYG{p}{\PYGZob{}}
+        \PYG{l+s+s1}{\PYGZsq{}save\PYGZus{}Z\PYGZus{}csv\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{True}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}relevant\PYGZus{}info\PYGZus{}Z\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{None}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}print\PYGZus{}Z\PYGZus{}data\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{False}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}x\PYGZus{}max\PYGZsq{}}\PYG{p}{:} \PYG{l+m+mf}{5.}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}nx\PYGZsq{}}\PYG{p}{:} \PYG{l+m+mi}{201}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}N\PYGZus{}iter\PYGZsq{}}\PYG{p}{:} \PYG{l+m+mi}{9}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}print\PYGZus{}steps\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{False}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}save\PYGZus{}pi\PYGZus{}x\PYGZus{}data\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{False}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}pi\PYGZus{}x\PYGZus{}file\PYGZus{}name\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{None}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}relevant\PYGZus{}info\PYGZus{}pi\PYGZus{}x\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{None}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}plot\PYGZus{}pi\PYGZus{}x\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{False}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}save\PYGZus{}plot\PYGZus{}pi\PYGZus{}x\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{False}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}show\PYGZus{}plot\PYGZus{}pi\PYGZus{}x\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{False}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}plot\PYGZus{}pi\PYGZus{}x\PYGZus{}file\PYGZus{}name\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{None}\PYG{p}{,}
+        \PYG{p}{\PYGZcb{}}
+
+    \PYG{n}{kwargs} \PYG{o}{=} \PYG{p}{\PYGZob{}}\PYG{o}{**}\PYG{n}{technical\PYGZus{}Z\PYGZus{}kwargs}\PYG{p}{,} \PYG{o}{**}\PYG{n}{physical\PYGZus{}kwargs}\PYG{p}{,} \PYG{o}{**}\PYG{n}{more\PYGZus{}technical\PYGZus{}kwargs}\PYG{p}{\PYGZcb{}}
+
+    \PYG{n}{average\PYGZus{}energy}\PYG{p}{(}\PYG{o}{**}\PYG{n}{kwargs}\PYG{p}{)}
+
+
+
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}}
+\PYG{c+c1}{\PYGZsh{} CORRE ALGORITMO PARA OPTIMIZACIÓN DE DX Y BETA\PYGZus{}INI}
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}}
+
+\PYG{k}{if} \PYG{n}{run\PYGZus{}optimization}\PYG{p}{:}
+
+    \PYG{c+c1}{\PYGZsh{} Parámetros físicos}
+    \PYG{n}{physical\PYGZus{}kwargs} \PYG{o}{=} \PYG{p}{\PYGZob{}}
+        \PYG{l+s+s1}{\PYGZsq{}beta\PYGZus{}fin\PYGZsq{}}\PYG{p}{:} \PYG{l+m+mi}{4}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}x\PYGZus{}max\PYGZsq{}}\PYG{p}{:} \PYG{l+m+mi}{5}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}potential\PYGZsq{}}\PYG{p}{:} \PYG{n}{harmonic\PYGZus{}potential}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}potential\PYGZus{}string\PYGZsq{}}\PYG{p}{:} \PYG{l+s+s1}{\PYGZsq{}harmonic\PYGZus{}potential\PYGZsq{}}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}nx\PYGZus{}min\PYGZsq{}}\PYG{p}{:} \PYG{l+m+mi}{20}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}nx\PYGZus{}max\PYGZsq{}}\PYG{p}{:} \PYG{l+m+mi}{1121}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}nx\PYGZus{}sampling\PYGZsq{}}\PYG{p}{:} \PYG{l+m+mi}{50}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}N\PYGZus{}iter\PYGZus{}min\PYGZsq{}}\PYG{p}{:} \PYG{l+m+mi}{9}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}N\PYGZus{}iter\PYGZus{}max\PYGZsq{}}\PYG{p}{:} \PYG{l+m+mi}{20}\PYG{p}{,}
+        \PYG{p}{\PYGZcb{}}
+
+    \PYG{c+c1}{\PYGZsh{} Parámetros técnicos}
+    \PYG{n}{technical\PYGZus{}kwargs} \PYG{o}{=} \PYG{p}{\PYGZob{}}
+        \PYG{l+s+s1}{\PYGZsq{}generate\PYGZus{}opt\PYGZus{}data\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{True}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}read\PYGZus{}opt\PYGZus{}data\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{False}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}save\PYGZus{}opt\PYGZus{}data\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{True}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}opt\PYGZus{}data\PYGZus{}file\PYGZus{}name\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{None}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}opt\PYGZus{}relevant\PYGZus{}info\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{None}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}plot\PYGZus{}opt\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{True}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}show\PYGZus{}plot\PYGZus{}opt\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{True}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}save\PYGZus{}plot\PYGZus{}opt\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{True}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}opt\PYGZus{}plot\PYGZus{}file\PYGZus{}name\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{None}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}print\PYGZus{}summary\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{True}\PYG{p}{,}
+        \PYG{p}{\PYGZcb{}}
+
+    \PYG{n}{kwargs} \PYG{o}{=} \PYG{p}{\PYGZob{}}\PYG{o}{**}\PYG{n}{physical\PYGZus{}kwargs}\PYG{p}{,} \PYG{o}{**}\PYG{n}{technical\PYGZus{}kwargs}\PYG{p}{\PYGZcb{}}
+
+    \PYG{n}{error}\PYG{p}{,} \PYG{n}{dx\PYGZus{}grid}\PYG{p}{,} \PYG{n}{beta\PYGZus{}ini\PYGZus{}grid}\PYG{p}{,} \PYG{n}{comp\PYGZus{}time} \PYG{o}{=} \PYG{n}{optimization}\PYG{p}{(}\PYG{o}{**}\PYG{n}{kwargs}\PYG{p}{)}
+\end{Verbatim}

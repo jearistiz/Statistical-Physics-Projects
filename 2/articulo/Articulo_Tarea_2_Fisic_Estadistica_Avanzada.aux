@@ -21,58 +21,80 @@
 \providecommand\HyField@AuxAddToFields[1]{}
 \providecommand\HyField@AuxAddToCoFields[2]{}
 \citation{Grynberg2010,Schwartz2013}
-\citation{Barone2003,Holstein1998}
-\citation{Kheirandish2018}
-\citation{RichardP.Feynmann1972}
-\citation{Cohen-Tannoudji}
-\citation{Metropolis1953}
-\citation{Hastings1970}
-\citation{Newman1999}
+\citation{WernerKrauth2006}
+\citation{WernerKrauth2006}
 \newlabel{FirstPage}{{}{1}{}{section*.1}{}}
-\@writefile{toc}{\contentsline {title}{Oscilador arm\IeC {\'o}nico cu\IeC {\'a}ntico unidimensional en ba\IeC {\~n}o\\t\IeC {\'e}rmico usando el algoritmo Metr\IeC {\'o}polis.}{1}{section*.2}}
+\@writefile{toc}{\contentsline {title}{Part\IeC {\'\i }cula bajo influencia de potencial arm\IeC {\'o}nico y anarm\IeC {\'o}nico en colectividad\\can\IeC {\'o}nica: algoritmos \textit  {Matrix Squaring} y \textit  {Path Integral}.}{1}{section*.2}}
 \@writefile{toc}{\contentsline {abstract}{Resumen}{1}{section*.1}}
 \newlabel{sec:Intro}{{I}{1}{}{section*.3}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {I}Introducci\IeC {\'o}n}{1}{section*.3}}
-\newlabel{sec:Teoria}{{II}{1}{}{section*.4}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {II}Consideraciones te\IeC {\'o}ricas}{1}{section*.4}}
+\citation{WernerKrauth2006}
+\citation{RichardP.Feynmann1972}
+\newlabel{sec:Teoria}{{II}{2}{}{section*.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {II}Consideraciones te\IeC {\'o}ricas}{2}{section*.4}}
 \newlabel{eq:convolution}{{2}{2}{}{equation.2.2}{}}
+\newlabel{eq:trotter}{{3}{2}{}{equation.2.3}{}}
 \newlabel{subsec:MtxSq}{{II\tmspace  +\thinmuskip {.1667em}A}{2}{}{section*.5}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {A}\textit  {Matrix Squaring}}{2}{section*.5}}
+\newlabel{eq:MS}{{4}{2}{}{equation.2.4}{}}
+\newlabel{eq:MS-iteration-process}{{5}{2}{}{equation.2.5}{}}
+\newlabel{eq:MS-first-iter}{{6}{2}{}{equation.2.6}{}}
 \newlabel{subsec:PathInt}{{II\tmspace  +\thinmuskip {.1667em}B}{2}{}{section*.6}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {B}\textit  {Path Integral Naive Sampling}}{2}{section*.6}}
-\newlabel{sec:Resultados}{{III}{2}{}{section*.7}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {III}Resultados y discusi\IeC {\'o}n}{2}{section*.7}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {A}\textit  {Matrix Squaring}}{2}{section*.8}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {B}\textit  {Path Integral Naive Sampling}}{2}{section*.9}}
-\newlabel{sec:conclusion}{{IV}{2}{}{section*.10}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {IV}Conclusi\IeC {\'o}n}{2}{section*.10}}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces \texthl  {caption}}}{2}{figure.1}}
+\newlabel{eq:convolution-path}{{8}{2}{}{equation.2.8}{}}
+\newlabel{eq:path-integral-formulation}{{9}{2}{}{equation.2.9}{}}
+\citation{RichardP.Feynmann1972}
+\citation{Cohen-Tannoudji}
+\newlabel{eq:pi-x}{{12}{3}{}{equation.2.12}{}}
+\newlabel{eq:path-ini}{{13}{3}{}{equation.2.13}{}}
+\newlabel{eq:acceptance-prob-path}{{19}{3}{}{equation.2.19}{}}
+\newlabel{sec:Resultados}{{III}{3}{}{section*.7}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {III}Resultados y discusi\IeC {\'o}n}{3}{section*.7}}
+\newlabel{subsec:Mtxsq-results}{{III\tmspace  +\thinmuskip {.1667em}A}{3}{}{section*.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A}\textit  {Matrix Squaring}}{3}{section*.8}}
+\newlabel{eq:Msq-err-comp}{{21}{3}{}{equation.3.21}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Error relativo cuantificado por (\ref  {eq:Msq-err-comp}) para $\beta _\mathrm  {fin}=4$. Notamos que cuanto m\IeC {\'a}s peque\IeC {\~n}a sea $\beta _\mathrm  {ini}$, la discretizaci\IeC {\'o}n $dx$ debe disminuir tambi\IeC {\'e}n para evitar que el error computacional sea grande.}}{4}{figure.1}}
+\newlabel{fig:Msq-err-comp}{{1}{4}{Error relativo cuantificado por (\ref {eq:Msq-err-comp}) para $\beta _\mathrm {fin}=4$. Notamos que cuanto más pequeña sea $\beta _\mathrm {ini}$, la discretización $dx$ debe disminuir también para evitar que el error computacional sea grande}{figure.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces $\pi ^{(Q)}_\mathrm  {teo}(x ; \beta _\mathrm  {fin})$ y $\pi ^{(Q)}_\mathrm  {comp}(x ; \beta _\mathrm  {fin})$ para el oscilador arm\IeC {\'o}nico cu\IeC {\'a}ntico. En la gr\IeC {\'a}fica solo aparece uno de los valores ya que el error computacional en este caso fue muy peque\IeC {\~n}o y las gr\IeC {\'a}ficas se solaparon. Los par\IeC {\'a}metros del algoritmo fueron $\beta _\mathrm  {fin} = 4$, $\beta _\mathrm  {ini} = 2^{-9}\beta _\mathrm  {fin}$, $x_\mathrm  {max}=5$, $dx=0.05$.}}{4}{figure.2}}
+\newlabel{fig:Msq-harm}{{2}{4}{$\pi ^{(Q)}_\mathrm {teo}(x ; \beta _\mathrm {fin})$ y $\pi ^{(Q)}_\mathrm {comp}(x ; \beta _\mathrm {fin})$ para el oscilador armónico cuántico. En la gráfica solo aparece uno de los valores ya que el error computacional en este caso fue muy pequeño y las gráficas se solaparon. Los parámetros del algoritmo fueron $\beta _\mathrm {fin} = 4$, $\beta _\mathrm {ini} = 2^{-9}\beta _\mathrm {fin}$, $x_\mathrm {max}=5$, $dx=0.05$}{figure.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces $\pi ^{(Q)}_\mathrm  {comp}(x ; \beta _\mathrm  {fin})$ para el potencial anarm\IeC {\'o}nico (\ref  {eq:anharm-pot}). Se muestra tambi\IeC {\'e}n para comparaci\IeC {\'o}n $\pi ^{(Q)}_\mathrm  {comp}(x ; \beta _\mathrm  {fin})$ del potencial arm\IeC {\'o}nico. Los par\IeC {\'a}metros del algoritmo fueron $\beta _\mathrm  {fin} = 4$, $\beta _\mathrm  {ini} = 2^{-9}\beta _\mathrm  {fin}$, $x_\mathrm  {max}=5$, $dx=0.05$.}}{4}{figure.3}}
+\newlabel{fig:Msq-anharm}{{3}{4}{$\pi ^{(Q)}_\mathrm {comp}(x ; \beta _\mathrm {fin})$ para el potencial anarmónico (\ref {eq:anharm-pot}). Se muestra también para comparación $\pi ^{(Q)}_\mathrm {comp}(x ; \beta _\mathrm {fin})$ del potencial armónico. Los parámetros del algoritmo fueron $\beta _\mathrm {fin} = 4$, $\beta _\mathrm {ini} = 2^{-9}\beta _\mathrm {fin}$, $x_\mathrm {max}=5$, $dx=0.05$}{figure.3}{}}
+\newlabel{eq:anharm-pot}{{22}{4}{}{equation.3.22}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces $\delimiter "426830A E \delimiter "526930B $ dada por (\ref  {eq:Energ-prom}) y calculada usando las matrices obtenidas mediante algoritmo \textit  {Matrix Squaring} para los potenciales arm\IeC {\'o}nico y anharm\IeC {\'o}nico. Los par\IeC {\'a}metros usados fueron $\beta _\mathrm  {ini} = 2^{-9}\beta _\mathrm  {fin}$, $x_\mathrm  {max}=5$, $dx=0.05$. Se notan diferencias entre el valor te\IeC {\'o}rico y el computacional para el potencial arm\IeC {\'o}nico pero solo en las puntas por el efecto de la derivada num\IeC {\'e}rica en los extremos. Notamos que para el potencial arm\IeC {\'o}nico el l\IeC {\'\i }mite de $T \rightarrow 0$ corresponde con el de la energ\IeC {\'\i }a base $E=1/2$, mientras que el caso del potencial anarm\IeC {\'o}nico la energ\IeC {\'\i }a en este l\IeC {\'\i }mite es un poco myor. La forma de las curvas para el potencial anarm\IeC {\'o}nico y el arm\IeC {\'o}nico son similares.}}{5}{figure.4}}
+\newlabel{fig:E-msq}{{4}{5}{$\langle E \rangle $ dada por (\ref {eq:Energ-prom}) y calculada usando las matrices obtenidas mediante algoritmo \textit {Matrix Squaring} para los potenciales armónico y anharmónico. Los parámetros usados fueron $\beta _\mathrm {ini} = 2^{-9}\beta _\mathrm {fin}$, $x_\mathrm {max}=5$, $dx=0.05$. Se notan diferencias entre el valor teórico y el computacional para el potencial armónico pero solo en las puntas por el efecto de la derivada numérica en los extremos. Notamos que para el potencial armónico el límite de $T \rightarrow 0$ corresponde con el de la energía base $E=1/2$, mientras que el caso del potencial anarmónico la energía en este límite es un poco myor. La forma de las curvas para el potencial anarmónico y el armónico son similares}{figure.4}{}}
+\newlabel{eq:Energ-prom}{{25}{5}{}{equation.3.25}{}}
+\newlabel{subsec:PathInt-results}{{III\tmspace  +\thinmuskip {.1667em}B}{5}{}{section*.9}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {B}\textit  {Path Integral Naive Sampling}}{5}{section*.9}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Histogramas para el potencial arm\IeC {\'o}nico obtenidas con el algoritmo \textit  {Path Integral Naive Sampling}. a) Histograma para posiciones $x_0$; semuestra tambi\IeC {\'e}n el path que se obtiene al final del algoritmo. b) Histograma para posiciones $x_0$ y comparaci\IeC {\'o}n con histograma para $x_k$ con $k\not =0$ notamos que los histogramas coinciden en la forma y se ajustan al los valores dados por el algoritmo \textit  {Matrix Squaring}. c) Histograma para posiciones $x_0$ y comparaci\IeC {\'o}n con histograma generado por los valores que toma todo el camino $[x_0,\tmspace  +\thinmuskip {.1667em}\tmspace  +\thinmuskip {.1667em}x_1,\tmspace  +\thinmuskip {.1667em}\tmspace  +\thinmuskip {.1667em}\dots  ,\tmspace  +\thinmuskip {.1667em}\tmspace  +\thinmuskip {.1667em}x_{9}]$. Si se hace Zoom en \IeC {\'e}ste \IeC {\'u}ltimo y se compara con los otros, podemos ver que las fluctuaciones alrededor del valor te\IeC {\'o}rico disminuyen debido a que ac\IeC {\'a} se consideran m\IeC {\'a}s datos. Los par\IeC {\'a}metros usados para este caso fueron $N_\mathrm  {iter}=10^6$ y $\delta =0.5$.}}{6}{figure.5}}
+\newlabel{fig:path-int-harm}{{5}{6}{Histogramas para el potencial armónico obtenidas con el algoritmo \textit {Path Integral Naive Sampling}. a) Histograma para posiciones $x_0$; semuestra también el path que se obtiene al final del algoritmo. b) Histograma para posiciones $x_0$ y comparación con histograma para $x_k$ con $k\neq 0$ notamos que los histogramas coinciden en la forma y se ajustan al los valores dados por el algoritmo \textit {Matrix Squaring}. c) Histograma para posiciones $x_0$ y comparación con histograma generado por los valores que toma todo el camino $[x_0,\,\,x_1,\,\,\dots ,\,\,x_{9}]$. Si se hace Zoom en éste último y se compara con los otros, podemos ver que las fluctuaciones alrededor del valor teórico disminuyen debido a que acá se consideran más datos. Los parámetros usados para este caso fueron $N_\mathrm {iter}=10^6$ y $\delta =0.5$}{figure.5}{}}
+\newlabel{sec:conclusion}{{IV}{6}{}{section*.10}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {IV}Conclusi\IeC {\'o}n}{6}{section*.10}}
 \citation{*}
 \bibdata{Articulo_Tarea_2_Fisic_Estadistica_AvanzadaNotes,5-Semestre_X_2020_I-Fisica_Estadistica_Avanzada-Tarea_2}
 \bibcite{Grynberg2010}{{1}{2010}{{Grynberg\ \emph  {et~al.}}}{{Grynberg, Aspect,\ and\ Fabre}}}
 \bibcite{Schwartz2013}{{2}{2014}{{Schwartz}}{{}}}
-\bibcite{Barone2003}{{3}{2003}{{Barone\ \emph  {et~al.}}}{{Barone, Boschi-Filho,\ and\ Farina}}}
-\bibcite{Holstein1998}{{4}{1998}{{Holstein}}{{}}}
-\bibcite{Kheirandish2018}{{5}{2018}{{Kheirandish}}{{}}}
-\bibcite{RichardP.Feynmann1972}{{6}{1972}{{{Richard P. Feynmann}}}{{}}}
-\bibcite{Cohen-Tannoudji}{{7}{1977}{{Cohen-Tannoudji\ \emph  {et~al.}}}{{Cohen-Tannoudji, Diu,\ and\ Lalo{\"{e}}}}}
-\bibcite{Metropolis1953}{{8}{1953}{{Metropolis\ \emph  {et~al.}}}{{Metropolis, Rosenbluth, Rosenbluth, Teller,\ and\ Teller}}}
-\bibcite{Hastings1970}{{9}{1970}{{Hastings}}{{}}}
-\bibcite{Newman1999}{{10}{1999}{{Newman\ and\ Barkema}}{{}}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces \texthl  {caption}}}{3}{figure.2}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces \texthl  {caption}}}{3}{figure.3}}
-\@writefile{toc}{\contentsline {section}{\numberline {}Agradecimientos}{3}{section*.11}}
-\@writefile{toc}{\contentsline {section}{\numberline {}Referencias}{3}{section*.12}}
-\newlabel{LastBibItem}{{10}{3}{}{section*.12}{}}
-\newlabel{appx:codigo_matrix_squaring}{{A}{4}{}{section*.13}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {A}C\IeC {\'o}digo 1: Matrix Squaring}{4}{section*.13}}
+\bibcite{WernerKrauth2006}{{3}{2006}{{Krauth}}{{}}}
+\bibcite{RichardP.Feynmann1972}{{4}{1972}{{{Richard P. Feynmann}}}{{}}}
+\bibcite{Cohen-Tannoudji}{{5}{1977}{{Cohen-Tannoudji\ \emph  {et~al.}}}{{Cohen-Tannoudji, Diu,\ and\ Lalo{\"{e}}}}}
+\bibcite{Kheirandish2018}{{6}{2018}{{Kheirandish}}{{}}}
+\bibcite{Newman1999}{{7}{1999}{{Newman\ and\ Barkema}}{{}}}
+\bibcite{Barone2003}{{8}{2003}{{Barone\ \emph  {et~al.}}}{{Barone, Boschi-Filho,\ and\ Farina}}}
+\bibcite{Holstein1998}{{9}{1998}{{Holstein}}{{}}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces {Histogramas para el potencial anararm\IeC {\'o}nico (\ref  {eq:anharm-pot}) obtenidas con el algoritmo \textit  {Path Integral Naive Sampling}. a) Histograma para posiciones $x_0$; semuestra tambi\IeC {\'e}n el path que se obtiene al final del algoritmo. b) Histograma para posiciones $x_0$ y comparaci\IeC {\'o}n con histograma para $x_k$ con $k\not =0$ notamos que los histogramas coinciden en la forma y se ajustan al los valores dados por el algoritmo \textit  {Matrix Squaring}. c) Histograma para posiciones $x_0$ y comparaci\IeC {\'o}n con histograma generado por los valores que toma todo el camino $[x_0,\tmspace  +\thinmuskip {.1667em}\tmspace  +\thinmuskip {.1667em}x_1,\tmspace  +\thinmuskip {.1667em}\tmspace  +\thinmuskip {.1667em}\dots  ,\tmspace  +\thinmuskip {.1667em}\tmspace  +\thinmuskip {.1667em}x_{9}]$. Si se hace Zoom en \IeC {\'e}ste \IeC {\'u}ltimo y se compara con los otros, podemos ver que las fluctuaciones alrededor del valor te\IeC {\'o}rico disminuyen debido a que ac\IeC {\'a} se consideran m\IeC {\'a}s datos. Los par\IeC {\'a}metros usados para este caso fueron $N_\mathrm  {iter}=10^6$ y $\delta =0.5$.}}}{7}{figure.6}}
+\newlabel{fig:path-int-anharm}{{6}{7}{Histogramas para el potencial anararmónico (\ref {eq:anharm-pot}) obtenidas con el algoritmo \textit {Path Integral Naive Sampling}. a) Histograma para posiciones $x_0$; semuestra también el path que se obtiene al final del algoritmo. b) Histograma para posiciones $x_0$ y comparación con histograma para $x_k$ con $k\neq 0$ notamos que los histogramas coinciden en la forma y se ajustan al los valores dados por el algoritmo \textit {Matrix Squaring}. c) Histograma para posiciones $x_0$ y comparación con histograma generado por los valores que toma todo el camino $[x_0,\,\,x_1,\,\,\dots ,\,\,x_{9}]$. Si se hace Zoom en éste último y se compara con los otros, podemos ver que las fluctuaciones alrededor del valor teórico disminuyen debido a que acá se consideran más datos. Los parámetros usados para este caso fueron $N_\mathrm {iter}=10^6$ y $\delta =0.5$}{figure.6}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {}Agradecimientos}{7}{section*.11}}
+\@writefile{toc}{\contentsline {section}{\numberline {}Referencias}{7}{section*.12}}
+\newlabel{LastBibItem}{{9}{7}{}{section*.12}{}}
+\newlabel{appx:codigo_matrix_squaring}{{A}{7}{}{section*.13}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {A}C\IeC {\'o}digo 1: Matrix Squaring}{7}{section*.13}}
+\newlabel{appx:codigo-path-int}{{B}{10}{}{section*.14}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {B}C\IeC {\'o}digo 2: Naive Path Integral Montecarlo Sampling}{10}{section*.14}}
 \bibstyle{apsrev4-2}
 \citation{REVTEX42Control}
 \citation{apsrev42Control}
 \gdef\minted@oldcachelist{,
   default-pyg-prefix.pygstyle,
   default.pygstyle,
-  196AD8B8DF3E412EFB1433CB3DC4043A6C0413B56F1ABBAF230B55542A3C5FA6.pygtex}
-\newlabel{appx:codigo_temperatura_finita}{{B}{17}{}{section*.14}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {B}C\IeC {\'o}digo 2: Naive Path Integral Montecarlo Sampling}{17}{section*.14}}
-\newlabel{LastPage}{{}{17}{}{}{}}
+  106FB1083E8A643103ED2B0CD8C869536C0413B56F1ABBAF230B55542A3C5FA6.pygtex,
+  F2105E97AC8618B732409DAF77999F2A4557740CA609DC28B4926A1036192BC7.pygtex}
+\newlabel{LastPage}{{}{13}{}{}{}}
