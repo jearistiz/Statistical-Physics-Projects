@@ -10,10 +10,14 @@ run_microstates_algorithm = False
 
 # Decide si corre algoritmo para cálculo de contribuciones a la función partición
 # por cada valor de energía 
+<<<<<<< HEAD
 run_Z_contributions_algorithm = False
 
 # Decide si corre algoritmo de aproximación de función partición
 run_Z_approx_algorithm = True
+=======
+run_Z_contributions_algorithm = True
+>>>>>>> 5e9d9e9e912884c51b16297df5b1ea3a8528bb80
 
 # Decide si corre algoritmo para optimización de dx y beta_ini
 run_specific_heat_algorithm = False
@@ -64,18 +68,28 @@ if run_Z_contributions_algorithm:
         'save_plot': True,
         'plot_file_Name': None,
         }
+<<<<<<< HEAD
     
     Z_array, statistical_weights_array, beta_array, energies, omegas = \
         partition_func_stat_weights(**kwargs)
     
+=======
+    
+    Z_array, statistical_weights_array, beta_array, energies, omegas = \
+        partition_func_stat_weights(**kwargs)
+    
+>>>>>>> 5e9d9e9e912884c51b16297df5b1ea3a8528bb80
     # Acá está la clave para  la pregunta de la mitad en la pag 5   
     # el gráfico de log(Z) es lineal a altos beta ya que Z es aproximadamente una exponencial para estos valores
     # plt.plot(beta_array, np.log(Z_array))
     # plt.show()
 
+<<<<<<< HEAD
 if run_Z_approx_algorithm:
     approx_partition_func(read_data=True, save_plot=True)
 
+=======
+>>>>>>> 5e9d9e9e912884c51b16297df5b1ea3a8528bb80
 if run_specific_heat_algorithm:
     
     kwargs = {
