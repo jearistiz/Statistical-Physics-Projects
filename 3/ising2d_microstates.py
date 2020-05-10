@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
 import os
-from time import time
 import datetime
 import collections
+from time import time
 
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 import pandas as pd
-
+from scipy.interpolate import interp1d
+from scipy.optimize import fmin, curve_fit
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -172,12 +173,14 @@ def read_energy_data(energy_data_file_name):
     return energies
 
 
-def energies_to_frequencies(energies):
-    energy_omegas = dict(collections.Counter(energies))
+def microstate_energies_to_frequencies(microstate_energies):
+    energy_omegas = dict(collections.Counter(microstate_energies))
     energy_omegas = sorted(energy_omegas.items(), key=lambda kv: kv[0])
     energy_omegas = np.array([list(item) for item in energy_omegas])
     energy_omegas = energy_omegas.transpose()
     energy_omegas = energy_omegas.tolist()
+    # Todas las energías diferentes --> energies.
+    # Número de veces que se repite cada energía) --> omega.
     energies, omegas = np.array(energy_omegas[0]), np.array(energy_omegas[1])
     return energies, omegas
 
@@ -204,19 +207,19 @@ def ising_microstate_plot(config, show_plot=True, save_plot=False, plot_file_nam
     return
 
 
-def ising_energy_plot(energies, L, read_data=False, energy_data_file_name=None, show_plot=True, save_plot=False, plot_file_Name=None):
+def ising_energy_plot(microstate_energies, L, read_data=False, energy_data_file_name=None, show_plot=True, save_plot=False, plot_file_Name=None):
     
     if read_data:
-        energies = read_energy_data(energy_data_file_name)
+        microstate_energies = read_energy_data(energy_data_file_name)
     
-    energies, omegas = energies_to_frequencies(energies)
+    energies, omegas = microstate_energies_to_frequencies(microstate_energies)
 
     x_lim = [0, 0, 10, 20, 35, 55, 80]
 
     plt.xlim(-1*x_lim[L],x_lim[L])
     plt.bar(energies, omegas, width=1, label='Histograma energías\nIsing $L\\times L=%d$'%(L*L))
     plt.xlabel('$E$')
-    plt.ylabel('Frecuencia')
+    plt.ylabel('Frecuencia $\Omega(E)$')
     plt.legend(loc='best', fancybox=True, framealpha=0.5)
     plt.ticklabel_format(axis='y', style='sci', scilimits=(0,0))
     plt.tight_layout()
@@ -232,27 +235,30 @@ def ising_energy_plot(energies, L, read_data=False, energy_data_file_name=None, 
     return
 
 
-def partition_func(energies, L, beta=4, beta_max=None, N_values=None, read_data=False,
-                   energy_data_file_name=None, plot_histogram=False, show_plot=True,
-                   save_plot=False, plot_file_Name=None,**kwargs):
+def partition_func_stat_weights(microstate_energies, L, beta=4, beta_max=None, N_beta=None,
+                                read_data=False, energy_data_file_name=None,
+                                plot_histogram=False, show_plot=True, save_plot=False,
+                                plot_file_Name=None, **kwargs):
     
     # Lee datos
     if read_data:
         if not energy_data_file_name:
             energy_data_file_name = 'ising-energy-data-L_%d.csv'%(L)
-        energies = read_energy_data(energy_data_file_name)
+        microstate_energies = read_energy_data(energy_data_file_name)
     
-    # Energías y número de microestados asociados a cada una de dichas energías
-    energies, omegas = energies_to_frequencies(energies)
+    # Energías y número de microestados asociados a cada una de dichas energías.
+    energies, omegas = microstate_energies_to_frequencies(microstate_energies)
 
-    # Para calcular Z en solo un valor de beta (y graficar contribuciones)
+    # Para calcular Z en solo un valor de beta (y graficar contribuciones).
     if not beta_max:
         Z_contributions = omegas * np.exp(- beta * energies)
         Z_value = sum(Z_contributions)
+        statistical_weights = Z_contributions / Z_value
         if plot_histogram:
             x_lim = [0, 0, 10, 20, 35, 55, 80]
             plt.xlim(-1*x_lim[L],x_lim[L])
-            plt.bar(energies, Z_contributions, width=1, label='Contribuciones a $Z(\\beta)$\nIsing $L\\times L=%d$'%(L*L))
+            plt.bar(energies, Z_contributions, width=1, 
+                    label='Contribuciones a $Z(\\beta)$\nIsing $L\\times L=%d$'%(L*L))
             plt.xlabel('$E$')
             plt.ylabel('$\Omega(E)e^{-\\beta E }$')
             plt.legend(loc='best', fancybox=True, framealpha=0.5, title='$\\beta=%.3f$'%beta)
@@ -266,16 +272,146 @@ def partition_func(energies, L, beta=4, beta_max=None, N_values=None, read_data=
             if show_plot:
                 plt.show()
             plt.close()
-        return Z_value, beta
+        return Z_value, statistical_weights, beta, energies, omegas
     # Para calcular Z en varios valores de beta
     else:
-        beta_array = np.linspace(beta, beta_max, N_values)
+        beta_array = np.linspace(beta, beta_max, N_beta)
         Z_array = []
+        statistical_weights_array = []
         for beta in beta_array:
-            Z_array.append(sum(omegas * np.exp(- beta * energies)))
-        return Z_array, beta_array
+            Z_contributions = omegas * np.exp(- beta * energies)
+            Z = sum(Z_contributions)
+            statistical_weights = Z_contributions / Z
+            Z_array.append(Z)
+            statistical_weights_array.append(statistical_weights)
+        return Z_array, statistical_weights_array, beta_array, energies, omegas
 
-def partition_array(energies, L, beta_min=0.1, beta_max=50, N_values=100, read_data=False, energy_data_file_name=None):
-    if read_data:
-        energies = read_energy_data(energy_data_file_name)
-    energies, omegas = energies_to_frequencies(energies)
+
+def energies_momenta(microstate_energies, L, n=1, beta_min=0.5, beta_max=None, N_beta=50,
+                     read_data=False, energy_data_file_name=None):
+    """
+    Calcula el enésimo momento de la energía <E^n> en el ensamble canónico
+    """
+
+    Z_array, statistical_weights_array, beta_array, energies, omegas = \
+        partition_func_stat_weights(microstate_energies, L, beta_min, beta_max,
+                                    N_beta, read_data=read_data,
+                                    energy_data_file_name=energy_data_file_name)
+
+    if type(n)==int or type(n)==float: n = [n]
+
+    E_n_array = []
+
+    for n_i in n:
+        E_n_i = []
+        if beta_max:
+            for statistical_weights in statistical_weights_array:
+                E_n_i.append(sum(energies**n_i * statistical_weights))
+            E_n_array.append(E_n_i)
+        else:
+            E_n_array.append(sum(energies**n_i * statistical_weights_array))
+
+    # Si se especifica solo 1 valor de n:
+    if len(E_n_array)==1:
+        # Si se calcula para varios beta devolvemos lista con E_n deseado 
+        # y lista con valores de beta ó,
+        # si se calcula para un solo beta se devuelve un escalar para E_n 
+        # y un escalar para beta
+        return E_n_array[0], beta_array, Z_array, statistical_weights_array, energies, omegas
+    # Si se especifican varios valores de n se devuelve una lista con n listas con
+    # valores de E_n apara posiblemente uno o varios valores de beta
+    else:
+        return E_n_array, beta_array, Z_array, statistical_weights_array, energies, omegas
+
+
+def approx_partition_func(microstate_energies_array=[None, None, None],
+                               L_array=[ 3, 4, 5], beta_min=0.00001, beta_max=2, N_beta=100,
+                               read_data=False, energy_data_file_name=None, plot=True,
+                               show_plot=True, save_plot=False, plot_file_Name=None,
+                               **kwargs):
+    
+    if plot:
+        plt.figure()
+        ax = plt.gca()
+    
+    for i, L in enumerate(L_array):
+        E_1_array, beta_array, Z_array, statistical_weights_array, energies, omegas = \
+            energies_momenta(microstate_energies_array[i], L, 1, beta_min, beta_max,
+                             N_beta, read_data, energy_data_file_name)
+        omega_interp = interp1d(energies, omegas, kind='cubic')
+        Z_approx_array = omega_interp(E_1_array) * np.exp(-beta_array * np.array(E_1_array))
+        if plot:
+            color = next(ax._get_lines.prop_cycler)['color']
+            plt.plot(beta_array, np.log(Z_array), label='$L\\times L = %d \\times %d$'%(L,L), color=color)
+            plt.plot(beta_array, np.log(Z_approx_array), '--', color=color)
+    if plot:
+        plt.xlabel('$\\beta$')
+        plt.ylabel('$log Z(\\beta)$' '  ó  ' '$log Z(\\beta)_{appx}$')
+        plt.legend(loc='best', fancybox=True, framealpha=0.5)
+        plt.ticklabel_format(axis='y', style='sci', scilimits=(0,0))
+        plt.tight_layout()
+        if save_plot:
+            if not plot_file_Name:
+                plot_file_Name = 'ising-Z_approx-plot-L_' + '_'.join(L_array) + '.pdf'
+            plot_file_Name = script_dir + '/' + plot_file_Name
+            plt.savefig(plot_file_Name)
+        if show_plot:
+            plt.show()
+        plt.close()
+
+    return Z_array, Z_approx_array
+
+
+approx_partition_func(read_data=True)
+
+def specific_heat_cv(microstate_energies, L, beta_min=0.1, beta_max=None, N_beta=50,
+                     read_data=False, energy_data_file_name=None, **kwargs):
+    
+    N = L * L
+    n = [1,2]
+    
+    energies_momenta_1_2, beta_array, *non_relevant = energies_momenta(microstate_energies, 
+                                                        L, n, beta_min, beta_max, N_beta,
+                                                        read_data, energy_data_file_name)
+    
+    avg_E = np.array(energies_momenta_1_2[0])
+    avg_E_squared = np.array(energies_momenta_1_2[1])
+    
+    sepcific_heat = beta_array**2 * (avg_E_squared - avg_E**2) / N
+
+    return sepcific_heat, beta_array
+
+
+def plot_specific_heat_cv(microstate_energies_array=[None, None, None], L_array=[2, 3, 4],
+                          beta_min=0.1, beta_max=10, N_beta=50, read_data=False,
+                          energy_data_file_name=None,show_plot=True, save_plot=False,
+                          plot_file_Name=None, **kwargs):
+    
+
+    plt.figure()
+    for i, L in enumerate(L_array):
+        sepcific_heat, beta_array = specific_heat_cv(microstate_energies_array[i], L, beta_min,
+                                                     beta_max, N_beta, read_data,
+                                                     energy_data_file_name, **kwargs)
+        sh_L = interp1d(1/beta_array, sepcific_heat, kind='cubic')
+        max_sh_T = fmin(lambda T: -sh_L(T), 2.5)
+        plt.plot(1/beta_array, sepcific_heat,
+                 label = '$ N = %d \\times %d$,   $T_c=%.3f$'%(L, L, max_sh_T))
+        plt.plot((max_sh_T,max_sh_T),(0,sh_L(max_sh_T)),'--',c='k',lw=0.5)
+    plt.xlabel('$T$')
+    plt.ylabel('$c_v$')
+    plt.ylim(0)
+    plt.legend(loc='best',fancybox=True, framealpha=0.5,
+               title='$c_v = \\frac{1}{N T^2}\left( \langle E^2 \\rangle - \langle E \\rangle ^2 \\right)$')
+    if save_plot:
+        if not plot_file_Name:
+            Ls_string = '_'.join([str(L) for L in L_array])
+            plot_file_Name = 'ising-specific_heat-plot-L_' + Ls_string + '.pdf'
+        plot_file_Name = script_dir + '/' + plot_file_Name
+        plt.savefig(plot_file_Name)
+    if show_plot:
+        plt.show()
+    plt.close()
+
+    return
+
