@@ -352,12 +352,8 @@ def approx_partition_func(microstate_energies_array=[None, None, None],
         plt.tight_layout()
         if save_plot:
             if not plot_file_Name:
-<<<<<<< HEAD
                 L_array_str = '_'.join([str(L) for L in L_array])
                 plot_file_Name = 'ising-Z_approx-plot-L_' + L_array_str + '.pdf'
-=======
-                plot_file_Name = 'ising-Z_approx-plot-L_' + '_'.join(L_array) + '.pdf'
->>>>>>> 5e9d9e9e912884c51b16297df5b1ea3a8528bb80
             plot_file_Name = script_dir + '/' + plot_file_Name
             plt.savefig(plot_file_Name)
         if show_plot:
@@ -367,11 +363,6 @@ def approx_partition_func(microstate_energies_array=[None, None, None],
     return Z_array, Z_approx_array
 
 
-<<<<<<< HEAD
-=======
-approx_partition_func(read_data=True)
-
->>>>>>> 5e9d9e9e912884c51b16297df5b1ea3a8528bb80
 def specific_heat_cv(microstate_energies, L, beta_min=0.1, beta_max=None, N_beta=50,
                      read_data=False, energy_data_file_name=None, **kwargs):
     
