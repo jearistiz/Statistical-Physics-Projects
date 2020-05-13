@@ -11,8 +11,10 @@ import matplotlib.colors as colors
 import pandas as pd
 from scipy.interpolate import interp1d
 from scipy.optimize import fmin, curve_fit
+from numba import njit
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
+
 
 def save_csv(data, data_headers=None, data_index=None, file_name=None,
              relevant_info=None, print_data=True):
@@ -86,7 +88,10 @@ def ising_microstates(L=2):
     # La primera mitad de los microestados
     # El procedimiento consiste en que en cada paso, para el espín i-esimo se llena 
     # estratégicamente en la mitad los microestados con 1 y en la otra mitad con -1,
-    # así se obtienen todas las configuraciones posibles. 
+    # así se obtienen todas las configuraciones posibles.
+    # Éste método es equivalente a generar números binarios remplazando ceros por -1
+    # pero es más rápido que hacerlo explícitamente en el algoritmo, ya que los números
+    # binarios habría que separarlos y convertirlos de str a int.
     for i in range(N):
         index_factor = int(2**N  / 2**(i+1))
         for j in range(2**i):
@@ -124,13 +129,42 @@ def ising_neighbours(L=2):
                                  condiciones de frontera periódicas (módulo N) 
     """
     N  = L * L
-    ngbrs = {i: ((i//L)*L + (i+1)%L, (i+L) % N,
-               (i//L)*L + (i-1)%L, (i-L) % N) for i in range(N)}
+    ngbrs = {i: [(i//L)*L + (i+1)%L, (i+L) % N,
+               (i//L)*L + (i-1)%L, (i-L) % N] for i in range(N)}
     return ngbrs
 
 
-def ising_energy(microstates, ngbrs, J=1, save_data=False, data_file_name=None):
-    t_0 = time()
+def ising_neighbours_free(L):
+    N = L * L
+    ngbrs = {}
+    for i in range(N):
+        ngbrs_i = []
+        #nbr up
+        if i // L == 0:
+            pass
+        else:
+            ngbrs_i.append(i-L)
+        #nbr right
+        if (i+1)%L == 0:
+            pass
+        else:
+            ngbrs_i.append(i+1)
+        #nbr down:
+        if i//L == L-1:
+            pass
+        else:
+            ngbrs_i.append(i+L)
+        #ngbr left:
+        if (i+1)%L == 1:
+            pass
+        else:
+            ngbrs_i.append(i-1)
+        ngbrs[i] = ngbrs_i
+    return ngbrs
+
+
+def ising_energy(microstates, ngbrs, J=1, save_data=False, data_file_name=None,
+                 print_log=True):
 
     energies = []
     N = len(ngbrs)
@@ -138,8 +172,7 @@ def ising_energy(microstates, ngbrs, J=1, save_data=False, data_file_name=None):
     for microstate_j in microstates:
         energy_j = 0
         for i in range(N):
-            for ngbr in ngbrs[i]:
-                energy_j -= microstate_j[i] * microstate_j[ngbr]
+            energy_j -= microstate_j[i] * np.sum([microstate_j[ngbr] for ngbr in ngbrs[i]])
         energies.append(energy_j)
     
     # En el algoritmo hemos contado cada contribución de energía 2 veces, por tanto se
@@ -152,14 +185,9 @@ def ising_energy(microstates, ngbrs, J=1, save_data=False, data_file_name=None):
             data_file_name = 'ising-energy-data-L_%d.csv'%(L)
         data_file_name = script_dir + '/' + data_file_name
         relevant_info = ['2D Ising energies: all microstates. L=%d.'%L]
-        headers = ['i-th microstate energy']
-        save_csv(energies, data_headers=headers, file_name=data_file_name, relevant_info=relevant_info)
-
-    t_1 = time()
-    comp_time = t_1-t_0
-    print('\n--------------------------------------------------------\n'
-          + 'Explicit energies:  L = %d --> computation time = %.3f \n'%(L,comp_time)
-          + '--------------------------------------------------------\n')
+        headers = ['i-th microstate\'s energy']
+        save_csv(energies, data_headers=headers, file_name=data_file_name, 
+                 relevant_info=relevant_info, print_data=False)
 
     return energies
 
@@ -182,6 +210,10 @@ def microstate_energies_to_frequencies(microstate_energies):
     # Todas las energías diferentes --> energies.
     # Número de veces que se repite cada energía) --> omega.
     energies, omegas = np.array(energy_omegas[0]), np.array(energy_omegas[1])
+    print('--------------------')
+    print('Energies and omegas:')
+    print('--------------------')
+    print(pd.DataFrame({'E': energies, 'Omega(E)': np.array(omegas, dtype=int)}),'\n')
     return energies, omegas
 
 
@@ -198,7 +230,6 @@ def ising_microstate_plot(config, show_plot=True, save_plot=False, plot_file_nam
     plt.tight_layout()
     if save_plot:
         if not plot_file_name:
-            now = datetime.datetime.now()
             plot_file_name =  'ising-config-plot-L_%d.pdf'%(L)
         plot_file_name = script_dir + '/' + plot_file_name
         plt.savefig(plot_file_name)
@@ -207,19 +238,32 @@ def ising_microstate_plot(config, show_plot=True, save_plot=False, plot_file_nam
     return
 
 
-def ising_energy_plot(microstate_energies, L, read_data=False, energy_data_file_name=None, show_plot=True, save_plot=False, plot_file_Name=None):
+def ising_energy_plot(microstate_energies, L, read_data=False, energy_data_file_name=None,
+                      interpolate_energies=True, show_plot=True, save_plot=False,
+                      plot_file_Name=None):
     
     if read_data:
+        if not energy_data_file_name:
+            energy_data_file_name = 'ising-energy-data-L_%d.csv'%(L)
         microstate_energies = read_energy_data(energy_data_file_name)
     
     energies, omegas = microstate_energies_to_frequencies(microstate_energies)
+    
+    E_min = min(energies)
+    E_max = max(energies)
+    E_plot = np.linspace(E_min, E_max, 100)
 
     x_lim = [0, 0, 10, 20, 35, 55, 80]
-
+    
+    plt.plot()
+    plt.bar(energies, omegas, width=1, label='Histograma energías\nIsing $L\\times L = %d \\times %d$'%(L, L))
+    if interpolate_energies:
+        omega_interp = interp1d(energies, omegas, kind='cubic')
+        plt.plot([0],[0])
+        plt.plot(E_plot, omega_interp(E_plot), label='Interpolación splines')
     plt.xlim(-1*x_lim[L],x_lim[L])
-    plt.bar(energies, omegas, width=1, label='Histograma energías\nIsing $L\\times L=%d$'%(L*L))
     plt.xlabel('$E$')
-    plt.ylabel('Frecuencia $\Omega(E)$')
+    plt.ylabel('$\Omega(E)$')
     plt.legend(loc='best', fancybox=True, framealpha=0.5)
     plt.ticklabel_format(axis='y', style='sci', scilimits=(0,0))
     plt.tight_layout()
@@ -414,3 +458,17 @@ def plot_specific_heat_cv(microstate_energies_array=[None, None, None], L_array=
 
     return
 
+
+def ising_odd_L_energy_asymmetry(L=3, show_plot=True, save_plot=False):
+    ngbr = ising_neighbours(L)
+    row = np.array([int((-1)**i) for i in range(L)])
+    microstate_asymmetry_highest_E = \
+        np.array([ row * int((-1)**i) for i in range(L) ]).flatten().tolist()
+    microstate_asymmetry_lowest_E = [-1 for i in range(L*L)]
+    print('E_highest = ', *ising_energy([microstate_asymmetry_highest_E], ngbr), '\n\n')
+    print('E_lowest = ', *ising_energy([microstate_asymmetry_lowest_E], ngbr), '\n\n')
+    ising_microstate_plot(np.array(microstate_asymmetry_highest_E), show_plot, save_plot,
+                          plot_file_name='ising-odd_asymmetry_highest_E-L_%d.pdf'%L)
+    ising_microstate_plot(np.array(microstate_asymmetry_lowest_E), show_plot, save_plot,
+                          plot_file_name='ising-odd_asymmetry_lowest_E-L_%d.pdf'%L)
+    return
