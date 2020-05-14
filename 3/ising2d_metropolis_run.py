@@ -7,6 +7,9 @@ from ising2d_metropolis import *
 # Decide si corre algoritmo para calcular microestados de energía
 run_metropolis_energies_algorithm = True
 
+# Decide si corre algoritmo que muestra la termalización
+run_thermalization_algorithm = False
+
 
 
 ################################################################################################
@@ -36,18 +39,18 @@ if run_metropolis_energies_algorithm:
     # Decide si grafica microestado final
     plot_microstate = True
     # Parámetros para figura de microestado
-    show_microstate_plot = True,
+    show_microstate_plot = True
     save_microstate_plot = True
     microstate_plot_file_name = None
 
     # Parámeros del algoritmo metrópolis para calcular energías
-    T = 2.
+    T = 2.27
     beta = 1/T
-    L = 6
+    L = 64
     # Como se está usando numba, en microstate siempre hay que entregar array con dtype=np.int64
     microstate = np.ones(L * L, dtype=np.int64)
     J = 1
-    N_steps = int(L * L * 40000)
+    N_steps = int(L * L * 10000)
     N_transient = int( N_steps * 0.25 )
 
     # Asigna nombre a archivo con datos de microestado inicial/final
@@ -67,7 +70,7 @@ if run_metropolis_energies_algorithm:
 
     # Decide si grafica histograma de energías
     # (contribuciones proporcionales al factor de boltzmann  Omega(E) * e**(-beta E) / Z(beta))
-    plot_energy_hist = True
+    plot_energy_hist = False
     # Parámetros para graficar histograma de energías.
     energy_hist_plot_file_name = \
         ('ising-metropolis-Z_contributions-plot-L_'
@@ -79,7 +82,7 @@ if run_metropolis_energies_algorithm:
                         'energy_data_file_name': None,
                         'interpolate_energies': False,
                         'show_plot': True,
-                        'save_plot': False,
+                        'save_plot': True,
                         'normed': True,
                         'plot_file_Name': energy_hist_plot_file_name,
                         'x_lim': None,
@@ -130,4 +133,48 @@ if run_metropolis_energies_algorithm:
     if plot_energy_hist:
         energy_plot_kwargs['microstate_energies'] = np.array(energies)
         ising_energy_plot(**energy_plot_kwargs)
+
+
+if run_thermalization_algorithm:
+
+    # Decide si imprime info del algoritmo
+    print_log = True
+
+    # Parámetros de algoritmo de termalización
+    beta = np.array([1 /10., 1/3, 1/2.27, 1/1.])
+    L = 6
+    microstates_ini = np.ones( (len(beta), L * L), dtype=np.int64)
+    read_ini_microstate_data = False
+    J = 1
+    N_steps = 200000
+    N_transient = 0
+
+    thermalization_args = \
+        (microstates_ini, read_ini_microstate_data, L, beta, J, N_steps, N_transient)
+
+    t_0 = time()
+    avg_energy_per_spin_array, beta, *dont_need = thermalization_demo(*thermalization_args)
+    t_1 = time()
+    print(t_1-t_0)
+    if print_log:
+        comp_time = t_1 - t_0
+        print_params = (L, N_steps, N_transient)
+        print('\n----------------------------------------------------------------------------\n'
+            + 'Ising 2D Metropolis thermalization:\n'
+            + 'T = ' + str(list(1/np.array(beta))) + '\n'
+            + 'L = %d,  N_steps = %d,  N_transient = %d\n'%print_params
+            + '<E>/N = ' + str([E_over_N[-1] for E_over_N in avg_energy_per_spin_array]) + '\n'
+            + '--> computation time = %.3f \n'%comp_time
+            + '----------------------------------------------------------------------------\n')
     
+    # Parámetros de figura de termalización
+    thermaization_data_file_name = None
+    show_plot = True
+    save_plot = True
+    plot_file_Name = None
+
+    thermalization_plot_args = (avg_energy_per_spin_array, beta, L, J, N_steps,
+                                N_transient, thermaization_data_file_name, show_plot,
+                                save_plot, plot_file_Name)
+
+    plot_thermalization_demo(*thermalization_plot_args)

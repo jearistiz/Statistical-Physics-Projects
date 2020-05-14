@@ -107,22 +107,60 @@ def ising_metropolis_microstate_plot(config, L, beta, J=1, N_steps=10000, N_tran
 
 @njit
 def thermalization_demo(microstates_ini=np.ones((3,36), dtype=np.int64), 
-                        L=6, beta=np.array([1/10.,1/2.5,1/0.1]),
-                        J=1, N_steps=10000, N_transient=100):
+                        read_ini_microstate_data=False, L=6,
+                        beta=np.array([1/10.,1/2.5,1/0.1]),
+                        J=1, N_steps=10000, N_transient=0):
+    
+    N = L * L
     energies_array = []
     microstate_array = []
     avg_energy_per_spin_array = []
 
-    for microstate in microstates_ini:
-        ising_args = (microstate, False, L, beta, J, N_steps, N_transient)
-        energies, microstate, avg_energy_per_spin = ising_metropolis_energies(*ising_args)
-        energies_array.append(energies)
+    for i, microstate in enumerate(microstates_ini):
+        ising_args = (microstate, read_ini_microstate_data, L, beta[i], J, N_steps, N_transient)
+        energies, microstate, avg_E_per_spin_final = ising_metropolis_energies(*ising_args)
+        energies_array.append(np.array(energies))
         microstate_array.append(microstate)
-        avg_energy_per_spin.append(microstate)
 
     for energies in energies_array:
-        avg_energy_per_spin.append(np.array([np.sum(energies[:])]))
+        avg_energy_per_spin = []
+        E_cumulative = 0.
+        for i, E in enumerate(energies):
+            E_cumulative += E
+            E_avg_per_spin = E_cumulative / ((i+1) * N)
+            avg_energy_per_spin.append(E_avg_per_spin)
+        avg_energy_per_spin_array.append(np.array(avg_energy_per_spin))
+
+    return avg_energy_per_spin_array, beta, energies_array, microstate_array
 
 
+def plot_thermalization_demo(avg_energy_per_spin_array, beta=np.array([1/10.,1/2.5,1/0.1]),
+                             L=6, J=1, N_steps=10000, N_transient=0,
+                             thermaization_data_file_name=None, show_plot=True, save_plot=False,
+                             plot_file_Name=None, **kwargs):
+
+    plt.figure()
+    N_steps = len(avg_energy_per_spin_array[0])
+    steps = range(1, N_steps+1)
+    for i, E_per_spin in enumerate(avg_energy_per_spin_array):
+        plt.plot(steps, E_per_spin, label = '$ T = %.3f$'%(1./beta[i]))
+    plt.xlabel('Número de iteraciones (Metrópolis)')
+    plt.ylabel('$\langle E \\rangle / N $')
+    plt.legend(loc='best',fancybox=True, framealpha=0.65,
+               title='$N = L \\times L = %d \\times %d$'%(L, L))
+    plt.ticklabel_format(axis='x', style='sci', scilimits=(0,0))
+    plt.tight_layout()
+    if save_plot:
+        if not plot_file_Name:
+            temps = 1/np.array(beta)
+            T_string = '_'.join([str(T) for T in temps])
+            plot_file_Name = ('ising-metropolis-thermalization-plot-L_%d-T_'%L + T_string
+                              + '-N_steps_%d-N_transient_%d.pdf'%(N_steps, N_transient))
+        plot_file_Name = script_dir + '/' + plot_file_Name
+        plt.savefig(plot_file_Name)
+    if show_plot:
+        plt.show()
+    plt.close()
+    
     return
 
