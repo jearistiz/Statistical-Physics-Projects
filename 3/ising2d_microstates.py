@@ -11,7 +11,6 @@ import matplotlib.colors as colors
 import pandas as pd
 from scipy.interpolate import interp1d
 from scipy.optimize import fmin, curve_fit
-from numba import njit
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -225,8 +224,12 @@ def ising_microstate_plot(config, show_plot=True, save_plot=False, plot_file_nam
     fig, ax = plt.subplots(1, 1)
     ax.imshow(config.reshape(L,L), cmap=bw_cmap, extent=(0,L,L,0), aspect='equal')
     ax.xaxis.set_ticks_position('top')
-    ax.set_xticks(range(0,L+1))
-    ax.set_yticks(range(0,L+1))
+    if L<10:
+        ax.set_xticks(range(0,L+1))
+        ax.set_yticks(range(0,L+1))
+    else:
+        ax.set_xticks(np.linspace(0, L, 10, dtype=int))
+        ax.set_yticks(np.linspace(0, L, 10, dtype=int))
     plt.tight_layout()
     if save_plot:
         if not plot_file_name:
@@ -240,7 +243,8 @@ def ising_microstate_plot(config, show_plot=True, save_plot=False, plot_file_nam
 
 def ising_energy_plot(microstate_energies, L, read_data=False, energy_data_file_name=None,
                       interpolate_energies=True, show_plot=True, save_plot=False,
-                      plot_file_Name=None):
+                      plot_file_Name=None, normed=False, x_lim=[0, 0, 10, 20, 35, 55, 80],
+                      y_label='$\Omega(E)$', legend_title=None):
     
     if read_data:
         if not energy_data_file_name:
@@ -249,11 +253,12 @@ def ising_energy_plot(microstate_energies, L, read_data=False, energy_data_file_
     
     energies, omegas = microstate_energies_to_frequencies(microstate_energies)
     
+    if normed:
+        omegas = np.array(omegas)/len(microstate_energies)
+
     E_min = min(energies)
     E_max = max(energies)
     E_plot = np.linspace(E_min, E_max, 100)
-
-    x_lim = [0, 0, 10, 20, 35, 55, 80]
     
     plt.plot()
     plt.bar(energies, omegas, width=1, label='Histograma energías\nIsing $L\\times L = %d \\times %d$'%(L, L))
@@ -261,10 +266,13 @@ def ising_energy_plot(microstate_energies, L, read_data=False, energy_data_file_
         omega_interp = interp1d(energies, omegas, kind='cubic')
         plt.plot([0],[0])
         plt.plot(E_plot, omega_interp(E_plot), label='Interpolación splines')
-    plt.xlim(-1*x_lim[L],x_lim[L])
+    if not x_lim:
+        pass
+    else:
+        plt.xlim(-1*x_lim[L],x_lim[L])
     plt.xlabel('$E$')
-    plt.ylabel('$\Omega(E)$')
-    plt.legend(loc='best', fancybox=True, framealpha=0.5)
+    plt.ylabel(y_label)
+    plt.legend(loc='best', fancybox=True, framealpha=0.5, title=legend_title)
     plt.ticklabel_format(axis='y', style='sci', scilimits=(0,0))
     plt.tight_layout()
     if save_plot:

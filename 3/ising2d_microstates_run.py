@@ -34,11 +34,10 @@ plt.rcParams.update({'font.size':15,'text.latex.unicode':True})
 # Obtenemos path para guardar archivos en el mismo directorio donde se ubica el script
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
-# or just a list of the list of key value pairs
-# list_key_value = [ [k,v] for k, v in dict.items() ]
+
 
 if run_microstates_algorithm:
-    L = 4
+    L = 2
     free_boundary_conditions = True
     energy_plot_kwargs = {
                           'microstate_energies': None,
