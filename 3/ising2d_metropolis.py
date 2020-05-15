@@ -9,7 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 import pandas as pd
-from numba import njit
+from numba import njit, prange
 from numba.typed import List
 
 from ising2d_microstates import (script_dir, ising_microstate_plot, save_csv,
@@ -163,4 +163,74 @@ def plot_thermalization_demo(avg_energy_per_spin_array, beta=np.array([1/10.,1/2
     plt.close()
     
     return
+
+@njit(parallel=True)
+def energies_momenta_montecarlo(energies, n, N_steps):
+    E_n = 0.
+    for i in prange(len(energies)):
+        E_n += energies[i]**n
+    return E_n/N_steps
+
+@njit
+def specific_heat_montecarlo(L=6, N_steps=int(1e5), N_transient=int(2.5e4), J=1,
+                             T_min = 0.1, T_max=5., N_temp=30):
+    T_array = np.linspace(T_min, T_max, N_temp)
+    N = L * L
+    cv_array = []
+    for i in prange(N_temp):
+        metropolis_args = (np.ones(N, dtype=np.int64), False, L,
+                           1./T_array[i], J, N_steps, N_transient)
+        energies, microstate, avg_energy_per_spin = ising_metropolis_energies(*metropolis_args)
+        E_1 = energies_momenta_montecarlo(energies, 1, N_steps)
+        E_2 = energies_momenta_montecarlo(energies, 2, N_steps)
+        cv = (E_2 - E_1**2) / (T_array[i]**2 * N)
+        cv_array.append(cv)
+    return cv_array, T_array
+
+@njit
+def several_specific_heats(L_array=np.array([2, 3, 4, 8]), N_steps_factor=int(5e3),
+                           J=1, T_min = 0.1, T_max=5., N_temp=30):
+    
+    cv_arrays = []
+    T_arrays = []
+    for i in prange(L_array.shape[0]):
+        L = L_array[i]
+        N = L * L
+        N_steps = int(N * N_steps_factor)
+        N_transient = int(N_steps * 0.4)
+        cv_args = (L, N_steps, N_transient, J, T_min, T_max, N_temp)
+        cv_list, T_list = specific_heat_montecarlo(*cv_args)
+        cv_arrays.append(np.array(cv_list))
+        T_arrays.append(T_list)
+    
+
+    return cv_arrays, T_arrays, L_array, N_steps_factor
+
+
+def specific_heat_plot(cv_arrays, T_arrays, L_array, N_steps_factor, J=1, 
+                       cv_data_file_name=None, show_plot=True,
+                       save_plot=False, plot_file_Name=None, **kwargs):
+    
+    plt.figure()
+    for i, cv_T_i in enumerate(cv_arrays):
+        plt.plot(T_arrays[i], cv_T_i, '--',
+                 label = '$ %d \\times %d $'%(L_array[i], L_array[i]))
+    plt.xlabel('$T$')
+    plt.ylabel('$c_v$')
+    plt.legend(loc='best',fancybox=True, framealpha=0.65, title='$N = L \\times L$')
+    plt.ylim(0)
+    plt.tight_layout()
+    if save_plot:
+        if not plot_file_Name:
+            L_string = '_'.join([str(L) for L in L_array])
+            plot_file_Name = ('ising-metropolis-specific_heat-plot-L_' + L_string
+                              + '-N_steps_factor_%d.pdf'%(N_steps_factor))
+        plot_file_Name = script_dir + '/' + plot_file_Name
+        plt.savefig(plot_file_Name)
+    if show_plot:
+        plt.show()
+    plt.close()
+    return
+
+
 

@@ -5,10 +5,13 @@ from ising2d_metropolis import *
 ################################################################################################
 
 # Decide si corre algoritmo para calcular microestados de energía
-run_metropolis_energies_algorithm = True
+run_metropolis_energies_algorithm = False
 
 # Decide si corre algoritmo que muestra la termalización
 run_thermalization_algorithm = False
+
+# Decide si corre algoritmo de calor específico
+run_specific_heat_algorithm = True
 
 
 
@@ -20,8 +23,7 @@ run_thermalization_algorithm = False
 plt.rc('text', usetex=True) 
 plt.rcParams.update({'font.size':15,'text.latex.unicode':True})
 
-# Obtenemos path para guardar archivos en el mismo directorio donde se ubica el script
-#script_dir = os.path.dirname(os.path.abspath(__file__))
+
 
 
 if run_metropolis_energies_algorithm:
@@ -44,10 +46,11 @@ if run_metropolis_energies_algorithm:
     microstate_plot_file_name = None
 
     # Parámeros del algoritmo metrópolis para calcular energías
-    T = 2.27
+    T = 2.28
     beta = 1/T
-    L = 64
-    # Como se está usando numba, en microstate siempre hay que entregar array con dtype=np.int64
+    L = 128
+    # Como se está usando numba, en microstate siempre hay que 
+    # entregar el siguiente array con dtype=np.int64
     microstate = np.ones(L * L, dtype=np.int64)
     J = 1
     N_steps = int(L * L * 10000)
@@ -133,6 +136,8 @@ if run_metropolis_energies_algorithm:
     if plot_energy_hist:
         energy_plot_kwargs['microstate_energies'] = np.array(energies)
         ising_energy_plot(**energy_plot_kwargs)
+    
+    del energies
 
 
 if run_thermalization_algorithm:
@@ -142,11 +147,11 @@ if run_thermalization_algorithm:
 
     # Parámetros de algoritmo de termalización
     beta = np.array([1 /10., 1/3, 1/2.27, 1/1.])
-    L = 6
+    L = 32
     microstates_ini = np.ones( (len(beta), L * L), dtype=np.int64)
     read_ini_microstate_data = False
     J = 1
-    N_steps = 200000
+    N_steps = int(L * L * 1e4)
     N_transient = 0
 
     thermalization_args = \
@@ -178,3 +183,74 @@ if run_thermalization_algorithm:
                                 save_plot, plot_file_Name)
 
     plot_thermalization_demo(*thermalization_plot_args)
+
+
+if run_specific_heat_algorithm:
+    
+    # Si read_cv_data=True, el algoritmo no corre, sino que se leen los datos de un archivo.
+    read_cv_data = False 
+    save_cv_data = True
+    cv_data_file_name = None
+
+
+    # Decide si imprime info del algoritmo
+    print_log = True
+    # Parámetros del algoritmo
+    L_array = np.array([2, 3, 4, 8])
+    N_steps_factor = int(2e4)
+    J = 1
+    T_min = 1.0
+    T_max = 5.0
+    N_temp = 100
+
+    several_cv_kwargs = (L_array, N_steps_factor, J, T_min, T_max, N_temp)
+
+    # Corre el algoritmo
+    t_0 = time()
+    if not read_cv_data:
+        cv_arrays, T_arrays, L_array, N_steps_factor = several_specific_heats(*several_cv_kwargs)
+    t_1 = time()
+    
+    # Imprime info del algoritmo
+    if print_log or save_energy_data:
+        comp_time = t_1 - t_0
+        l0 = '---------------------------------------------------------------------------\n'
+        l1 = 'Ising 2D Metropolis specific heat (cv) plot:'
+        l2 = 'T_min = %.3f,  T_max = %.3f,  N_temp = %d'%(T_min, T_max, N_temp)
+        l3 = 'L = ' + str(list(L_array)) 
+        l4 = ('N_steps_factor ='
+              + ' %d (N_steps = L*L*N_steps_factor, N_transient = N_steps/4)'%N_steps_factor)
+        l5 = '--> computation time = %.3f'%comp_time
+        if print_log and not read_cv_data:
+            print('\n' + l0 + l1 + '\n' + l2 + '\n' + l3 + '\n' + l4 + '\n' + l5 + '\n' + l0)
+        if print_log and read_cv_data:
+            print('Los datos se leyeron de un archivo, no se generaron en este momento.')
+
+    # Guarda datos de energías muestreadas o microestado final en archivo CSV
+    if save_cv_data and not read_cv_data:
+        if not cv_data_file_name:
+            L_string = '_'.join([str(L) for L in L_array])
+            cv_data_file_name = ('ising-metropolis-specific_heat-plot-L_' + L_string
+                                     + '-N_steps_factor_%d-T_min_%.3f-T_max_%.3f-N_temp_%d.csv'
+                                     % (N_steps_factor, T_min, T_max, N_temp))
+        cv_data_file_name = script_dir + '/' + cv_data_file_name
+        relevant_info = [l1, l2 ,l3 , l4, l5]
+        headers = np.array([ ['Temperature', 'cv (L=%d)'%L] for L in L_array]).flatten()
+        shape = (2*len(L_array), len(cv_arrays[0]))
+        cv_data = np.array([[T, cv_arrays[i]] for i, T in enumerate(T_arrays)]).reshape(shape)
+        save_csv(cv_data.transpose(), data_headers=headers, file_name=cv_data_file_name,
+                 relevant_info=relevant_info, print_data=False)
+    if save_cv_data and read_cv_data:
+        print()
+
+    # Parámetrosd de la gráfica
+    show_plot = True
+    save_plot = True
+    plot_file_Name = None
+
+    cv_plot_args = (cv_arrays, T_arrays, L_array, N_steps_factor, J,
+                    cv_data_file_name, show_plot, save_plot, plot_file_Name)
+
+    specific_heat_plot(*cv_plot_args)
+
+    pass
