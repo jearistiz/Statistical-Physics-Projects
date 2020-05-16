@@ -216,7 +216,7 @@ def microstate_energies_to_frequencies(microstate_energies):
     return energies, omegas
 
 
-def ising_microstate_plot(config, show_plot=True, save_plot=False, plot_file_name=None):
+def ising_microstate_plot(config ,show_plot=True, save_plot=False, plot_file_name=None):
     
     L = int(len(config)**0.5)
     bw_cmap = colors.ListedColormap(['black', 'white'])
@@ -377,10 +377,10 @@ def energies_momenta(microstate_energies, L, n=1, beta_min=0.5, beta_max=None, N
 
 
 def approx_partition_func(microstate_energies_array=[None, None, None],
-                               L_array=[ 3, 4, 5], beta_min=0.00001, beta_max=2, N_beta=100,
-                               read_data=False, energy_data_file_name=None, plot=True,
-                               show_plot=True, save_plot=False, plot_file_Name=None,
-                               **kwargs):
+                          L_array=[ 3, 4, 5], beta_min=0.00001, beta_max=2, N_beta=100,
+                          read_data=False, energy_data_file_name=None, plot=True,
+                          show_plot=True, save_plot=False, plot_file_Name=None,
+                          **kwargs):
     
     if plot:
         plt.figure()
@@ -390,7 +390,7 @@ def approx_partition_func(microstate_energies_array=[None, None, None],
         E_1_array, beta_array, Z_array, statistical_weights_array, energies, omegas = \
             energies_momenta(microstate_energies_array[i], L, 1, beta_min, beta_max,
                              N_beta, read_data, energy_data_file_name)
-        omega_interp = interp1d(energies, omegas, kind='cubic')
+        omega_interp = interp1d(energies, omegas, kind='linear')
         Z_approx_array = omega_interp(E_1_array) * np.exp(-beta_array * np.array(E_1_array))
         if plot:
             color = next(ax._get_lines.prop_cycler)['color']
@@ -398,7 +398,7 @@ def approx_partition_func(microstate_energies_array=[None, None, None],
             plt.plot(beta_array, np.log(Z_approx_array), '--', color=color)
     if plot:
         plt.xlabel('$\\beta$')
-        plt.ylabel('$log Z(\\beta)$' '  ó  ' '$log Z(\\beta)_{appx}$')
+        plt.ylabel('$\log Z(\\beta)$' '  ó  ' '$\log Z(\\beta)_{appx}$')
         plt.legend(loc='best', fancybox=True, framealpha=0.5)
         plt.ticklabel_format(axis='y', style='sci', scilimits=(0,0))
         plt.tight_layout()
@@ -435,15 +435,18 @@ def specific_heat_cv(microstate_energies, L, beta_min=0.1, beta_max=None, N_beta
 
 def plot_specific_heat_cv(microstate_energies_array=[None, None, None], L_array=[2, 3, 4],
                           beta_min=0.1, beta_max=10, N_beta=50, read_data=False,
-                          energy_data_file_name=None,show_plot=True, save_plot=False,
-                          plot_file_Name=None, **kwargs):
+                          energy_data_file_name=None, show_plot=True, save_plot=False,
+                          plot_file_Name=None, save_cv_data=True,**kwargs):
     
-
+    cv_arrays = []
+    T_arrays = []
     plt.figure()
     for i, L in enumerate(L_array):
         sepcific_heat, beta_array = specific_heat_cv(microstate_energies_array[i], L, beta_min,
                                                      beta_max, N_beta, read_data,
                                                      energy_data_file_name, **kwargs)
+        cv_arrays.append(sepcific_heat)
+        T_arrays.append(1/np.array(beta_array))
         sh_L = interp1d(1/beta_array, sepcific_heat, kind='cubic')
         max_sh_T = fmin(lambda T: -sh_L(T), 2.5)
         plt.plot(1/beta_array, sepcific_heat,
@@ -463,6 +466,15 @@ def plot_specific_heat_cv(microstate_energies_array=[None, None, None], L_array=
     if show_plot:
         plt.show()
     plt.close()
+
+    if save_cv_data:
+        cv_data_file_name = script_dir + '/ising-specific-heat-parte-1.csv'
+        relevant_info = ['L = ' + str(np.array(L_array))]
+        headers = np.array([ ['Temperature', 'cv (L=%d)'%L] for L in L_array]).flatten()
+        shape = (2*len(L_array), len(cv_arrays[0]))
+        cv_data = np.array([[T, cv_arrays[i]] for i, T in enumerate(T_arrays)]).reshape(shape)
+        save_csv(cv_data.transpose(), data_headers=headers, file_name=cv_data_file_name,
+                 relevant_info=relevant_info, print_data=False)
 
     return
 

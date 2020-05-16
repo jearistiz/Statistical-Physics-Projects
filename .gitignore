@@ -5,6 +5,7 @@
 bibliogrfia/
 .history/
 3/*.csv
+.numba*
 
 # User-specific files
 *.rsuser

@@ -13,7 +13,7 @@ from numba import njit, prange
 from numba.typed import List
 
 from ising2d_microstates import (script_dir, ising_microstate_plot, save_csv,
-                                 ising_energy_plot)
+                                 ising_energy_plot, energies_momenta)
 
 
 @njit
@@ -38,7 +38,10 @@ def ising_neighbours(L=2):
     N  = L * L
     ngbrs = []
     for i in range(N):
-        ngbrs.append(np.array([int((i//L)*L + (i+1)%L), int((i+L) % N), int((i//L)*L + (i-1)%L), int((i-L) % N)]))
+        ngbrs.append(np.array([int((i // L) * L + (i + 1) % L),     # derecha
+                               int((i + L) % N),                    # abajo
+                               int((i // L) * L + (i - 1) % L),     # izquierda
+                               int((i - L) % N)]))                  # arriba
     return ngbrs
 
 
@@ -52,7 +55,8 @@ def ising_energy(microstates, ngbrs, J=1, save_data=False, data_file_name=None,
     for microstate_j in microstates:
         energy_j = 0
         for i in range(N):
-            energy_j -= microstate_j[i] * np.sum(np.array([microstate_j[ngbr] for ngbr in ngbrs[i]]))
+            energy_j -= (microstate_j[i] 
+                         * np.sum(np.array([microstate_j[ngbr] for ngbr in ngbrs[i]])))
         energies.append(energy_j)
     # En el algoritmo hemos contado cada contribución de energía 2 veces, por tanto se
     # debe hacer corrección. Además se agrega el factor de la integral de intercambio.
@@ -63,35 +67,46 @@ def ising_energy(microstates, ngbrs, J=1, save_data=False, data_file_name=None,
 def ising_metropolis_energies(microstate=np.ones(36,dtype=np.int64), 
                               read_ini_microstate_data=False, L=6, beta=1., J=1,
                               N_steps=10000, N_transient=100):
-    
     N = L * L
+    # Calcula vecinos
     ngbrs = ising_neighbours(L)
-    
+
+    # Si los datos se no se leyeron, genera microestado inicial aleatoriamente
     if read_ini_microstate_data:
         pass
     else: 
         microstate = np.random.choice(np.array([1,-1]), N)
     
+    # Calcula energía inicial
     energy = ising_energy([microstate], ngbrs, J=J, print_log=False)[0]
+    # Arreglo donde se guardarán energías de los microestados muestreados
     energies = []
-    # Transiente
+
+    # En el transiente no se guardan las energías,
+    # se espera a que el sistema se termalice.
     for i in range(N_transient):
         k = np.random.randint(N)
-        delta_E = 2. * J  * microstate[k] * np.sum(np.array([microstate[ngbr_i] for ngbr_i in ngbrs[k]]))
+        delta_E = (2. * J * microstate[k]
+                   * np.sum(np.array([microstate[ngbr_i] for ngbr_i in ngbrs[k]])))
         if  np.random.uniform(0,1) < np.exp(-beta * delta_E):
             microstate[k] *= -1
             energy += delta_E
-    # Se comienzan a guardar las energías
+    # Pasado el transiente, se comienzan a guardar las energías
     for i in range(N_steps):
         k = np.random.randint(N)
-        delta_E = 2. * J * microstate[k] * np.sum(np.array([microstate[ngbr_i] for ngbr_i in ngbrs[k]]))
+        delta_E = (2. * J * microstate[k]
+                   * np.sum(np.array([microstate[ngbr_i] for ngbr_i in ngbrs[k]])))
         if np.random.uniform(0,1) < np.exp(-beta * delta_E):
             microstate[k] *= -1
             energy += delta_E
         energies.append(energy)
+    
+    # Se calcula la energía media por espín del microestado final
     N_steps2 = np.array(len(energies),dtype=np.int64)
     avg_energy_per_spin = np.float(np.sum(np.array(energies))/(N_steps2 * N * 1.))
 
+    # Se devuelven las energías, el microestado final y la energía media
+    # por espín del microestado final. 
     return energies, microstate, avg_energy_per_spin
 
 
@@ -140,15 +155,40 @@ def plot_thermalization_demo(avg_energy_per_spin_array, beta=np.array([1/10.,1/2
                              plot_file_Name=None, **kwargs):
 
     plt.figure()
+    if L==6:
+        Es = np.array([72, 68, 64, 60, 56, 52, 48, 44, 40,
+                       36, 32, 28, 24, 20, 16, 12, 8, 4, 0])
+        Omegas = np.array([2, 0, 72, 144, 1620, 6048, 35148, 159840, 804078,
+                           3846576, 17569080, 71789328, 260434986, 808871328,
+                           2122173684, 4616013408, 8196905106, 11674988208,
+                           13172279424])
+        nn = len(Omegas)-1
+        Es_array = np.concatenate((Es[:nn], np.array([0]), -Es[:nn]))
+        Omegas_array = np.concatenate((Omegas[:nn], np.array([Omegas[-1]]), Omegas[:nn]))
+        E_over_N_array = []
+        for beta_i in beta:            
+            Z_contrib = Omegas_array * np.exp(-beta_i * Es_array)
+            Z = np.sum(Z_contrib)
+            p_E = Z_contrib/Z
+            E_over_N = np.sum(Es_array * p_E)/(L*L)
+            E_over_N_array.append(E_over_N)
+            plt.plot([0, N_steps],[E_over_N, E_over_N], '--', c='k')
+            print('T = %.4f     <E>/N = %.4f'%(1/beta_i, E_over_N) )
     N_steps = len(avg_energy_per_spin_array[0])
     steps = range(1, N_steps+1)
     for i, E_per_spin in enumerate(avg_energy_per_spin_array):
-        plt.plot(steps, E_per_spin, label = '$ T = %.3f$'%(1./beta[i]))
-    plt.xlabel('Número de iteraciones (Metrópolis)')
+        if L==6:
+            plt.plot(steps, E_per_spin,
+                    label = '$ T = %.1f\,\,\\frac{\langle E \\rangle}{N}=%.2f$'
+                    %(1./beta[i],E_over_N_array[i]))
+        else:
+            plt.plot(steps, E_per_spin, label = '$ T = %.1f$'%(1./beta[i]))
+    plt.xscale('log')
+    plt.xlabel('Número de iteraciones')
     plt.ylabel('$\langle E \\rangle / N $')
-    plt.legend(loc='best',fancybox=True, framealpha=0.65,
+    plt.legend(loc=3, fancybox=True, framealpha=0.9,
                title='$N = L \\times L = %d \\times %d$'%(L, L))
-    plt.ticklabel_format(axis='x', style='sci', scilimits=(0,0))
+    #plt.ticklabel_format(axis='x', style='sci', scilimits=(0,0))
     plt.tight_layout()
     if save_plot:
         if not plot_file_Name:
@@ -189,7 +229,7 @@ def specific_heat_montecarlo(L=6, N_steps=int(1e5), N_transient=int(2.5e4), J=1,
 
 @njit
 def several_specific_heats(L_array=np.array([2, 3, 4, 8]), N_steps_factor=int(5e3),
-                           J=1, T_min = 0.1, T_max=5., N_temp=30):
+                           N_transient_factor=0.7, J=1, T_min = 0.1, T_max=5., N_temp=30):
     
     cv_arrays = []
     T_arrays = []
@@ -197,7 +237,7 @@ def several_specific_heats(L_array=np.array([2, 3, 4, 8]), N_steps_factor=int(5e
         L = L_array[i]
         N = L * L
         N_steps = int(N * N_steps_factor)
-        N_transient = int(N_steps * 0.4)
+        N_transient = int(N_steps * N_transient_factor)
         cv_args = (L, N_steps, N_transient, J, T_min, T_max, N_temp)
         cv_list, T_list = specific_heat_montecarlo(*cv_args)
         cv_arrays.append(np.array(cv_list))
@@ -207,14 +247,37 @@ def several_specific_heats(L_array=np.array([2, 3, 4, 8]), N_steps_factor=int(5e
     return cv_arrays, T_arrays, L_array, N_steps_factor
 
 
-def specific_heat_plot(cv_arrays, T_arrays, L_array, N_steps_factor, J=1, 
+def specific_heat_plot(cv_arrays, T_arrays, L_array, N_steps_factor,
+                       N_transient_factor, T_min, T_max, N_temp, J=1, 
+                       read_cv_data_part_1=True, read_cv_data=False,
                        cv_data_file_name=None, show_plot=True,
                        save_plot=False, plot_file_Name=None, **kwargs):
     
     plt.figure()
+    if read_cv_data:
+        if not cv_data_file_name:
+            L_string = '_'.join([str(L) for L in L_array])
+            cv_data_file_name = ('ising-metropolis-specific_heat-plot-L_' + L_string
+                + '-N_steps_factor_%d-N_transient_factor_%d-T_min_%.3f-T_max_%.3f-N_temp_%d.csv'
+                % (N_steps_factor, N_transient_factor, T_min, T_max, N_temp))
+        cv_data_file_name = script_dir + '/' + cv_data_file_name
+        cv_data = pd.read_csv(cv_data_file_name, index_col=0, comment='#')
+        cv_data = cv_data.to_numpy(dtype=np.float).transpose()
+        T_arrays = []
+        cv_arrays = []
+        for i in range(int(len(cv_data)/2)):
+            T_arrays.append(cv_data[i * 2])
+            cv_arrays.append(cv_data[i * 2 + 1])
     for i, cv_T_i in enumerate(cv_arrays):
-        plt.plot(T_arrays[i], cv_T_i, '--',
+        plt.plot(T_arrays[i], cv_T_i, '-*', ms=4,
                  label = '$ %d \\times %d $'%(L_array[i], L_array[i]))
+    if read_cv_data_part_1:
+        cv_data_file_name = 'ising-specific-heat-parte-1.csv'
+        cv_data_file_name = script_dir + '/' + cv_data_file_name
+        cv_data = pd.read_csv(cv_data_file_name, index_col=0, comment='#')
+        cv_data = cv_data.to_numpy(dtype=np.float).transpose()
+        for i in range(int(len(cv_data)/2)):
+            plt.plot(cv_data[i*2], cv_data[i * 2 + 1], '--', c='k', lw=1.5)
     plt.xlabel('$T$')
     plt.ylabel('$c_v$')
     plt.legend(loc='best',fancybox=True, framealpha=0.65, title='$N = L \\times L$')

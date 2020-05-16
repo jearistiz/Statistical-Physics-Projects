@@ -1,0 +1,51 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{} \PYGZhy{}*\PYGZhy{} coding: utf\PYGZhy{}8 \PYGZhy{}*\PYGZhy{}}
+\PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k+kn}{as} \PYG{n+nn}{np}
+\PYG{k+kn}{from} \PYG{n+nn}{ising2d\PYGZus{}metropolis} \PYG{k+kn}{import} \PYG{n}{ising\PYGZus{}neighbours}\PYG{p}{,} \PYG{n}{ising\PYGZus{}energy}
+
+\PYG{k}{def} \PYG{n+nf}{ising\PYGZus{}metropolis\PYGZus{}energies}\PYG{p}{(}\PYG{n}{microstate}\PYG{o}{=}\PYG{n}{np}\PYG{o}{.}\PYG{n}{ones}\PYG{p}{(}\PYG{l+m+mi}{36}\PYG{p}{,}\PYG{n}{dtype}\PYG{o}{=}\PYG{n}{np}\PYG{o}{.}\PYG{n}{int64}\PYG{p}{),} 
+                              \PYG{n}{read\PYGZus{}ini\PYGZus{}microstate\PYGZus{}data}\PYG{o}{=}\PYG{n+nb+bp}{False}\PYG{p}{,} \PYG{n}{L}\PYG{o}{=}\PYG{l+m+mi}{6}\PYG{p}{,} \PYG{n}{beta}\PYG{o}{=}\PYG{l+m+mf}{1.}\PYG{p}{,} \PYG{n}{J}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{,}
+                              \PYG{n}{N\PYGZus{}steps}\PYG{o}{=}\PYG{l+m+mi}{10000}\PYG{p}{,} \PYG{n}{N\PYGZus{}transient}\PYG{o}{=}\PYG{l+m+mi}{100}\PYG{p}{):}
+
+    \PYG{n}{N} \PYG{o}{=} \PYG{n}{L} \PYG{o}{*} \PYG{n}{L}
+    \PYG{c+c1}{\PYGZsh{} Calcula vecinos}
+    \PYG{n}{ngbrs} \PYG{o}{=} \PYG{n}{ising\PYGZus{}neighbours}\PYG{p}{(}\PYG{n}{L}\PYG{p}{)}
+
+    \PYG{c+c1}{\PYGZsh{} Si los datos se no se leyeron, genera microestado inicial aleatoriamente}
+    \PYG{k}{if} \PYG{n}{read\PYGZus{}ini\PYGZus{}microstate\PYGZus{}data}\PYG{p}{:}
+        \PYG{k}{pass}
+    \PYG{k}{else}\PYG{p}{:} 
+        \PYG{n}{microstate} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{choice}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{([}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{]),} \PYG{n}{N}\PYG{p}{)}
+    
+    \PYG{c+c1}{\PYGZsh{} Calcula energía inicial}
+    \PYG{n}{energy} \PYG{o}{=} \PYG{n}{ising\PYGZus{}energy}\PYG{p}{([}\PYG{n}{microstate}\PYG{p}{],} \PYG{n}{ngbrs}\PYG{p}{,} \PYG{n}{J}\PYG{o}{=}\PYG{n}{J}\PYG{p}{,} \PYG{n}{print\PYGZus{}log}\PYG{o}{=}\PYG{n+nb+bp}{False}\PYG{p}{)[}\PYG{l+m+mi}{0}\PYG{p}{]}
+    \PYG{c+c1}{\PYGZsh{} Arreglo donde se guardarán energías de los microestados muestreados}
+    \PYG{n}{energies} \PYG{o}{=} \PYG{p}{[]}
+
+    \PYG{c+c1}{\PYGZsh{} En el transiente no se guardan las energías,}
+    \PYG{c+c1}{\PYGZsh{} se espera a que el sistema se termalice.}
+    \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{N\PYGZus{}transient}\PYG{p}{):}
+        \PYG{n}{k} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{randint}\PYG{p}{(}\PYG{n}{N}\PYG{p}{)}
+        \PYG{n}{delta\PYGZus{}E} \PYG{o}{=} \PYG{p}{(}\PYG{l+m+mf}{2.} \PYG{o}{*} \PYG{n}{J} \PYG{o}{*} \PYG{n}{microstate}\PYG{p}{[}\PYG{n}{k}\PYG{p}{]}
+                   \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sum}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{([}\PYG{n}{microstate}\PYG{p}{[}\PYG{n}{ngbr\PYGZus{}i}\PYG{p}{]} \PYG{k}{for} \PYG{n}{ngbr\PYGZus{}i} \PYG{o+ow}{in} \PYG{n}{ngbrs}\PYG{p}{[}\PYG{n}{k}\PYG{p}{]])))}
+        \PYG{k}{if}  \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{uniform}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{)} \PYG{o}{\PYGZlt{}} \PYG{n}{np}\PYG{o}{.}\PYG{n}{exp}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{n}{beta} \PYG{o}{*} \PYG{n}{delta\PYGZus{}E}\PYG{p}{):}
+            \PYG{n}{microstate}\PYG{p}{[}\PYG{n}{k}\PYG{p}{]} \PYG{o}{*=} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}
+            \PYG{n}{energy} \PYG{o}{+=} \PYG{n}{delta\PYGZus{}E}
+    \PYG{c+c1}{\PYGZsh{} Pasado el transiente, se comienzan a guardar las energías}
+    \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{N\PYGZus{}steps}\PYG{p}{):}
+        \PYG{n}{k} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{randint}\PYG{p}{(}\PYG{n}{N}\PYG{p}{)}
+        \PYG{n}{delta\PYGZus{}E} \PYG{o}{=} \PYG{p}{(}\PYG{l+m+mf}{2.} \PYG{o}{*} \PYG{n}{J} \PYG{o}{*} \PYG{n}{microstate}\PYG{p}{[}\PYG{n}{k}\PYG{p}{]}
+                   \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sum}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{([}\PYG{n}{microstate}\PYG{p}{[}\PYG{n}{ngbr\PYGZus{}i}\PYG{p}{]} \PYG{k}{for} \PYG{n}{ngbr\PYGZus{}i} \PYG{o+ow}{in} \PYG{n}{ngbrs}\PYG{p}{[}\PYG{n}{k}\PYG{p}{]])))}
+        \PYG{k}{if} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{uniform}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{)} \PYG{o}{\PYGZlt{}} \PYG{n}{np}\PYG{o}{.}\PYG{n}{exp}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{n}{beta} \PYG{o}{*} \PYG{n}{delta\PYGZus{}E}\PYG{p}{):}
+            \PYG{n}{microstate}\PYG{p}{[}\PYG{n}{k}\PYG{p}{]} \PYG{o}{*=} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}
+            \PYG{n}{energy} \PYG{o}{+=} \PYG{n}{delta\PYGZus{}E}
+        \PYG{n}{energies}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{energy}\PYG{p}{)}
+    
+    \PYG{c+c1}{\PYGZsh{} Se calcula la energía media por espín del microestado final}
+    \PYG{n}{N\PYGZus{}steps2} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{energies}\PYG{p}{),}\PYG{n}{dtype}\PYG{o}{=}\PYG{n}{np}\PYG{o}{.}\PYG{n}{int64}\PYG{p}{)}
+    \PYG{n}{avg\PYGZus{}energy\PYGZus{}per\PYGZus{}spin} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{float}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{sum}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{(}\PYG{n}{energies}\PYG{p}{))}\PYG{o}{/}\PYG{p}{(}\PYG{n}{N\PYGZus{}steps2} \PYG{o}{*} \PYG{n}{N} \PYG{o}{*} \PYG{l+m+mf}{1.}\PYG{p}{))}
+
+    \PYG{c+c1}{\PYGZsh{} Se devuelven las energías, el microestado final y la energía media}
+    \PYG{c+c1}{\PYGZsh{} por espín del microestado final. }
+    \PYG{k}{return} \PYG{n}{energies}\PYG{p}{,} \PYG{n}{microstate}\PYG{p}{,} \PYG{n}{avg\PYGZus{}energy\PYGZus{}per\PYGZus{}spin}
+\end{Verbatim}

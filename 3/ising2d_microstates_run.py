@@ -6,7 +6,7 @@ from ising2d_microstates import *
 ################################################################################################
 
 # Decide si corre algoritmo para calcular microestados de energía
-run_microstates_algorithm = True
+run_microstates_algorithm = False
 
 # Decide si corre algoritmo para cálculo de contribuciones a la función partición
 # por cada valor de energía 
@@ -16,7 +16,7 @@ run_Z_contributions_algorithm = False
 run_Z_approx_algorithm = False
 
 # Decide si corre algoritmo para optimización de dx y beta_ini
-run_specific_heat_algorithm = False
+run_specific_heat_algorithm = True
 
 # Decide si corre demostración de asimetría para L impares
 run_odd_asymmetry = False
@@ -37,7 +37,7 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 
 
 if run_microstates_algorithm:
-    L = 2
+    L = 3
     free_boundary_conditions = True
     energy_plot_kwargs = {
                           'microstate_energies': None,
@@ -46,8 +46,8 @@ if run_microstates_algorithm:
                           'energy_data_file_name': None,
                           'interpolate_energies': False,
                           'show_plot': True,
-                          'save_plot': False,
-                          'plot_file_Name': None
+                          'save_plot': True,
+                          'plot_file_Name': None,
                           }
 
     print('--------------------------------------')
@@ -137,14 +137,15 @@ if run_specific_heat_algorithm:
     kwargs = {
         'microstate_energies_array': [None, None, None, None],
         'L_array': [2, 3, 4, 5],
-        'beta_min': 1/8,
-        'beta_max': 10,
+        'beta_min': 1/5,
+        'beta_max': 1.,
         'N_beta': 1000,
         'read_data': True,
         'energy_data_file_name': None,
         'show_plot': True,
         'save_plot': True,
         'plot_file_Name': None,
+        'save_cv_data': True,
         }
 
     plot_specific_heat_cv(**kwargs)
@@ -155,5 +156,5 @@ if run_odd_asymmetry:
     print('--------------------------------------')
     print('L odd energy asymmetry demonstration')
     print('--------------------------------------\n')
-    L = 2
+    L = 3
     ising_odd_L_energy_asymmetry(L, save_plot=True)
