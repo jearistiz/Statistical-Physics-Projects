@@ -10,13 +10,13 @@ run_microstates_algorithm = False
 
 # Decide si corre algoritmo para cálculo de contribuciones a la función partición
 # por cada valor de energía 
-run_Z_contributions_algorithm = False
+run_Z_contributions_algorithm = True
 
 # Decide si corre algoritmo de aproximación de función partición
 run_Z_approx_algorithm = False
 
 # Decide si corre algoritmo para optimización de dx y beta_ini
-run_specific_heat_algorithm = True
+run_specific_heat_algorithm = False
 
 # Decide si corre demostración de asimetría para L impares
 run_odd_asymmetry = False
@@ -37,16 +37,16 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 
 
 if run_microstates_algorithm:
-    L = 3
-    free_boundary_conditions = True
+    L = 2
+    free_boundary_conditions = False
     energy_plot_kwargs = {
                           'microstate_energies': None,
                           'L': L,
-                          'read_data': False,
+                          'read_data': True,
                           'energy_data_file_name': None,
                           'interpolate_energies': False,
                           'show_plot': True,
-                          'save_plot': True,
+                          'save_plot': False,
                           'plot_file_Name': None,
                           }
 
@@ -105,15 +105,15 @@ if run_Z_contributions_algorithm:
     print('--------------------------------------')
     kwargs = {
         'microstate_energies': None,
-        'L': 3,
-        'beta': 0.0005,
+        'L': 5,
+        'beta': 1.,
         'beta_max': None,
         'N_beta': 100,
         'read_data': True,
         'energy_data_file_name': None,
         'plot_histogram': True,
         'show_plot': True,
-        'save_plot': False,
+        'save_plot': True,
         'plot_file_Name': None,
         } 
     

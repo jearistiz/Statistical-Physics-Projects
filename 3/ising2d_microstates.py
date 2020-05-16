@@ -313,12 +313,12 @@ def partition_func_stat_weights(microstate_energies, L, beta=4, beta_max=None, N
                     label='Contribuciones a $Z(\\beta)$\nIsing $L\\times L=%d$'%(L*L))
             plt.xlabel('$E$')
             plt.ylabel('$\Omega(E)e^{-\\beta E }$')
-            plt.legend(loc='best', fancybox=True, framealpha=0.5, title='$\\beta=%.3f$'%beta)
+            plt.legend(loc='best', fancybox=True, framealpha=0.5, title='$\\beta=%.4f$'%beta)
             plt.ticklabel_format(axis='y', style='sci', scilimits=(0,0))
             plt.tight_layout()
             if save_plot:
                 if not plot_file_Name:
-                    plot_file_Name = 'ising-Z_contributions-plot-L_%d-beta_%.3f.pdf'%(L,beta)
+                    plot_file_Name = 'ising-Z_contributions-plot-L_%d-beta_%.4f.pdf'%(L,beta)
                 plot_file_Name = script_dir + '/' + plot_file_Name
                 plt.savefig(plot_file_Name)
             if show_plot:
@@ -376,8 +376,8 @@ def energies_momenta(microstate_energies, L, n=1, beta_min=0.5, beta_max=None, N
         return E_n_array, beta_array, Z_array, statistical_weights_array, energies, omegas
 
 
-def approx_partition_func(microstate_energies_array=[None, None, None],
-                          L_array=[ 3, 4, 5], beta_min=0.00001, beta_max=2, N_beta=100,
+def approx_partition_func(microstate_energies_array=[None, None, None, None],
+                          L_array=[ 2, 3, 4, 5], beta_min=0.00001, beta_max=2, N_beta=100,
                           read_data=False, energy_data_file_name=None, plot=True,
                           show_plot=True, save_plot=False, plot_file_Name=None,
                           **kwargs):
