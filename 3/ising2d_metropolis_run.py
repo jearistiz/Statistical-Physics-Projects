@@ -25,7 +25,7 @@ plt.rcParams.update({'font.size':15,'text.latex.unicode':True})
 
 
 
-
+# Muestreo de energías usando algoritmo Metrópolis
 if run_metropolis_energies_algorithm:
     
     # Decide si lee o guarda datos y asigna nombres a los archivos
@@ -140,6 +140,7 @@ if run_metropolis_energies_algorithm:
     del energies
 
 
+# Algoritmo de termalización
 if run_thermalization_algorithm:
 
     # Decide si imprime info del algoritmo
@@ -157,6 +158,7 @@ if run_thermalization_algorithm:
     thermalization_args = \
         (microstates_ini, read_ini_microstate_data, L, beta, J, N_steps, N_transient)
 
+    # Corre algoritmo de termalización
     t_0 = time()
     avg_energy_per_spin_array, beta, *dont_need = thermalization_demo(*thermalization_args)
     t_1 = time()
@@ -184,7 +186,7 @@ if run_thermalization_algorithm:
 
     plot_thermalization_demo(*thermalization_plot_args)
 
-
+# Algoritmo de calor específico
 if run_specific_heat_algorithm:
     
     # Si read_cv_data=True, el algoritmo no corre, sino que se leen los datos de un archivo.

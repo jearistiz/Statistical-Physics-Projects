@@ -1,0 +1,173 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{from} \PYG{n+nn}{ising2d\PYGZus{}microstates} \PYG{k+kn}{import} \PYG{o}{*}
+
+
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}}
+\PYG{c+c1}{\PYGZsh{} PANEL DE CONTROL}
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}}
+
+\PYG{c+c1}{\PYGZsh{} Decide si corre algoritmo para calcular microestados de energía}
+\PYG{n}{run\PYGZus{}microstates\PYGZus{}algorithm} \PYG{o}{=} \PYG{n+nb+bp}{False}
+
+\PYG{c+c1}{\PYGZsh{} Decide si corre algoritmo para cálculo de contribuciones a la función partición}
+\PYG{c+c1}{\PYGZsh{} por cada valor de energía }
+\PYG{n}{run\PYGZus{}Z\PYGZus{}contributions\PYGZus{}algorithm} \PYG{o}{=} \PYG{n+nb+bp}{True}
+
+\PYG{c+c1}{\PYGZsh{} Decide si corre algoritmo de aproximación de función partición}
+\PYG{n}{run\PYGZus{}Z\PYGZus{}approx\PYGZus{}algorithm} \PYG{o}{=} \PYG{n+nb+bp}{False}
+
+\PYG{c+c1}{\PYGZsh{} Decide si corre algoritmo para optimización de dx y beta\PYGZus{}ini}
+\PYG{n}{run\PYGZus{}specific\PYGZus{}heat\PYGZus{}algorithm} \PYG{o}{=} \PYG{n+nb+bp}{False}
+
+\PYG{c+c1}{\PYGZsh{} Decide si corre demostración de asimetría para L impares}
+\PYG{n}{run\PYGZus{}odd\PYGZus{}asymmetry} \PYG{o}{=} \PYG{n+nb+bp}{False}
+
+
+
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}}
+\PYG{c+c1}{\PYGZsh{} PARÁMETROS GENERALES PARA LAS FIGURAS}
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}}
+
+\PYG{c+c1}{\PYGZsh{} Usar latex en texto de figuras y agrandar tamaño de fuente}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rc}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}text\PYGZsq{}}\PYG{p}{,} \PYG{n}{usetex}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{)} 
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{o}{.}\PYG{n}{update}\PYG{p}{(\PYGZob{}}\PYG{l+s+s1}{\PYGZsq{}font.size\PYGZsq{}}\PYG{p}{:}\PYG{l+m+mi}{15}\PYG{p}{,}\PYG{l+s+s1}{\PYGZsq{}text.latex.unicode\PYGZsq{}}\PYG{p}{:}\PYG{n+nb+bp}{True}\PYG{p}{\PYGZcb{})}
+
+\PYG{c+c1}{\PYGZsh{} Obtenemos path para guardar archivos en el mismo directorio donde se ubica el script}
+\PYG{n}{script\PYGZus{}dir} \PYG{o}{=} \PYG{n}{os}\PYG{o}{.}\PYG{n}{path}\PYG{o}{.}\PYG{n}{dirname}\PYG{p}{(}\PYG{n}{os}\PYG{o}{.}\PYG{n}{path}\PYG{o}{.}\PYG{n}{abspath}\PYG{p}{(}\PYG{n+nv+vm}{\PYGZus{}\PYGZus{}file\PYGZus{}\PYGZus{}}\PYG{p}{))}
+
+
+\PYG{c+c1}{\PYGZsh{} Algoritmo para calcular microestados}
+\PYG{k}{if} \PYG{n}{run\PYGZus{}microstates\PYGZus{}algorithm}\PYG{p}{:}
+    \PYG{c+c1}{\PYGZsh{} Tamaño del sistema}
+    \PYG{n}{L} \PYG{o}{=} \PYG{l+m+mi}{2}
+    \PYG{c+c1}{\PYGZsh{} Decide si pone condiciones de frontera libres}
+    \PYG{n}{free\PYGZus{}boundary\PYGZus{}conditions} \PYG{o}{=} \PYG{n+nb+bp}{False}
+    \PYG{n}{energy\PYGZus{}plot\PYGZus{}kwargs} \PYG{o}{=} \PYG{p}{\PYGZob{}}
+                          \PYG{l+s+s1}{\PYGZsq{}microstate\PYGZus{}energies\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{None}\PYG{p}{,}
+                          \PYG{l+s+s1}{\PYGZsq{}L\PYGZsq{}}\PYG{p}{:} \PYG{n}{L}\PYG{p}{,}
+                          \PYG{l+s+s1}{\PYGZsq{}read\PYGZus{}data\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{True}\PYG{p}{,}
+                          \PYG{l+s+s1}{\PYGZsq{}energy\PYGZus{}data\PYGZus{}file\PYGZus{}name\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{None}\PYG{p}{,}
+                          \PYG{l+s+s1}{\PYGZsq{}interpolate\PYGZus{}energies\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{False}\PYG{p}{,}
+                          \PYG{l+s+s1}{\PYGZsq{}show\PYGZus{}plot\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{True}\PYG{p}{,}
+                          \PYG{l+s+s1}{\PYGZsq{}save\PYGZus{}plot\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{False}\PYG{p}{,}
+                          \PYG{l+s+s1}{\PYGZsq{}plot\PYGZus{}file\PYGZus{}Name\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{None}\PYG{p}{,}
+                          \PYG{p}{\PYGZcb{}}
+
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Microstates algorithm\PYGZsq{}}\PYG{p}{)}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Grid: L x L = }\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{ x }\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{\PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{p}{(}\PYG{n}{L}\PYG{p}{,} \PYG{n}{L}\PYG{p}{))}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+
+    \PYG{c+c1}{\PYGZsh{} Calcula los microestados del sistema solo si read\PYGZus{}data=False.}
+    \PYG{k}{if} \PYG{o+ow}{not} \PYG{n}{energy\PYGZus{}plot\PYGZus{}kwargs}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}read\PYGZus{}data\PYGZsq{}}\PYG{p}{]:}
+        
+        \PYG{c+c1}{\PYGZsh{} Genera todos los microestados posibles }
+        \PYG{n}{microstates} \PYG{o}{=} \PYG{n}{ising\PYGZus{}microstates}\PYG{p}{(}\PYG{n}{L}\PYG{p}{)}
+        
+        \PYG{c+c1}{\PYGZsh{} Calcula los vecinos}
+        \PYG{n}{neighbours} \PYG{o}{=} \PYG{n}{ising\PYGZus{}neighbours\PYGZus{}free}\PYG{p}{(}\PYG{n}{L}\PYG{p}{)} \PYG{k}{if} \PYG{n}{free\PYGZus{}boundary\PYGZus{}conditions} \PYGZbs{}
+                                            \PYG{k}{else} \PYG{n}{ising\PYGZus{}neighbours}\PYG{p}{(}\PYG{n}{L}\PYG{p}{)}
+        
+        \PYG{c+c1}{\PYGZsh{} Cálculo de energía para cada microestado}
+        \PYG{n}{t\PYGZus{}0} \PYG{o}{=} \PYG{n}{time}\PYG{p}{()}    
+        \PYG{n}{energies} \PYG{o}{=} \PYG{n}{ising\PYGZus{}energy}\PYG{p}{(}\PYG{n}{microstates}\PYG{p}{,} \PYG{n}{neighbours}\PYG{p}{,}
+                                \PYG{n}{save\PYGZus{}data} \PYG{o}{=} \PYG{o+ow}{not} \PYG{n}{free\PYGZus{}boundary\PYGZus{}conditions}\PYG{p}{)}
+        \PYG{n}{t\PYGZus{}1} \PYG{o}{=} \PYG{n}{time}\PYG{p}{()}
+        \PYG{n}{comp\PYGZus{}time} \PYG{o}{=} \PYG{n}{t\PYGZus{}1}\PYG{o}{\PYGZhy{}}\PYG{n}{t\PYGZus{}0}
+        \PYG{c+c1}{\PYGZsh{} Imprime log del algoritmo}
+        \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZsq{}}
+            \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{}Explicit energies:  L = }\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{ \PYGZhy{}\PYGZhy{}\PYGZgt{} computation time = }\PYG{l+s+si}{\PYGZpc{}.3f}\PYG{l+s+s1}{ }\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{p}{(}\PYG{n}{L}\PYG{p}{,}\PYG{n}{comp\PYGZus{}time}\PYG{p}{)}
+            \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+        
+        \PYG{n}{energy\PYGZus{}plot\PYGZus{}kwargs}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}microstate\PYGZus{}energies\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{n}{energies}
+        \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+        \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}All microstates, each in a single row:\PYGZsq{}}\PYG{p}{)}
+        \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+        \PYG{k}{print}\PYG{p}{(}\PYG{n}{pd}\PYG{o}{.}\PYG{n}{concat}\PYG{p}{([}\PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{(}\PYG{n}{microstates}\PYG{p}{),}
+                        \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{(\PYGZob{}}\PYG{l+s+s1}{\PYGZsq{}Energy\PYGZsq{}}\PYG{p}{:} \PYG{n}{energies}\PYG{p}{\PYGZcb{})],}
+                        \PYG{n}{axis}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{,} 
+                        \PYG{n}{sort}\PYG{o}{=}\PYG{n+nb+bp}{False}
+                        \PYG{p}{),}
+              \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+
+    \PYG{c+c1}{\PYGZsh{} Grafica histograma de energías \PYGZbs{}Omega(E)}
+    \PYG{n}{ising\PYGZus{}energy\PYGZus{}plot}\PYG{p}{(}\PYG{o}{**}\PYG{n}{energy\PYGZus{}plot\PYGZus{}kwargs}\PYG{p}{)}
+
+    \PYG{n}{microstate\PYGZus{}rand} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{choice}\PYG{p}{([}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{],} \PYG{n}{L}\PYG{o}{*}\PYG{n}{L}\PYG{p}{)}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}One random microstate as a 2D grid:\PYGZsq{}}\PYG{p}{)}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+    \PYG{k}{print}\PYG{p}{(}\PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{(}\PYG{n}{microstate\PYGZus{}rand}\PYG{o}{.}\PYG{n}{reshape}\PYG{p}{((}\PYG{n}{L}\PYG{p}{,}\PYG{n}{L}\PYG{p}{))),} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+
+    \PYG{c+c1}{\PYGZsh{} Grafica un microestado aleatorio}
+    \PYG{n}{ising\PYGZus{}microstate\PYGZus{}plot}\PYG{p}{(}\PYG{n}{microstate\PYGZus{}rand}\PYG{p}{,} \PYG{n}{save\PYGZus{}plot}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{)}
+
+
+\PYG{c+c1}{\PYGZsh{} Algoritmo para calcular contribuciones a la función partición: }
+\PYG{c+c1}{\PYGZsh{} Omega(E)*e\PYGZca{}\PYGZob{}\PYGZhy{}beta E\PYGZcb{}, que es proporcional a p\PYGZus{}E}
+\PYG{k}{if} \PYG{n}{run\PYGZus{}Z\PYGZus{}contributions\PYGZus{}algorithm}\PYG{p}{:}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Z contributions algorithm\PYGZsq{}}\PYG{p}{)}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{kwargs} \PYG{o}{=} \PYG{p}{\PYGZob{}}
+        \PYG{l+s+s1}{\PYGZsq{}microstate\PYGZus{}energies\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{None}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}L\PYGZsq{}}\PYG{p}{:} \PYG{l+m+mi}{5}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}beta\PYGZsq{}}\PYG{p}{:} \PYG{l+m+mf}{1.}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}beta\PYGZus{}max\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{None}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}N\PYGZus{}beta\PYGZsq{}}\PYG{p}{:} \PYG{l+m+mi}{100}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}read\PYGZus{}data\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{True}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}energy\PYGZus{}data\PYGZus{}file\PYGZus{}name\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{None}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}plot\PYGZus{}histogram\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{True}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}show\PYGZus{}plot\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{True}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}save\PYGZus{}plot\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{True}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}plot\PYGZus{}file\PYGZus{}Name\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{None}\PYG{p}{,}
+        \PYG{p}{\PYGZcb{}} 
+    
+    \PYG{n}{Z\PYGZus{}array}\PYG{p}{,} \PYG{n}{statistical\PYGZus{}weights\PYGZus{}array}\PYG{p}{,} \PYG{n}{beta\PYGZus{}array}\PYG{p}{,} \PYG{n}{energies}\PYG{p}{,} \PYG{n}{omegas} \PYG{o}{=} \PYGZbs{}
+        \PYG{n}{partition\PYGZus{}func\PYGZus{}stat\PYGZus{}weights}\PYG{p}{(}\PYG{o}{**}\PYG{n}{kwargs}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Algoritmo de aproximación de la función partición: equivalencia con ensamble}
+\PYG{c+c1}{\PYGZsh{} microcanónico}
+\PYG{k}{if} \PYG{n}{run\PYGZus{}Z\PYGZus{}approx\PYGZus{}algorithm}\PYG{p}{:}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Z approximation algorithm\PYGZsq{}}\PYG{p}{)}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{approx\PYGZus{}partition\PYGZus{}func}\PYG{p}{(}\PYG{n}{read\PYGZus{}data}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{,} \PYG{n}{save\PYGZus{}plot}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Algoritmo para graficar calor específico}
+\PYG{k}{if} \PYG{n}{run\PYGZus{}specific\PYGZus{}heat\PYGZus{}algorithm}\PYG{p}{:}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Specific Heat algorithm\PYGZsq{}}\PYG{p}{)}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{kwargs} \PYG{o}{=} \PYG{p}{\PYGZob{}}
+        \PYG{l+s+s1}{\PYGZsq{}microstate\PYGZus{}energies\PYGZus{}array\PYGZsq{}}\PYG{p}{:} \PYG{p}{[}\PYG{n+nb+bp}{None}\PYG{p}{,} \PYG{n+nb+bp}{None}\PYG{p}{,} \PYG{n+nb+bp}{None}\PYG{p}{,} \PYG{n+nb+bp}{None}\PYG{p}{],}
+        \PYG{l+s+s1}{\PYGZsq{}L\PYGZus{}array\PYGZsq{}}\PYG{p}{:} \PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{,} \PYG{l+m+mi}{4}\PYG{p}{,} \PYG{l+m+mi}{5}\PYG{p}{],}
+        \PYG{l+s+s1}{\PYGZsq{}beta\PYGZus{}min\PYGZsq{}}\PYG{p}{:} \PYG{l+m+mi}{1}\PYG{o}{/}\PYG{l+m+mi}{5}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}beta\PYGZus{}max\PYGZsq{}}\PYG{p}{:} \PYG{l+m+mf}{1.}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}N\PYGZus{}beta\PYGZsq{}}\PYG{p}{:} \PYG{l+m+mi}{1000}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}read\PYGZus{}data\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{True}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}energy\PYGZus{}data\PYGZus{}file\PYGZus{}name\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{None}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}show\PYGZus{}plot\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{True}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}save\PYGZus{}plot\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{True}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}plot\PYGZus{}file\PYGZus{}Name\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{None}\PYG{p}{,}
+        \PYG{l+s+s1}{\PYGZsq{}save\PYGZus{}cv\PYGZus{}data\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{True}\PYG{p}{,}
+        \PYG{p}{\PYGZcb{}}
+
+    \PYG{n}{plot\PYGZus{}specific\PYGZus{}heat\PYGZus{}cv}\PYG{p}{(}\PYG{o}{**}\PYG{n}{kwargs}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Algoritmo para mostrar que la asimetría en histograma de Omega para L impar }
+\PYG{c+c1}{\PYGZsh{} se debe a las condiciones de frontera periódicas}
+\PYG{k}{if} \PYG{n}{run\PYGZus{}odd\PYGZus{}asymmetry}\PYG{p}{:}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}L odd energy asymmetry demonstration\PYGZsq{}}\PYG{p}{)}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{L} \PYG{o}{=} \PYG{l+m+mi}{3}
+    \PYG{n}{ising\PYGZus{}odd\PYGZus{}L\PYGZus{}energy\PYGZus{}asymmetry}\PYG{p}{(}\PYG{n}{L}\PYG{p}{,} \PYG{n}{save\PYGZus{}plot}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{)}
+\end{Verbatim}

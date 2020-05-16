@@ -6,7 +6,7 @@
 %Control: page (0) single
 %Control: year (1) truncated
 %Control: production of eprint (0) enabled
-\begin{thebibliography}{1}%
+\begin{thebibliography}{6}%
 \makeatletter
 \providecommand \@ifxundefined [1]{%
  \@ifx{#1\undefined}
@@ -50,6 +50,12 @@
 \providecommand \BibitemShut  [1]{\csname bibitem#1\endcsname}%
 \let\auto@bib@innerbib\@empty
 %</preamble>
+\bibitem [{\citenamefont {Huang}(1963)}]{Huang}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {K.}~\bibnamefont
+  {Huang}},\ }\href@noop {} {\emph {\bibinfo {title} {{Statistical
+  Mechanics}}}}\ (\bibinfo  {publisher} {John Wiley {\&} Sons},\ \bibinfo
+  {year} {1963})\BibitemShut {NoStop}%
 \bibitem [{\citenamefont {Lam}\ \emph {et~al.}(2015)\citenamefont {Lam},
   \citenamefont {Pitrou},\ and\ \citenamefont
   {Seibert}}]{10.1145/2833157.2833162}%
@@ -63,4 +69,42 @@
   HPC}}},\ \bibinfo {series and number} {LLVM '15}\ (\bibinfo  {publisher}
   {Association for Computing Machinery},\ \bibinfo {address} {New York, NY,
   USA},\ \bibinfo {year} {2015})\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Greiner}\ \emph {et~al.}(2012)\citenamefont
+  {Greiner}, \citenamefont {Neise},\ and\ \citenamefont
+  {St{\"{o}}cker}}]{greiner2012thermodynamics}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {W.}~\bibnamefont
+  {Greiner}}, \bibinfo {author} {\bibfnamefont {L.}~\bibnamefont {Neise}}, and\
+  \bibinfo {author} {\bibfnamefont {H.}~\bibnamefont {St{\"{o}}cker}},\
+  }\href@noop {} {\emph {\bibinfo {title} {{Thermodynamics and statistical
+  mechanics}}}}\ (\bibinfo  {publisher} {Springer Science {\&} Business
+  Media},\ \bibinfo {year} {2012})\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {McCoy}\ and\ \citenamefont
+  {Wu}(2014)}]{mccoy2014two}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {B.~M.}\ \bibnamefont
+  {McCoy}}and\ \bibinfo {author} {\bibfnamefont {T.~T.}\ \bibnamefont {Wu}},\
+  }\href@noop {} {\emph {\bibinfo {title} {{The two-dimensional Ising
+  model}}}}\ (\bibinfo  {publisher} {Courier Corporation},\ \bibinfo {year}
+  {2014})\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Chaikin}\ \emph {et~al.}(1995)\citenamefont
+  {Chaikin}, \citenamefont {Lubensky},\ and\ \citenamefont
+  {Witten}}]{chaikin1995principles}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {P.~M.}\ \bibnamefont
+  {Chaikin}}, \bibinfo {author} {\bibfnamefont {T.~C.}\ \bibnamefont
+  {Lubensky}}, and\ \bibinfo {author} {\bibfnamefont {T.~A.}\ \bibnamefont
+  {Witten}},\ }\href@noop {} {\emph {\bibinfo {title} {{Principles of condensed
+  matter physics}}}},\ Vol.~\bibinfo {volume} {10}\ (\bibinfo  {publisher}
+  {Cambridge university press Cambridge},\ \bibinfo {year} {1995})\BibitemShut
+  {NoStop}%
+\bibitem [{\citenamefont {Ort{\'{i}}n}\ and\ \citenamefont
+  {Sancho}(2006)}]{rull2006curso}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {J.}~\bibnamefont
+  {Ort{\'{i}}n}}and\ \bibinfo {author} {\bibfnamefont {J.~M.}\ \bibnamefont
+  {Sancho}},\ }\href@noop {} {\emph {\bibinfo {title} {{Curso de F{\'{i}}sica
+  Estad{\'{i}}stica}}}},\ Vol.~\bibinfo {volume} {28}\ (\bibinfo  {publisher}
+  {Edicions Universitat Barcelona},\ \bibinfo {year} {2006})\BibitemShut
+  {NoStop}%
 \end{thebibliography}%

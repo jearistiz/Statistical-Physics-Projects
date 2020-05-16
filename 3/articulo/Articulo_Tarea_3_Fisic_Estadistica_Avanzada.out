@@ -1,17 +1,17 @@
-\BOOKMARK [0][-]{section*.1}{Modelo de Ising: Apreciaciones Generales y Algoritmo Metr\363polis.}{}% 1
-\BOOKMARK [1][-]{section*.2}{Introducci\363n}{section*.1}% 2
-\BOOKMARK [1][-]{section*.3}{Consideraciones te\363ricas}{section*.1}% 3
+\BOOKMARK [0][-]{section*.2}{Modelo de Ising: Apreciaciones Generales y Algoritmo Metr\363polis.}{}% 2
+\BOOKMARK [1][-]{section*.1}{Resumen}{section*.2}% 1
+\BOOKMARK [1][-]{section*.3}{Consideraciones te\363ricas}{section*.2}% 3
 \BOOKMARK [2][-]{section*.4}{Hamiltoniano del sistema y ensamble can\363nico.}{section*.3}% 4
 \BOOKMARK [2][-]{section*.5}{Microestados y contribuciones a la funci\363n partici\363n}{section*.3}% 5
 \BOOKMARK [2][-]{section*.6}{Equivalencia entre ensambles microcan\363nico y macrocan\363nico}{section*.3}% 6
 \BOOKMARK [2][-]{section*.7}{Calor espec\355fico}{section*.3}% 7
-\BOOKMARK [1][-]{section*.8}{Modelo de Ising y Algoritmo Metr\363polis}{section*.1}% 8
+\BOOKMARK [1][-]{section*.8}{Modelo de Ising y Algoritmo Metr\363polis}{section*.2}% 8
 \BOOKMARK [2][-]{section*.9}{El algoritmo Metr\363polis para el modelo de Ising 2d}{section*.8}% 9
-\BOOKMARK [2][-]{section*.10}{Termalizaci\363n del sistema usando el algoritmo}{section*.8}% 10
+\BOOKMARK [2][-]{section*.10}{Importancia de la termalizaci\363n del sistema al usar el algoritmo Metr\363polis}{section*.8}% 10
 \BOOKMARK [2][-]{section*.11}{Microestados finales y temperatura cr\355tica}{section*.8}% 11
 \BOOKMARK [2][-]{section*.12}{Calor espec\355fico}{section*.8}% 12
-\BOOKMARK [1][-]{section*.13}{Conclusi\363n}{section*.1}% 13
-\BOOKMARK [1][-]{section*.14}{Agradecimientos}{section*.1}% 14
-\BOOKMARK [1][-]{section*.15}{Referencias}{section*.1}% 15
-\BOOKMARK [1][-]{section*.16}{C\363digo 1: enumeraci\363n exacta de microestados}{section*.1}% 16
-\BOOKMARK [1][-]{section*.17}{C\363digo 2: Algoritmo Montecarlo}{section*.1}% 17
+\BOOKMARK [1][-]{section*.13}{Conclusi\363n}{section*.2}% 13
+\BOOKMARK [1][-]{section*.14}{Agradecimientos}{section*.2}% 14
+\BOOKMARK [1][-]{section*.15}{Referencias}{section*.2}% 15
+\BOOKMARK [1][-]{section*.16}{C\363digo 1: enumeraci\363n exacta de microestados}{section*.2}% 16
+\BOOKMARK [1][-]{section*.17}{C\363digo 2: algoritmo Montecarlo}{section*.2}% 17

@@ -44,7 +44,7 @@ def ising_neighbours(L=2):
                                int((i - L) % N)]))                  # arriba
     return ngbrs
 
-
+#Calcula las energías de los microestados que se le entregan.
 @njit
 def ising_energy(microstates, ngbrs, J=1, save_data=False, data_file_name=None,
                  print_log=True):
@@ -63,6 +63,8 @@ def ising_energy(microstates, ngbrs, J=1, save_data=False, data_file_name=None,
     energies = 0.5 * J * np.array(energies)
     return energies
 
+# Algoritmo metrópolis: muestrea energías del modelo de Ising en ensamble canónico
+# a partir de configuración dada o de configuración aleatoria
 @njit
 def ising_metropolis_energies(microstate=np.ones(36,dtype=np.int64), 
                               read_ini_microstate_data=False, L=6, beta=1., J=1,
@@ -109,7 +111,7 @@ def ising_metropolis_energies(microstate=np.ones(36,dtype=np.int64),
     # por espín del microestado final. 
     return energies, microstate, avg_energy_per_spin
 
-
+# Grafica microestado dado
 def ising_metropolis_microstate_plot(config, L, beta, J=1, N_steps=10000, N_transient=100,
                                      show_plot=True, save_plot=False, plot_file_name=None):
     
@@ -120,6 +122,8 @@ def ising_metropolis_microstate_plot(config, L, beta, J=1, N_steps=10000, N_tran
     
     ising_microstate_plot(np.array(config), show_plot, save_plot, plot_file_name)
 
+# Algoritmo que calcula la termalización de los sistemas en ensamble canónico para
+# algoritmo metrópolis
 @njit
 def thermalization_demo(microstates_ini=np.ones((3,36), dtype=np.int64), 
                         read_ini_microstate_data=False, L=6,
@@ -131,12 +135,15 @@ def thermalization_demo(microstates_ini=np.ones((3,36), dtype=np.int64),
     microstate_array = []
     avg_energy_per_spin_array = []
 
+    # Corre algoritmo metrópolis para cada beta escogido
     for i, microstate in enumerate(microstates_ini):
         ising_args = (microstate, read_ini_microstate_data, L, beta[i], J, N_steps, N_transient)
         energies, microstate, avg_E_per_spin_final = ising_metropolis_energies(*ising_args)
         energies_array.append(np.array(energies))
         microstate_array.append(microstate)
 
+    # Calcula energía promedio por espín para cada uno de los betas y para cada
+    # paso N_step por el que pasa el algoritmo. 
     for energies in energies_array:
         avg_energy_per_spin = []
         E_cumulative = 0.
@@ -148,13 +155,14 @@ def thermalization_demo(microstates_ini=np.ones((3,36), dtype=np.int64),
 
     return avg_energy_per_spin_array, beta, energies_array, microstate_array
 
-
+# Grafica la termalización calculada en la función anterior
 def plot_thermalization_demo(avg_energy_per_spin_array, beta=np.array([1/10.,1/2.5,1/0.1]),
                              L=6, J=1, N_steps=10000, N_transient=0,
                              thermaization_data_file_name=None, show_plot=True, save_plot=False,
                              plot_file_Name=None, **kwargs):
 
     plt.figure()
+    # Si L=6 calcula por enumeración exacta <E>/N para los valores de beta deseados
     if L==6:
         Es = np.array([72, 68, 64, 60, 56, 52, 48, 44, 40,
                        36, 32, 28, 24, 20, 16, 12, 8, 4, 0])
@@ -176,6 +184,7 @@ def plot_thermalization_demo(avg_energy_per_spin_array, beta=np.array([1/10.,1/2
             print('T = %.4f     <E>/N = %.4f'%(1/beta_i, E_over_N) )
     N_steps = len(avg_energy_per_spin_array[0])
     steps = range(1, N_steps+1)
+    # Grafica termalización para cada beta deseado
     for i, E_per_spin in enumerate(avg_energy_per_spin_array):
         if L==6:
             plt.plot(steps, E_per_spin,
@@ -188,7 +197,6 @@ def plot_thermalization_demo(avg_energy_per_spin_array, beta=np.array([1/10.,1/2
     plt.ylabel('$\langle E \\rangle / N $')
     plt.legend(loc=3, fancybox=True, framealpha=0.9,
                title='$N = L \\times L = %d \\times %d$'%(L, L))
-    #plt.ticklabel_format(axis='x', style='sci', scilimits=(0,0))
     plt.tight_layout()
     if save_plot:
         if not plot_file_Name:
@@ -204,6 +212,7 @@ def plot_thermalization_demo(avg_energy_per_spin_array, beta=np.array([1/10.,1/2
     
     return
 
+# Calcula el momento <E**n> deseado.
 @njit(parallel=True)
 def energies_momenta_montecarlo(energies, n, N_steps):
     E_n = 0.
@@ -211,22 +220,31 @@ def energies_momenta_montecarlo(energies, n, N_steps):
         E_n += energies[i]**n
     return E_n/N_steps
 
+# Calcula calor específico para un L e intervalo para T dado, 
+# usando algoritmo metrópolis
 @njit
 def specific_heat_montecarlo(L=6, N_steps=int(1e5), N_transient=int(2.5e4), J=1,
                              T_min = 0.1, T_max=5., N_temp=30):
+    # Temperaturas para las cuales se va a calcular cv
     T_array = np.linspace(T_min, T_max, N_temp)
     N = L * L
     cv_array = []
+    # Cálculo de cv para cada temperatura
     for i in prange(N_temp):
+        # Corre algoritmo metrópolis
         metropolis_args = (np.ones(N, dtype=np.int64), False, L,
                            1./T_array[i], J, N_steps, N_transient)
         energies, microstate, avg_energy_per_spin = ising_metropolis_energies(*metropolis_args)
+        # Calcula promedio de E
         E_1 = energies_momenta_montecarlo(energies, 1, N_steps)
+        # Calcula promedio de E**2
         E_2 = energies_momenta_montecarlo(energies, 2, N_steps)
+        # calcula cv explícitamente cv = beta**2 * (<E**2> - <E>**2)/N
         cv = (E_2 - E_1**2) / (T_array[i]**2 * N)
         cv_array.append(cv)
     return cv_array, T_array
 
+# Calcula calor específico para varios valores de L y un intervalo de T deseado
 @njit
 def several_specific_heats(L_array=np.array([2, 3, 4, 8]), N_steps_factor=int(5e3),
                            N_transient_factor=0.7, J=1, T_min = 0.1, T_max=5., N_temp=30):
@@ -246,7 +264,7 @@ def several_specific_heats(L_array=np.array([2, 3, 4, 8]), N_steps_factor=int(5e
 
     return cv_arrays, T_arrays, L_array, N_steps_factor
 
-
+# Grafica calores específicos para diferentes L en función de T.
 def specific_heat_plot(cv_arrays, T_arrays, L_array, N_steps_factor,
                        N_transient_factor, T_min, T_max, N_temp, J=1, 
                        read_cv_data_part_1=True, read_cv_data=False,
@@ -294,6 +312,3 @@ def specific_heat_plot(cv_arrays, T_arrays, L_array, N_steps_factor,
         plt.show()
     plt.close()
     return
-
-
-

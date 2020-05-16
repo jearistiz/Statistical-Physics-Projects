@@ -12,6 +12,7 @@ import pandas as pd
 from scipy.interpolate import interp1d
 from scipy.optimize import fmin, curve_fit
 
+# Obtiene path del directorio en que está ubicado este script
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -73,7 +74,7 @@ def save_csv(data, data_headers=None, data_index=None, file_name=None,
 
     return data_pdDF
 
-
+# Cálculo de microestados
 def ising_microstates(L=2):
     # Tamaño del sistema
     N = L * L
@@ -108,7 +109,7 @@ def ising_microstates(L=2):
 
     return microstates
 
-
+# Cálculo de vecinos: condiciones de frontera periódicas
 def ising_neighbours(L=2):
     """
     vecinos del espin i en el formato {i: (derecha, izquierda, abajo, arriba)}
@@ -132,7 +133,7 @@ def ising_neighbours(L=2):
                (i//L)*L + (i-1)%L, (i-L) % N] for i in range(N)}
     return ngbrs
 
-
+# Cálculo de vecinos: condiciones de frontera libres
 def ising_neighbours_free(L):
     N = L * L
     ngbrs = {}
@@ -161,13 +162,17 @@ def ising_neighbours_free(L):
         ngbrs[i] = ngbrs_i
     return ngbrs
 
-
+# Cálculo de energías para cada microestado. Los microestados deben estar 
+# contenidos en un arreglo y cada lista dentro del arreglo representa un 
+# microestado diferente
 def ising_energy(microstates, ngbrs, J=1, save_data=False, data_file_name=None,
                  print_log=True):
 
-    energies = []
+    
+    energies = []       # lista en que se almacenan energías de cada microestado
     N = len(ngbrs)
     L = int(N**0.5)
+    # Se calcula energía para cada microestado
     for microstate_j in microstates:
         energy_j = 0
         for i in range(N):
@@ -175,10 +180,10 @@ def ising_energy(microstates, ngbrs, J=1, save_data=False, data_file_name=None,
         energies.append(energy_j)
     
     # En el algoritmo hemos contado cada contribución de energía 2 veces, por tanto se
-    # debe hacer corrección. Además se agrega el factor de la integral de intercambio.
+    # debe hacer corrección. Además se agrega el factor de la fuerza de la interacción.
     energies = 0.5 * J * np.array(energies)
 
-    # Guardamos datos de energías
+    # Guardamos datos de energías en archivo CSV
     if save_data:
         if not data_file_name:
             data_file_name = 'ising-energy-data-L_%d.csv'%(L)
@@ -190,7 +195,7 @@ def ising_energy(microstates, ngbrs, J=1, save_data=False, data_file_name=None,
 
     return energies
 
-
+# Lee archivo donde están guardadas las energías de cada microestado.
 def read_energy_data(energy_data_file_name):
     energy_data_file_name = script_dir + '/' + energy_data_file_name
     energies = pd.read_csv(energy_data_file_name, index_col=0, comment='#')
@@ -199,15 +204,18 @@ def read_energy_data(energy_data_file_name):
     energies = energies.tolist()[0]
     return energies
 
-
+# Convierte la lista de energías de cada microestado en un histograma
+# representado por las listas Omega(E) (omegas) y E (energies)
 def microstate_energies_to_frequencies(microstate_energies):
+    # Se calculan los omegas y las energías usando la librería collections
     energy_omegas = dict(collections.Counter(microstate_energies))
+    # Se organizan las energías ascendentemente
     energy_omegas = sorted(energy_omegas.items(), key=lambda kv: kv[0])
     energy_omegas = np.array([list(item) for item in energy_omegas])
     energy_omegas = energy_omegas.transpose()
     energy_omegas = energy_omegas.tolist()
     # Todas las energías diferentes --> energies.
-    # Número de veces que se repite cada energía) --> omega.
+    # Número de veces que se repite cada energía) --> omegas.
     energies, omegas = np.array(energy_omegas[0]), np.array(energy_omegas[1])
     print('--------------------')
     print('Energies and omegas:')
@@ -215,7 +223,7 @@ def microstate_energies_to_frequencies(microstate_energies):
     print(pd.DataFrame({'E': energies, 'Omega(E)': np.array(omegas, dtype=int)}),'\n')
     return energies, omegas
 
-
+# Grafica un microestado dado
 def ising_microstate_plot(config ,show_plot=True, save_plot=False, plot_file_name=None):
     
     L = int(len(config)**0.5)
@@ -240,19 +248,23 @@ def ising_microstate_plot(config ,show_plot=True, save_plot=False, plot_file_nam
         plt.show()
     return
 
-
+# Grafica histograma de energías Omega(E) vs E
 def ising_energy_plot(microstate_energies, L, read_data=False, energy_data_file_name=None,
                       interpolate_energies=True, show_plot=True, save_plot=False,
                       plot_file_Name=None, normed=False, x_lim=[0, 0, 10, 20, 35, 55, 80],
                       y_label='$\Omega(E)$', legend_title=None):
     
+    # Lee datos de energías de todos los microestados de archivo de texto
     if read_data:
         if not energy_data_file_name:
             energy_data_file_name = 'ising-energy-data-L_%d.csv'%(L)
         microstate_energies = read_energy_data(energy_data_file_name)
     
+    # Pasa energías de microestados a histograma usando función definida en
+    # este módulo
     energies, omegas = microstate_energies_to_frequencies(microstate_energies)
     
+    # Si se quiere el histograma normado
     if normed:
         omegas = np.array(omegas)/len(microstate_energies)
 
@@ -260,8 +272,10 @@ def ising_energy_plot(microstate_energies, L, read_data=False, energy_data_file_
     E_max = max(energies)
     E_plot = np.linspace(E_min, E_max, 100)
     
+    # Se grafica el histograma y se guardan si se desea
     plt.plot()
-    plt.bar(energies, omegas, width=1, label='Histograma energías\nIsing $L\\times L = %d \\times %d$'%(L, L))
+    plt.bar(energies, omegas, width=1,
+            label='Histograma energías\nIsing $L\\times L = %d \\times %d$'%(L, L))
     if interpolate_energies:
         omega_interp = interp1d(energies, omegas, kind='cubic')
         plt.plot([0],[0])
@@ -286,7 +300,7 @@ def ising_energy_plot(microstate_energies, L, read_data=False, energy_data_file_
 
     return
 
-
+# Grafica las contribuciones a la función partición Omega(E)e^{-beta E} vs E
 def partition_func_stat_weights(microstate_energies, L, beta=4, beta_max=None, N_beta=None,
                                 read_data=False, energy_data_file_name=None,
                                 plot_histogram=False, show_plot=True, save_plot=False,
@@ -343,6 +357,10 @@ def energies_momenta(microstate_energies, L, n=1, beta_min=0.5, beta_max=None, N
                      read_data=False, energy_data_file_name=None):
     """
     Calcula el enésimo momento de la energía <E^n> en el ensamble canónico
+    
+    Se puede calcular para varios valores de beta especificando meta max y N_beta
+    Se puede calcular también para varios valores de n entregando una lista con 
+    los valores de n deseados.
     """
 
     Z_array, statistical_weights_array, beta_array, energies, omegas = \
@@ -375,26 +393,33 @@ def energies_momenta(microstate_energies, L, n=1, beta_min=0.5, beta_max=None, N
     else:
         return E_n_array, beta_array, Z_array, statistical_weights_array, energies, omegas
 
-
+# Aproximación para la función partición: equivalencia con ensamble canónico
 def approx_partition_func(microstate_energies_array=[None, None, None, None],
                           L_array=[ 2, 3, 4, 5], beta_min=0.00001, beta_max=2, N_beta=100,
                           read_data=False, energy_data_file_name=None, plot=True,
                           show_plot=True, save_plot=False, plot_file_Name=None,
                           **kwargs):
     
+    # Si se desea graficar
     if plot:
         plt.figure()
         ax = plt.gca()
     
+    # Se calcula la aproximación
     for i, L in enumerate(L_array):
+        # Se calcula el promedio de E, <E> para los valores de beta deseados.
         E_1_array, beta_array, Z_array, statistical_weights_array, energies, omegas = \
             energies_momenta(microstate_energies_array[i], L, 1, beta_min, beta_max,
                              N_beta, read_data, energy_data_file_name)
+        # Se hace interpolación para calcular Omega(<E>).
         omega_interp = interp1d(energies, omegas, kind='linear')
+        # Se realiza la aproximación explicitampente omega(<E>) e^{-beta<E>}
         Z_approx_array = omega_interp(E_1_array) * np.exp(-beta_array * np.array(E_1_array))
+        # Se grafica si se desea
         if plot:
             color = next(ax._get_lines.prop_cycler)['color']
-            plt.plot(beta_array, np.log(Z_array), label='$L\\times L = %d \\times %d$'%(L,L), color=color)
+            plt.plot(beta_array, np.log(Z_array),
+                     label='$L\\times L = %d \\times %d$'%(L,L), color=color)
             plt.plot(beta_array, np.log(Z_approx_array), '--', color=color)
     if plot:
         plt.xlabel('$\\beta$')
@@ -414,13 +439,14 @@ def approx_partition_func(microstate_energies_array=[None, None, None, None],
 
     return Z_array, Z_approx_array
 
-
+# Cálculo del calor específico por enumeración exacta
 def specific_heat_cv(microstate_energies, L, beta_min=0.1, beta_max=None, N_beta=50,
                      read_data=False, energy_data_file_name=None, **kwargs):
     
     N = L * L
     n = [1,2]
     
+    # Se calcula <E> y <E**2>
     energies_momenta_1_2, beta_array, *non_relevant = energies_momenta(microstate_energies, 
                                                         L, n, beta_min, beta_max, N_beta,
                                                         read_data, energy_data_file_name)
@@ -428,11 +454,12 @@ def specific_heat_cv(microstate_energies, L, beta_min=0.1, beta_max=None, N_beta
     avg_E = np.array(energies_momenta_1_2[0])
     avg_E_squared = np.array(energies_momenta_1_2[1])
     
+    # Se calcula explicitamente cv = beta**2 * (<E**2> - <E>**2) / N
     sepcific_heat = beta_array**2 * (avg_E_squared - avg_E**2) / N
 
     return sepcific_heat, beta_array
 
-
+# Se grafica calor específico para varios valores de L y en función de T
 def plot_specific_heat_cv(microstate_energies_array=[None, None, None], L_array=[2, 3, 4],
                           beta_min=0.1, beta_max=10, N_beta=50, read_data=False,
                           energy_data_file_name=None, show_plot=True, save_plot=False,
@@ -441,6 +468,7 @@ def plot_specific_heat_cv(microstate_energies_array=[None, None, None], L_array=
     cv_arrays = []
     T_arrays = []
     plt.figure()
+    # Se calcula cv(T) para diferentes valores de L y se grafican
     for i, L in enumerate(L_array):
         sepcific_heat, beta_array = specific_heat_cv(microstate_energies_array[i], L, beta_min,
                                                      beta_max, N_beta, read_data,
@@ -466,7 +494,7 @@ def plot_specific_heat_cv(microstate_energies_array=[None, None, None], L_array=
     if show_plot:
         plt.show()
     plt.close()
-
+    # Se guardan valores de cv en archivo CSV
     if save_cv_data:
         cv_data_file_name = script_dir + '/ising-specific-heat-parte-1.csv'
         relevant_info = ['L = ' + str(np.array(L_array))]
@@ -478,17 +506,25 @@ def plot_specific_heat_cv(microstate_energies_array=[None, None, None], L_array=
 
     return
 
-
+# Demostración de que la asimetría en Omega(E) vs E para L impares se debe a las
+# condiciones de frontera periódicas.
 def ising_odd_L_energy_asymmetry(L=3, show_plot=True, save_plot=False):
+    # Se calculan vecinos
     ngbr = ising_neighbours(L)
+    # Se calcula microestado de máxima energía 
     row = np.array([int((-1)**i) for i in range(L)])
     microstate_asymmetry_highest_E = \
         np.array([ row * int((-1)**i) for i in range(L) ]).flatten().tolist()
+    # Se calcula microestado de máxima energía
     microstate_asymmetry_lowest_E = [-1 for i in range(L*L)]
+    # Máxima energía para caso asimétrico
     print('E_highest = ', *ising_energy([microstate_asymmetry_highest_E], ngbr), '\n\n')
+    # Mínima energía para caso asimétrico
     print('E_lowest = ', *ising_energy([microstate_asymmetry_lowest_E], ngbr), '\n\n')
+    # Gráfica microestado máxima energía
     ising_microstate_plot(np.array(microstate_asymmetry_highest_E), show_plot, save_plot,
                           plot_file_name='ising-odd_asymmetry_highest_E-L_%d.pdf'%L)
+    # Gráfica microestado mínima energía
     ising_microstate_plot(np.array(microstate_asymmetry_lowest_E), show_plot, save_plot,
                           plot_file_name='ising-odd_asymmetry_lowest_E-L_%d.pdf'%L)
     return

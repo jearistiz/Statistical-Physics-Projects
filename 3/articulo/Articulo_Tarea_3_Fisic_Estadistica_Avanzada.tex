@@ -78,9 +78,9 @@
              %  but any date may be explicitly specified
 
 \begin{abstract}
-
+Presentamos en este artículo un estudio medianamente detallado del modelo de Ising 2-dimensional en retícula cuadrada de lado $L$ con condiciones de frontera periódicas. Introducimos el sistema en general y hacemos un estudio por enumeración exacta de los microestados del sistema hasta un tamaño $L \times L = 5 \times 5$. Estudiamos el fenómeno de transición de fase de segundo orden para estos sistemas de $L$ pequeños y evidenciamos la complejidad computacional de la enumeración exacta para este modelo. Con esto en mente, se realiza un muestreo inteligente de los microestados del sistema con la implementación del algoritmo Metrópolis para el modelo en cuestión, el cual permite subir el valor de $L$ hasta $128$. En el algoritmo metrópolis notamos la importancia de la termalización del sistema y logramos evidenciar de primera mano el comienzo de la formación de la discontinuidad en el calor específico $c_v$, lo cual es característica de una transición de fase de segundo orden. 
 \begin{description}
-\item[Palabras clave] 	.
+\item[Palabras clave] Modelo de Ising, conteo de microestados, ensamble canónico, calor específico,\\transición de fase, algoritmo metrópolis, termalización.
 \end{description}
 \end{abstract}
 
@@ -90,10 +90,6 @@
 
 %\tableofcontents
 \onecolumngrid
-
-
-	
-\section{Introducción\label{sec:intro}}
 
 \section{Consideraciones teóricas\label{sec:teoria-microestados}}
 
@@ -125,9 +121,9 @@
 			p_E = \frac{\Omega(E) e^{-\beta E}}{Z}. \label{eq:energy_prob}
 		\end{equation}
 
-	Cuando tenemos este sistema en el ensamble canónico y $L$ es lo suficientemente grande, se presenta una transición de fase de segundo orden caracterizada por una discontinuidad en la derivada del calor específico $c_v$ y se da a una temperatura crítica $T_c$. Cuando $L\rightarrow\infty$, se tiene $T_c = 2 / \log\left( 1 + \sqrt{2} \right) \approx 2.269$ [\hl{citaaaaa}].
+	Cuando tenemos este sistema en el ensamble canónico y $L$ es lo suficientemente grande, se presenta una transición de fase de segundo orden caracterizada por una discontinuidad en el calor específico $c_v$ y se da a una temperatura crítica $T_c$. Cuando $L\rightarrow\infty$, se tiene $T_c = 2 / \log\left( 1 + \sqrt{2} \right) \approx 2.269$ \cite{Huang}.
 
-	A pesar de que la escencia del modelo de Ising es muy sencilla, nos encontramos con un problema importante al estudiarlo (que se encuentra en gran parte de la física estadística), el cual es el conteo de microestados. El número de microestados del sistema 2-dimensional en rejilla cuadrada es $\Omega = 2^{L \times L}$. Para el caso $L=10$ esto es $\Omega \approx 10^30 $. El cálculo del total de éste número de microestados rebasa cualquier capacidad computacional disponible hasta el momento.
+	A pesar de que la escencia del modelo de Ising es muy sencilla, nos encontramos con un problema importante al estudiarlo (que se encuentra en gran parte de la física estadística), el cual es el conteo de microestados. El número de microestados del sistema 2-dimensional en rejilla cuadrada es $\Omega = 2^{L \times L}$. Para el caso $L=10$ esto es $\Omega \approx 10^{30} $. El cálculo del total de éste número de microestados rebasa cualquier capacidad computacional disponible hasta el momento.
 	Entre otras cosas, para darnos una idea de este problema, estudiaremos en las siguientes secciones el cálculo de los microestados por enumeración exacta.
 
 	\subsection{Microestados y contribuciones a la función partición\label{subsec:teoria-contribuciones-Z}}
@@ -136,7 +132,7 @@
 
 	\textit{Nota}: el código con el que se generaron las figuras se puede ver en el apéndice \ref{appx:microestados} y usa un módulo propio que escribimos, el cual contiene todas las funciones necesarias para generar las gráficas y para el cual se adjunta el link en el anexo en cuestión.
 
-	La figura \ref{fig:energy-omegas-3x3-4x4-5x5} muestra el histograma de $\Omega(E)$ para $L = 3, \,\,\,4, \,\,\,5$ con condiciones de frontera periódicas. Notamos que el caso $L=3$ es evidentemente asimétrico con respecto a la energía $E=0$, contrario al caso $L=4$ que es simétrico con respecto a la misma energía. El caso $L=5$ es aparentemente simétrico en el mismo sentido. Sin embargo, al calcular los valores de energía exactos encontramos que este caso es realmente asimétrico (por ejemplo, para la mínima energía $E=-50$ se tiene $Omega(-50)$, mientras que $\Omega(50)=0$). En general, se tiene que para $L$ impar, el histograma de $\Omega(E)$ es asimétrico y para $L$ par es simétrico. Sin embargo, para $L$ lo suficientemente grande, la asimetría del histograma en cuestión es mínima y se puede considerar como simétrico. Como veremos a continuación, se trata de un efecto de tamaño finito que es consecuencia de las condiciones de frontera periódicas. 
+	La figura \ref{fig:energy-omegas-3x3-4x4-5x5} muestra el histograma de $\Omega(E)$ para $L = 3, \,\,\,4, \,\,\,5$ con condiciones de frontera periódicas. Notamos que el caso $L=3$ es evidentemente asimétrico con respecto a la energía $E=0$, contrario al caso $L=4$ que es simétrico con respecto a la misma energía. El caso $L=5$ es aparentemente simétrico en el mismo sentido. Sin embargo, al calcular los valores de energía exactos encontramos que este caso es realmente asimétrico (por ejemplo, para la mínima energía $E=-50$ se tiene $\Omega(-50)$, mientras que $\Omega(50)=0$). En general, se tiene que para $L$ impar, el histograma de $\Omega(E)$ es asimétrico y para $L$ par es simétrico. Sin embargo, para $L$ lo suficientemente grande, la asimetría del histograma en cuestión es mínima y se puede considerar como simétrico. Como veremos a continuación, se trata de un efecto de tamaño finito que es consecuencia de las condiciones de frontera periódicas. 
 	
 		\begin{figure}[!ht]
 			\centering
@@ -162,16 +158,16 @@
 			\label{fig:energy-asymmetry-fbc-3x3}
 		\end{figure}
 
-	Por otro lado, sabemos que la función partición tiene gran importancia en la física estadística, ya que de ella se deduce la termodinámica del sistema. Notemos que las contribuciones de cada energía a la función partición, \textit{i.e.} $\Omega(E)e^{-\beta E}$ son proporcionales a la probabilidad $p_E$ definida en \ref{eq:energy_prob}. Conocerlas es básicamente conocer la probabilidad de que el sistema se encuentre en una energía $E$ dada.
-
-	En la figura \ref{fig:Z-contributions-L_3_5} mostramos dichas contribuciones por energías a la función partición $\Omega(E)e^{-\beta E} \propto p_E$. Arriba: $N = 3 \times 3$, abajo: $N = 5 \times 5$. Izquierda: $T=2000$, centro: $T=T_c \approx 2.45$ (temperatura crítica para valores pequeños de $L$), derecha: $T=1$. Para temperaturas muy altas, notamos, al comparar con la figura \ref{fig:energy-omegas-3x3-4x4-5x5} que los histogramas son casi idénticos. Esto es esperable ya que $T \gg 0 \implies \beta \ll 1 \implies \Omega(E) e^{-\beta E} \approx \Omega(E)$. Por otro lado, cuando $T \approx T_c$ se tiene que hay mayores contribuciones de energías pequeñas pero aún hay muchas energías que contribuyen al sistema y las contribuciones son mayores cuanto menor es $E$ es un límite intermedio entre bajas y altas temperaturas, de algún modo $T_c$ se convierte en una temperatura característica del sistema. Finalmente, el límite de bajas temperaturas es el esperado: prácticamente la única contribución es la del estado base.
-
 		\begin{figure}[!ht]
 			\centering
 			\includegraphics[width=0.9\linewidth]{{{figures/ising-Z_contributions-plots-L_3_5}}}
 			\caption{Contribuciones por energías a la función partición $\Omega(E)e^{-\beta E} \propto p_E$. Arriba: $N = 3 \times 3$, abajo: $N = 5 \times 5$. Izquierda: $T=2000$, centro: $T=T_c \approx 2.45$ (temperatura crítica para valores pequeños de $L$), derecha: $T=1$.}
 			\label{fig:Z-contributions-L_3_5}
 		\end{figure}
+
+	Por otro lado, sabemos que la función partición tiene gran importancia en la física estadística, ya que de ella se deduce la termodinámica del sistema. Notemos que las contribuciones de cada energía a la función partición, \textit{i.e.} $\Omega(E)e^{-\beta E}$ son proporcionales a la probabilidad $p_E$ definida en \ref{eq:energy_prob}. Conocerlas es básicamente conocer la probabilidad de que el sistema se encuentre en una energía $E$ dada.
+
+	En la figura \ref{fig:Z-contributions-L_3_5} mostramos dichas contribuciones por energías a la función partición $\Omega(E)e^{-\beta E} \propto p_E$. Arriba: $N = 3 \times 3$, abajo: $N = 5 \times 5$. Izquierda: $T=2000$, centro: $T=T_c \approx 2.45$ (temperatura crítica para valores pequeños de $L$), derecha: $T=1$. Para temperaturas muy altas, notamos, al comparar con la figura \ref{fig:energy-omegas-3x3-4x4-5x5} que los histogramas son casi idénticos. Esto es esperable ya que $T \gg 0 \implies \beta \ll 1 \implies \Omega(E) e^{-\beta E} \approx \Omega(E)$. Por otro lado, cuando $T \approx T_c$ se tiene que hay mayores contribuciones de energías pequeñas pero aún hay muchas energías que contribuyen al sistema y las contribuciones son mayores cuanto menor es $E$. Éste es es un límite intermedio entre bajas y altas temperaturas, de algún modo $T_c$ se convierte en una temperatura característica del sistema. Finalmente, el límite de bajas temperaturas es el esperado: prácticamente la única contribución es la del estado base.
 
 	\subsection{Equivalencia entre ensambles microcanónico y macrocanónico\label{subsec:teoria-equivalencia-micro}}
 	Usualmente encontramos en los textos de física estadística que en el caso del límite termodinámico hay una equivalencia entre los ensambles canónico y microcanónico, que se puede escribir en la forma
@@ -185,7 +181,7 @@
 		\begin{figure}[!ht]
 			\centering
 			\includegraphics[width=0.6\linewidth]{{{figures/ising-Z_approx-plot-L_2_3_4_5}}}
-			\caption{En líneas punteadas se muestra $\log Z_\mathrm{appx}$ calculado con el método descrito en el artículo y en líneas continuas $\log Z$ calculado directamente por enumeración exacta. Ésto muestra la equivalencia. Esto muestra la equivalencia a bajas temperaturas entre ensambles microcanónico y macrocanónico en el caso de bajo valor $L$, expresada por la ecuación \ref{eq:equiv-micro-macro}.}
+			\caption{En líneas punteadas se muestra $\log Z_\mathrm{appx}$ calculado con el método descrito en el artículo y en líneas continuas $\log Z$ calculado directamente por enumeración exacta. Ésto muestra la equivalencia. Esto muestra la equivalencia a bajas temperaturas entre ensambles microcanónico y macrocanónico en el caso de bajo valor $L$, expresada por la ecuación ()\ref{eq:equiv-micro-macro}).}
 			\label{fig:micro-macro-equivalence}
 		\end{figure}
 
@@ -201,9 +197,7 @@
 		\end{equation}
 	
 	
-	De los cálculos en las secciones anteriores tenemos todos los elementos para calcular este calor específico para $L = 2,\,\,\, 3,\,\,\, 4,\,\,\, 5$.
-	
-	La figura \ref{fig:specific-heat} muestra dichos valores en función de la temperatura, T. Como nos encontramos aún en valores relativamente bajos de $L$, no se presenta una discontinuidad evidente en el calor específico. Sin embargo, conforme se aumenta $L$, notamos que el pico de $c_v$ se va haciendo más puntiagudo. Para valores más altos de $L$, como se verá en la sección \ref{sec:metropolis}, el pico se convierte en el punto de discontinuidad, demostrando así una transición de fase de segundo orden, para la cual, en el límite $L\rightarrow\infty$, la temperatura crítica es $T_c = 2/\log(1 + \sqrt{2})$. En las gráficas se muestran los valores $T_c$ para cada $L$, asociados a los picos de las gráficas.
+	De los cálculos en las secciones anteriores tenemos todos los elementos para calcular este calor específico para $L = 2,\,\,\, 3,\,\,\, 4,\,\,\, 5$. La figura \ref{fig:specific-heat} muestra dichos valores en función de la temperatura, T. Como nos encontramos aún en valores relativamente bajos de $L$, no se presenta una discontinuidad evidente en el calor específico. Sin embargo, conforme se aumenta $L$, notamos que el pico de $c_v$ se va haciendo más puntiagudo. Para valores más altos de $L$, como se verá en la sección \ref{sec:metropolis}, el pico se convierte en el punto de discontinuidad, demostrando así una transición de fase de segundo orden, para la cual, en el límite $L\rightarrow\infty$, la temperatura crítica es $T_c = 2/\log(1 + \sqrt{2})$. En las gráficas se muestran los valores $T_c$ para cada $L$, asociados a los picos de las gráficas.
 
 		\begin{figure}[!ht]
 			\centering
@@ -236,18 +230,14 @@ En trabajos anteriores ya hemos estudiado el algoritmo Metrópolis, el cual cons
 	
 	El resto del módulo \mintinline{python}{ising2d_metropolis} está bien explicado en los comentarios del mismo.
 
-	Hay que anotar enfáticamente que en las implementaciones del algoritmo metrópolis se usó la librería Numba que permite un tipo de compilación de los programas denominado JIT (\textit{Just In Time Compilation}). Sin el uso de esta librería, no hubiese sido posible el cálculo tan preciso de las datos usados en las gráficas acá presentadas, ya que los tiempos de cómputo al usar este tipo de compilación permiten ganancias en la optimización de los tiempos de cómputo hasta en 100 veces \cite{10.1145/2833157.2833162}.
+	Hay que anotar enfáticamente que en las implementaciones del algoritmo metrópolis se usó la librería Numba que permite un tipo de compilación de los programas denominado JIT (\textit{Just In Time Compilation}). Sin el uso de esta librería, no hubiese sido posible el cálculo tan preciso de las datos usados para generar las gráficas acá presentadas, ya que los tiempos de cómputo al usar este tipo de compilación permiten ganancias en la optimización de los tiempos de cómputo hasta en 100 veces \cite{10.1145/2833157.2833162}.
 
 		\inputminted[linenos,breaklines]{python}{ising2d-metropolis-z-retazo.py}
 
 
-	\subsection{Termalización del sistema usando el algoritmo\label{subsec:metropolis-termalizacion}}
+	\subsection{Importancia de la termalización del sistema al usar el algoritmo Metrópolis\label{subsec:metropolis-termalizacion}}
 
 	Como se dijo en la sección anterior, se espera que en la primera parte del algoritmo (en los primeros \mintinline{python}{N_transient} pasos) el sistema se termalice. Como estamos en el ensamble canónico, la termalización del sistema está caracterizada por la energía promedio del sistema $\langle E \rangle / N$. Cuando esta cantidad se mantenga aproximadamente constante con el cambio del número de iteraciones, podemos asegurar que el sistema se habrá termalizado.
-	
-	Para entender mejor lo anterior, en la figura \ref{fig:thermalization-energy} se muestra $\langle E \rangle / N$ en función del número de iteraciones \mintinline{python}{N_steps}. Como en este caso estamos interesados en ver direectamente la termalización, se escoge \mintinline{python}{N_transient} igual a cero. En la izquierda se muestra la termalización para el caso $N = 6 \times 6$, en el cual se puede hacer la comparación de $\langle E \rangle / N$ para diferentes teperaturas por enumeración exacta, ya que en el enunciado de la parte 1 se dio el histograma $\Omega(E)$ para este caso y eso basta para calcular $\langle E \rangle / N$. En dicha figura se muestran los valores para cada temperatura y notamos que la termalización se da en escalas diferentes, dependiendo de la temperatura. Así, para temperaturas altas, el sistema se termaliza mucho más rápido que para temperaturas bajas, pero esto es más evidente en sistemas con $L$ más grande. Es interesante notar que los límites están bien definidos. Para temperaturas bajas, el sistema tiende a estados ferromagnéticos que implican  $\langle E \rangle / N \approx 2$, mientras que para temperaturas altas el sistema se termaliza en $\langle E \rangle / N$ cada vez más cercano a cero, como se espera, según los histogramas de $\Omega(E)$ y $e^{-\beta E}\Omega(E)$ mostrados en la sección \ref{subsec:teoria-contribuciones-Z}.
-	
-	En el centro de la figura \ref{fig:thermalization-energy} encontramos la termalización para $L=32$ y diferentes temperaturas. Notamos que en general la termalización demora más que para el caso anterior ($N = 6 \times 6$). Esto es esperable, ya que el número de configuraciones posibles en este caso ($\Omega = 2^{32 \times 32}$ !!!) es muchísimo mayor que el número de configuraciones en el caso anterior, por lo cual, el sistema debe pasar primero por muchos más estados antes de llegar al equilibrio. Sucede de forma similar con el caso $N=64 \times 64$, el cual necesita muchas más iteraciones para llegar al equilibrio. 
 
 	\begin{figure}[!ht]
 		\centering
@@ -255,6 +245,10 @@ En trabajos anteriores ya hemos estudiado el algoritmo Metrópolis, el cual cons
 		\caption{Visualización gráfica del paso al equilibrio en el algoritmo Metrópolis para el modelo de Ising en el ensamble canónico, medido por el paso al equilibrio de la energía promedio del sistema. Izquierda: $N=6 \times 6$. Centro: $N=32 \times 32$. Derecha: $N=64 \times 64$.}
 		\label{fig:thermalization-energy}
 	\end{figure}
+
+	Para entender mejor lo anterior, en la figura \ref{fig:thermalization-energy} se muestra $\langle E \rangle / N$ en función del número de iteraciones \mintinline{python}{N_steps}. Como en este caso estamos interesados en ver direectamente la termalización, se escoge \mintinline{python}{N_transient} igual a cero. En la izquierda se muestra la termalización para el caso $N = 6 \times 6$, en el cual se puede hacer la comparación de $\langle E \rangle / N$ para diferentes teperaturas por enumeración exacta, ya que en el enunciado de la parte 1 se dio el histograma $\Omega(E)$ para este caso y eso basta para calcular $\langle E \rangle / N$. En dicha figura se muestran los valores para cada temperatura y notamos que la termalización se da en escalas diferentes, dependiendo de la temperatura. Así, para temperaturas altas, el sistema se termaliza mucho más rápido que para temperaturas bajas, pero esto es más evidente en sistemas con $L$ más grande. Es interesante notar que los límites están bien definidos. Para temperaturas bajas, el sistema tiende a estados ferromagnéticos que implican  $\langle E \rangle / N \approx -2$, mientras que para temperaturas altas el sistema se termaliza en $\langle E \rangle / N$ cada vez más cercano a cero, como se espera, según los histogramas de $\Omega(E)$ y $e^{-\beta E}\Omega(E)$ mostrados en la sección \ref{subsec:teoria-contribuciones-Z}.
+	
+	En el centro de la figura \ref{fig:thermalization-energy} encontramos la termalización para $L=32$ y diferentes temperaturas. Notamos que en general la termalización demora más que para el caso anterior ($N = 6 \times 6$). Esto es esperable, ya que el número de configuraciones posibles en este caso ($\Omega = 2^{32 \times 32}$ !!!) es muchísimo mayor que el número de configuraciones en el caso anterior, por lo cual, el sistema debe pasar primero por muchos más estados antes de llegar al equilibrio. Sucede de forma similar con el caso $N=64 \times 64$, el cual necesita muchas más iteraciones para llegar al equilibrio. \linebreak
 	
 	Para ilustrar un poco mejor el tema de la termalización, en la figura \ref{fig:thermalization-configs} mostramos los microestados por los cuales pasa el sistema de $N=128 \times 128$ en el principio del transiente ($\mathrm{N_{steps}}=10^3$), en medio del transiente ($\mathrm{N_{steps}}=10^5$) y cuando el sistema ya está termalizado ($\mathrm{N_{steps}}=10^8$), todo para temperatura baja $T=1$ y, como queremos ver explícitamente la termalización, se usó $\mathrm{N_{transient}}=0$. Vemos que el sistema pasa de una configuración prácticamente aleatoria ($\langle E \rangle / N \approx 0$), luego una configuración con pequeños parches con dominio ferromagnético ($\langle E \rangle / N \approx -1$) y finalmente a una configuración casi completamente ferromagnética donde ($\langle E \rangle / N \approx -2$), estos valores se deducen aproximadamente a partir de la figura \ref{fig:thermalization-energy} (derecha) que muestra la termalización para el caso más cercano al $N = 128 \times 128$ que se pudo obtener.
 
@@ -276,13 +270,13 @@ En trabajos anteriores ya hemos estudiado el algoritmo Metrópolis, el cual cons
 		\label{fig:final-thermalized-microstates-different-temperatures}
 	\end{figure}
 
-	Para $T=1$ encontramos un sistema con dos grandes dominios ferromagnéticos, esta configuración es estable a bajas temperaturas para sistemas con $L$ grande, ya que el aumento en la energía debido a los bordes entre los dos diferentes dominios ferromagnéticos aumentan poco la energía del sistema \textit{i.e} $\delta E>0$ de los bordes es mucho menor a la energía de un sistema con un solo dominio ferromagnético $E_min=-2L^2<0$. Cuanto más baja sea la temperatura, este tipo de microestados con dos grandes dominios ferromagnéticos serán menos probables y en cambio serán mucho más probables microestados con un solo dominio ferromagnético (todos los espines $1$ o todos $-1$).
+	Para $T=1$ encontramos un sistema con dos grandes dominios ferromagnéticos, esta configuración es estable a bajas temperaturas para sistemas con $L$ grande, ya que el aumento en la energía debido a los bordes entre los dos diferentes dominios ferromagnéticos aumentan poco la energía del sistema \textit{i.e} $\delta E>0$ de los bordes es mucho menor a la energía de un sistema con un solo dominio ferromagnético $E_\mathrm{min}=-2L^2<0$. Cuanto más baja sea la temperatura, este tipo de microestados con dos grandes dominios ferromagnéticos serán menos probables y en cambio serán mucho más probables microestados con un solo dominio ferromagnético (todos los espines $1$ o todos $-1$).
 
-	El caso $T=2.5$ es más cercano a la temperatura crítica del sistema con $L$ infinito. Aquí observamos que hay pequeños pero muchos más dominios ferromagnéticos (pequeños parches blancos o negros), que corresponden con un sistema típico de temperatura que no es muy alta ni muy baja. 
+	El caso $T=2.5$ es más cercano a la temperatura crítica del sistema con $L$ infinito. Aquí observamos que hay pequeños pero muchos más dominios ferromagnéticos (pequeños parches blancos o negros), que corresponden con un sistema típico de temperatura que no es muy alta ni muy baja.
 
-	Finalmente, el caso de alta temperatura, $T=10$ es casi completamente aleatorio, aunque aún se notan algunos dominios ferromagnéticos son casi imperceptibles. Este es un microestado típico de alta temperatura, donde todos los microestados son casi igualmente probables y en el que predominan energías promedio $\langle E \rangle / N$ cercanas a cero, como se puede ver en la figura \ref{fig:thermalization-energy} (derecha). 
+	Finalmente, el caso de alta temperatura, $T=10$ es casi completamente aleatorio, aunque aún se notan algunos dominios ferromagnéticos son casi imperceptibles. Este es un microestado típico de alta temperatura, donde todos los microestados son casi igualmente probables y en el que predominan energías promedio $\langle E \rangle / N$ cercanas a cero, como se puede ver en la figura \ref{fig:thermalization-energy} (derecha). \linebreak
 
-	Un caso interesante de estudio son las configuraciones típicas de un sistema relativamente grande a temperatura cercana a la temperatura crítica. Para entender qué sucede en este caso, en la figura \ref{fig:final-critical-temp-128x128} se muestran tres configuraciones típicas para el sistema $L=128$ a tempreatura $T_c \approx 2.27$. Encontramos que a esta temperatura hay grandes dominios ferromagnéticos que ya están prácticamente formados pero contienen ``ruido" en su interior, es decir, grandes regiones blancas o negras que en su interior contienen esporádicamente el color (espín) contrario. Esta es la manifestación del cambio de fase de segundo orden, de la cual ya hablamos en la sección \ref{subsec:teoria-calor-especifico}. Para temperaturas menores a la temperatura crítica esperamos obtener menos ruido en esos dominios ferromagnéticos bien formados, paulatinamente hasta llegar a un estado totalmente ferromagnético en el límite $T \rightarrow 0$. Para temperaturas más altas, esperamos tener estados un poco más aleatorios con dominios ferromagnéticos cada vez menos evidentes. 
+	Un caso interesante de estudio son las configuraciones típicas de un sistema relativamente grande a temperatura cercana a la temperatura crítica. Para entender qué sucede en este caso, en la figura \ref{fig:final-critical-temp-128x128} se muestran tres configuraciones típicas para el sistema $L=128$ a tempreatura $T_c \approx 2.27$. Encontramos que a esta temperatura hay grandes dominios ferromagnéticos que ya están prácticamente formados pero contienen ``ruido'' en su interior, es decir, grandes regiones blancas o negras que en su interior contienen esporádicamente el color (espín) contrario. Esta es la manifestación del cambio de fase de segundo orden, de la cual ya hablamos en la sección \ref{subsec:teoria-calor-especifico}. Para temperaturas menores a la temperatura crítica esperamos obtener menos ruido en esos dominios ferromagnéticos bien formados, paulatinamente hasta llegar a un estado totalmente ferromagnético en el límite $T \rightarrow 0$. Para temperaturas más altas, esperamos tener estados un poco más aleatorios con dominios ferromagnéticos cada vez menos evidentes. 
 
 	\begin{figure}[!ht]
 		\centering
@@ -294,14 +288,14 @@ En trabajos anteriores ya hemos estudiado el algoritmo Metrópolis, el cual cons
 	\subsection{Calor específico\label{subsec:metropolis-cv}}
 	Para finalizar nuestros análisis, presentamos en la figura \ref{fig:metropolis-cv} el calor específico calculado para varios valores de $L$, hasta $L=64$. En primer lugar hay que mencionar que obtener esta gráfica no sería posible de manera sencilla por enumeración exacta ya que el número de microestados $\Omega = 2^{64 \times 64}$ es un número casi inconmesurable que sobrepasa cualquier capacidad computacional. En cambio, mediante un muestreo inteligente con el algoritmo metrópolis es posible obtenerla. En los casos $L = 2,\text{ }3,\text{ }4\text{ y }5$ se muestra para comparación y en línea negra punteada los resultados obtenidos por enumeración exacta. Notamos que el algoritmo metrópolis logra capturar estas curvas con gran precisión.
 
-	Para valores más grandes de $L$ no es posible obtener la curva ya que no se tiene acceso a la ennumeración exacta de los microestados. Sin embargo, notamos que las curvas para estos valores son continuas y presentan pocas fluctuaciones, lo cual da un buen presagio para la exactitud del método. 
+	Para valores más grandes de $L$ no es posible obtener la curva `teórica' ya que no se tiene acceso a la ennumeración exacta de los microestados. Sin embargo, notamos que las curvas para estos valores son continuas y presentan pocas fluctuaciones, lo cual da un buen presagio para la exactitud del método. 
 
 	Encontramos también evidente que el pico de las gráficas se hace cada vez más puntiagudo, conforme aumenta $L$, lo cual evidencia una transición de fase de segundo orden, según se comentó ya en la sección \ref{subsec:teoria-calor-especifico}.
 
 	\begin{figure}[!ht]
 		\centering
 		\includegraphics[width=0.6\linewidth]{{{figures/ising-metropolis-specific_heat-plot-L_2_3_4_5_8_16_32_64-N_steps_factor_80000}}}
-		\caption{Calor específico en función de la temperatura para varios tamaños $L$ del sistema calculados con el algoritmo metrópolis. Se nota que cuanto mayor es $L$, la discontinuidad en el pico es más evidente, característica propia de una transición de fase de segundo orden. Los parámetros usados fueron $\mathrm{N_{steps}}= 80000 L \times L$, $\mathrm{N_{transient}}= 0.7 \mathrm{N_{steps}}$ y se graficaron 100 datos de $c_v$ para valores entre $T=1$ y $T=5$. El tiempo de cómputo fue de $12000 \mathrm{s}$.}
+		\caption{Calor específico en función de la temperatura para varios tamaños $L$ del sistema calculados con el algoritmo metrópolis. Se nota que cuanto mayor es $L$, la discontinuidad en la derivada del pico es más evidente, característica propia de una transición de fase de segundo orden. Los parámetros usados fueron $\mathrm{N_{steps}}= 80000 L \times L$, $\mathrm{N_{transient}}= 0.7 \mathrm{N_{steps}}$ y se graficaron 100 datos de $c_v$ para valores entre $T=1$ y $T=5$. El tiempo de cómputo fue de $12000 \mathrm{s}$.}
 		\label{fig:metropolis-cv}
 	\end{figure}
 
@@ -311,9 +305,11 @@ En trabajos anteriores ya hemos estudiado el algoritmo Metrópolis, el cual cons
 
 El modelo de Ising es un sistema con una gran riqueza conceptual, debido a la sencillez de su planteamiento y a la gran cantidad de información que podemos obtener de él. Esto lo pudimos observar alrededor de todo el artículo. 
 
-La sencillez del modelo  
+La sencillez de su planteamiento no se traduce en sencillez de cómputo, pues como se vio en la primera sección, éste es un sistema en el cual el número de microestados crece muy rápidamente conforme $L$ crece. Sin embargo, para valores pequeños de L fue posible evidenciar características como la asimetría en los histogramas de $\Omega(E)$ para $L$ impar, que lo asociamos a un efecto de tamaño finito debido a las condiciones de frontera periódicas usadas. Pudimos también evidenciar en esta parte que las contribuciones a la función partición son mayores para estados menos energéticos conforme disminuimos la temperatura del sistema, tal y como se espera. Además, encontramos que para temperaturas bajas, a pesar de que $L$ fuese bajo, hay una equivalencia entre los ensambles micro y macrocanónico. En lo que a esto concierne se podría investigar a futuro, con el método Metrópolis si para sistemas con $L$ grande esta equivalencia la podemos evidenciar para cualquier temperatura. Finalmente, para estos sistemas de $L$ pequeño pudimos calcular por enumeración exacta y usando el teorema de fluctuación-disipación las curvas $c_v(T)$ en las que se comienza a dar indicio de la transición de fase de segundo orden, que es mucho más evidente para sistemas con $L$ grande, tal y como se mostró en la sección del algoritmo metrópolis. Evidenciamos también en esta parte que el tiempo computacional para sistemas levemente mayores $L=8$ el tiempo computacional desborda las capacidades de un computador `sencillo'.
 
-Las implementaciones de los algoritmos usados en este trabajo son suficientemente generales y se podrían adaptar con cierta facilidad a otros sistemas de interés que sean objeto de estudio.
+Dadas las limitaciones del método de enumeración exacta, nos vimos en la necesidad de acudir a una técnica de muestreo inteligente para poder obtener información de sistemas más grandes (hasta $N=128 \times 128$): el algoritmo Metrópolis nos permitió reproducir gran cantidad de la información obtenida para sistemas pequeños pero para sistemas mucho más grandes. Encontramos que uno de los aspectos más delicados es lograr termalizar el sistema, de manera que los datos obtenidos mediante el algoritmo sean fidedignos. Pudios evidenciar en esta parte configuraciones típicas de microestados a diferentes temperaturas y para diferentes tamaños, encontrando que para temperaturas bajas los sistemas tienden a dominios casi completamente ferromagnéticos, en la temperatura crítica existen pocos y grandes dominios ferromagnéticos con `ruido' que son característicos de la transición de fase y en temperaturas altas, los microestados tienden a ser muy aleatorios. Finalmente pudimos evidenciar mucho mejor la transición de fase de segundo orden como una (casi) discontinuidad en la curva $c_v$ para sistemas con $L$ grande (en nuestro caso logramos llegar hasta $L=64$ y fue suficiente para notar el inicio de la formación de unadiscontinuidad, recordemos que la discontinuidad como tal se nota para $L\rightarrow\infty$).
+
+Es de recalcar que para la parte del algoritmo Metrópolis, el cálculo computacional necesario para obtener las gráficas no hubiese sido posible sin el uso de la librería Numba, como se mencionó en la sección \ref{subsec:metropolis-algoritmo}.
 
 \section*{Agradecimientos}
 Agradezco a mis compañeros de clase con los que tuve discusiones que ayudaron en la implementación del algoritmo y en las conclusiones presentadas.
@@ -329,21 +325,20 @@ Agradezco a mis compañeros de clase con los que tuve discusiones que ayudaron e
 
 \appendix
 
-\begin{widetext}
 
 \section{Código 1: enumeración exacta de microestados\label{appx:microestados}}
 
 A continuación se muestra el código . Éste código está disponible en \href{https://github.com/jearistiz/Statistical-Physics-Projects/blob/master/2/matrix_squaring.py}{este link}
 
-%\inputminted[linenos,breaklines]{python}{code_1.py}
+\inputminted[linenos,breaklines]{python}{code_1.py}
 
-\section{Código 2: Algoritmo Montecarlo\label{appx:montecarlo}}
+\section{Código 2: algoritmo Montecarlo\label{appx:montecarlo}}
 
 A continuación se muestra el código que está disponible en \href{https://github.com/jearistiz/Statistical-Physics-Projects/blob/master/2/path_integral_naive_sampling.py}{este link}.
 
-%\inputminted[linenos,breaklines]{python}{code_2.py}
+\inputminted[linenos,breaklines]{python}{code_2.py}
 
-\end{widetext}
+
 
 
 \end{document}

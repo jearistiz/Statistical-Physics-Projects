@@ -35,9 +35,11 @@ plt.rcParams.update({'font.size':15,'text.latex.unicode':True})
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
 
-
+# Algoritmo para calcular microestados
 if run_microstates_algorithm:
+    # Tamaño del sistema
     L = 2
+    # Decide si pone condiciones de frontera libres
     free_boundary_conditions = False
     energy_plot_kwargs = {
                           'microstate_energies': None,
@@ -58,11 +60,13 @@ if run_microstates_algorithm:
     print('Grid: L x L = %d x %d'%(L, L))
     print('--------------------------------------------')
 
-
+    # Calcula los microestados del sistema solo si read_data=False.
     if not energy_plot_kwargs['read_data']:
         
+        # Genera todos los microestados posibles 
         microstates = ising_microstates(L)
         
+        # Calcula los vecinos
         neighbours = ising_neighbours_free(L) if free_boundary_conditions \
                                             else ising_neighbours(L)
         
@@ -72,6 +76,7 @@ if run_microstates_algorithm:
                                 save_data = not free_boundary_conditions)
         t_1 = time()
         comp_time = t_1-t_0
+        # Imprime log del algoritmo
         print('--------------------------------------------------------\n'
             + 'Explicit energies:  L = %d --> computation time = %.3f \n'%(L,comp_time)
             + '--------------------------------------------------------\n')
@@ -87,6 +92,7 @@ if run_microstates_algorithm:
                         ),
               '\n')
 
+    # Grafica histograma de energías \Omega(E)
     ising_energy_plot(**energy_plot_kwargs)
 
     microstate_rand = np.random.choice([-1,1], L*L)
@@ -94,10 +100,13 @@ if run_microstates_algorithm:
     print('One random microstate as a 2D grid:')
     print('-----------------------------------')
     print(pd.DataFrame(microstate_rand.reshape((L,L))), '\n')
+
+    # Grafica un microestado aleatorio
     ising_microstate_plot(microstate_rand, save_plot=True)
 
 
-
+# Algoritmo para calcular contribuciones a la función partición: 
+# Omega(E)*e^{-beta E}, que es proporcional a p_E
 if run_Z_contributions_algorithm:
     print('--------------------------------------')
     print('--------------------------------------')
@@ -120,7 +129,8 @@ if run_Z_contributions_algorithm:
     Z_array, statistical_weights_array, beta_array, energies, omegas = \
         partition_func_stat_weights(**kwargs)
 
-
+# Algoritmo de aproximación de la función partición: equivalencia con ensamble
+# microcanónico
 if run_Z_approx_algorithm:
     print('--------------------------------------')
     print('--------------------------------------')
@@ -128,7 +138,7 @@ if run_Z_approx_algorithm:
     print('--------------------------------------')
     approx_partition_func(read_data=True, save_plot=True)
 
-
+# Algoritmo para graficar calor específico
 if run_specific_heat_algorithm:
     print('--------------------------------------')
     print('--------------------------------------')
@@ -150,7 +160,8 @@ if run_specific_heat_algorithm:
 
     plot_specific_heat_cv(**kwargs)
 
-
+# Algoritmo para mostrar que la asimetría en histograma de Omega para L impar 
+# se debe a las condiciones de frontera periódicas
 if run_odd_asymmetry:
     print('--------------------------------------')
     print('--------------------------------------')

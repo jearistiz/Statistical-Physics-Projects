@@ -1,0 +1,269 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{from} \PYG{n+nn}{ising2d\PYGZus{}metropolis} \PYG{k+kn}{import} \PYG{o}{*}
+
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}}
+\PYG{c+c1}{\PYGZsh{} PANEL DE CONTROL}
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}}
+
+\PYG{c+c1}{\PYGZsh{} Decide si corre algoritmo para calcular microestados de energía}
+\PYG{n}{run\PYGZus{}metropolis\PYGZus{}energies\PYGZus{}algorithm} \PYG{o}{=} \PYG{n+nb+bp}{False}
+
+\PYG{c+c1}{\PYGZsh{} Decide si corre algoritmo que muestra la termalización}
+\PYG{n}{run\PYGZus{}thermalization\PYGZus{}algorithm} \PYG{o}{=} \PYG{n+nb+bp}{False}
+
+\PYG{c+c1}{\PYGZsh{} Decide si corre algoritmo de calor específico}
+\PYG{n}{run\PYGZus{}specific\PYGZus{}heat\PYGZus{}algorithm} \PYG{o}{=} \PYG{n+nb+bp}{True}
+
+
+
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}}
+\PYG{c+c1}{\PYGZsh{} PARÁMETROS GENERALES PARA LAS FIGURAS}
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}}
+
+\PYG{c+c1}{\PYGZsh{} Usar latex en texto de figuras y agrandar tamaño de fuente}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rc}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}text\PYGZsq{}}\PYG{p}{,} \PYG{n}{usetex}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{)} 
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{o}{.}\PYG{n}{update}\PYG{p}{(\PYGZob{}}\PYG{l+s+s1}{\PYGZsq{}font.size\PYGZsq{}}\PYG{p}{:}\PYG{l+m+mi}{15}\PYG{p}{,}\PYG{l+s+s1}{\PYGZsq{}text.latex.unicode\PYGZsq{}}\PYG{p}{:}\PYG{n+nb+bp}{True}\PYG{p}{\PYGZcb{})}
+
+
+
+\PYG{c+c1}{\PYGZsh{} Muestreo de energías usando algoritmo Metrópolis}
+\PYG{k}{if} \PYG{n}{run\PYGZus{}metropolis\PYGZus{}energies\PYGZus{}algorithm}\PYG{p}{:}
+    
+    \PYG{c+c1}{\PYGZsh{} Decide si lee o guarda datos y asigna nombres a los archivos}
+    \PYG{n}{read\PYGZus{}ini\PYGZus{}microstate\PYGZus{}data} \PYG{o}{=} \PYG{n+nb+bp}{False}
+    \PYG{n}{save\PYGZus{}final\PYGZus{}microstate\PYGZus{}data} \PYG{o}{=} \PYG{n+nb+bp}{True}
+    \PYG{n}{microstate\PYGZus{}data\PYGZus{}file\PYGZus{}name} \PYG{o}{=} \PYG{n+nb+bp}{None}
+    \PYG{n}{save\PYGZus{}energy\PYGZus{}data} \PYG{o}{=} \PYG{n+nb+bp}{False}
+    \PYG{n}{energy\PYGZus{}data\PYGZus{}file\PYGZus{}name} \PYG{o}{=} \PYG{n+nb+bp}{None}
+
+    \PYG{c+c1}{\PYGZsh{} Muestra parámetros y tiempo de cómputo}
+    \PYG{n}{print\PYGZus{}log} \PYG{o}{=} \PYG{n+nb+bp}{True}
+
+    \PYG{c+c1}{\PYGZsh{} Decide si grafica microestado final}
+    \PYG{n}{plot\PYGZus{}microstate} \PYG{o}{=} \PYG{n+nb+bp}{True}
+    \PYG{c+c1}{\PYGZsh{} Parámetros para figura de microestado}
+    \PYG{n}{show\PYGZus{}microstate\PYGZus{}plot} \PYG{o}{=} \PYG{n+nb+bp}{True}
+    \PYG{n}{save\PYGZus{}microstate\PYGZus{}plot} \PYG{o}{=} \PYG{n+nb+bp}{True}
+    \PYG{n}{microstate\PYGZus{}plot\PYGZus{}file\PYGZus{}name} \PYG{o}{=} \PYG{n+nb+bp}{None}
+
+    \PYG{c+c1}{\PYGZsh{} Parámeros del algoritmo metrópolis para calcular energías}
+    \PYG{n}{T} \PYG{o}{=} \PYG{l+m+mf}{2.27}
+    \PYG{n}{beta} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{o}{/}\PYG{n}{T}
+    \PYG{n}{L} \PYG{o}{=} \PYG{l+m+mi}{128}
+    \PYG{c+c1}{\PYGZsh{} Como se está usando numba, en microstate siempre hay que }
+    \PYG{c+c1}{\PYGZsh{} entregar el siguiente array con dtype=np.int64}
+    \PYG{n}{microstate} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{ones}\PYG{p}{(}\PYG{n}{L} \PYG{o}{*} \PYG{n}{L}\PYG{p}{,} \PYG{n}{dtype}\PYG{o}{=}\PYG{n}{np}\PYG{o}{.}\PYG{n}{int64}\PYG{p}{)}
+    \PYG{n}{J} \PYG{o}{=} \PYG{l+m+mi}{1}
+    \PYG{n}{N\PYGZus{}steps} \PYG{o}{=} \PYG{n+nb}{int}\PYG{p}{(}\PYG{l+m+mf}{1e8}\PYG{p}{)}  \PYG{c+c1}{\PYGZsh{} int(L * L * 10000)}
+    \PYG{n}{N\PYGZus{}transient} \PYG{o}{=} \PYG{l+m+mi}{0}     \PYG{c+c1}{\PYGZsh{} int( N\PYGZus{}steps)}
+
+    \PYG{c+c1}{\PYGZsh{} Asigna nombre a archivo con datos de microestado inicial/final}
+    \PYG{k}{if} \PYG{n}{read\PYGZus{}ini\PYGZus{}microstate\PYGZus{}data} \PYG{o+ow}{or} \PYG{n}{save\PYGZus{}final\PYGZus{}microstate\PYGZus{}data}\PYG{p}{:}
+        \PYG{k}{if} \PYG{o+ow}{not} \PYG{n}{microstate\PYGZus{}data\PYGZus{}file\PYGZus{}name}\PYG{p}{:}
+            \PYG{n}{microstate\PYGZus{}data\PYGZus{}file\PYGZus{}name} \PYG{o}{=} \PYGZbs{}
+                \PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}ising\PYGZhy{}metropolis\PYGZhy{}final\PYGZhy{}config\PYGZhy{}L\PYGZus{}}\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{\PYGZhy{}temp\PYGZus{}}\PYG{l+s+si}{\PYGZpc{}.3f}\PYG{l+s+s1}{\PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{p}{(}\PYG{n}{L}\PYG{p}{,} \PYG{n}{T}\PYG{p}{)}
+                 \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}N\PYGZus{}steps\PYGZus{}}\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{\PYGZhy{}N\PYGZus{}transient\PYGZus{}}\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{.csv\PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{p}{(}\PYG{n}{N\PYGZus{}steps}\PYG{p}{,} \PYG{n}{N\PYGZus{}transient}\PYG{p}{))}
+        \PYG{n}{microstate\PYGZus{}data\PYGZus{}file\PYGZus{}name} \PYG{o}{=} \PYG{n}{script\PYGZus{}dir} \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{}/\PYGZsq{}} \PYG{o}{+} \PYG{n}{microstate\PYGZus{}data\PYGZus{}file\PYGZus{}name}
+        \PYG{k}{if} \PYG{n}{read\PYGZus{}ini\PYGZus{}microstate\PYGZus{}data}\PYG{p}{:}
+            \PYG{n}{microstate} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}csv}\PYG{p}{(}\PYG{n}{microstate\PYGZus{}data\PYGZus{}file\PYGZus{}name}\PYG{p}{,} \PYG{n}{index\PYGZus{}col}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{comment}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZsh{}\PYGZsq{}}\PYG{p}{)}
+            \PYG{n}{microstate} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{(}\PYG{n}{microstate}\PYG{o}{.}\PYG{n}{to\PYGZus{}numpy}\PYG{p}{()}\PYG{o}{.}\PYG{n}{transpose}\PYG{p}{()[}\PYG{l+m+mi}{0}\PYG{p}{],} \PYG{n}{dtype}\PYG{o}{=}\PYG{n}{np}\PYG{o}{.}\PYG{n}{int64}\PYG{p}{)}
+    
+    \PYG{n}{metropolis\PYGZus{}args} \PYG{o}{=} \PYG{p}{(}\PYG{n}{microstate}\PYG{p}{,} \PYG{n}{read\PYGZus{}ini\PYGZus{}microstate\PYGZus{}data}\PYG{p}{,}
+                       \PYG{n}{L}\PYG{p}{,} \PYG{n}{beta}\PYG{p}{,} \PYG{n}{J}\PYG{p}{,} \PYG{n}{N\PYGZus{}steps}\PYG{p}{,} \PYG{n}{N\PYGZus{}transient}\PYG{p}{)}
+    
+
+    \PYG{c+c1}{\PYGZsh{} Decide si grafica histograma de energías}
+    \PYG{c+c1}{\PYGZsh{} (contribuciones proporcionales al factor de boltzmann  Omega(E) * e**(\PYGZhy{}beta E) / Z(beta))}
+    \PYG{n}{plot\PYGZus{}energy\PYGZus{}hist} \PYG{o}{=} \PYG{n+nb+bp}{False}
+    \PYG{c+c1}{\PYGZsh{} Parámetros para graficar histograma de energías.}
+    \PYG{n}{energy\PYGZus{}hist\PYGZus{}plot\PYGZus{}file\PYGZus{}name} \PYG{o}{=} \PYGZbs{}
+        \PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}ising\PYGZhy{}metropolis\PYGZhy{}Z\PYGZus{}contributions\PYGZhy{}plot\PYGZhy{}L\PYGZus{}\PYGZsq{}}
+         \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{\PYGZhy{}temp\PYGZus{}}\PYG{l+s+si}{\PYGZpc{}.3f}\PYG{l+s+s1}{\PYGZhy{}N\PYGZus{}steps\PYGZus{}}\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{\PYGZhy{}N\PYGZus{}transient\PYGZus{}}\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{.pdf\PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{p}{(}\PYG{n}{L}\PYG{p}{,} \PYG{n}{T}\PYG{p}{,} \PYG{n}{N\PYGZus{}steps}\PYG{p}{,} \PYG{n}{N\PYGZus{}transient}\PYG{p}{))}
+    \PYG{n}{energy\PYGZus{}plot\PYGZus{}kwargs} \PYG{o}{=} \PYG{p}{\PYGZob{}}
+                        \PYG{l+s+s1}{\PYGZsq{}microstate\PYGZus{}energies\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{None}\PYG{p}{,}
+                        \PYG{l+s+s1}{\PYGZsq{}L\PYGZsq{}}\PYG{p}{:} \PYG{n}{L}\PYG{p}{,}
+                        \PYG{l+s+s1}{\PYGZsq{}read\PYGZus{}data\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{False}\PYG{p}{,}
+                        \PYG{l+s+s1}{\PYGZsq{}energy\PYGZus{}data\PYGZus{}file\PYGZus{}name\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{None}\PYG{p}{,}
+                        \PYG{l+s+s1}{\PYGZsq{}interpolate\PYGZus{}energies\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{False}\PYG{p}{,}
+                        \PYG{l+s+s1}{\PYGZsq{}show\PYGZus{}plot\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{True}\PYG{p}{,}
+                        \PYG{l+s+s1}{\PYGZsq{}save\PYGZus{}plot\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{True}\PYG{p}{,}
+                        \PYG{l+s+s1}{\PYGZsq{}normed\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{True}\PYG{p}{,}
+                        \PYG{l+s+s1}{\PYGZsq{}plot\PYGZus{}file\PYGZus{}Name\PYGZsq{}}\PYG{p}{:} \PYG{n}{energy\PYGZus{}hist\PYGZus{}plot\PYGZus{}file\PYGZus{}name}\PYG{p}{,}
+                        \PYG{l+s+s1}{\PYGZsq{}x\PYGZus{}lim\PYGZsq{}}\PYG{p}{:} \PYG{n+nb+bp}{None}\PYG{p}{,}
+                        \PYG{l+s+s1}{\PYGZsq{}y\PYGZus{}label\PYGZsq{}}\PYG{p}{:} \PYG{l+s+s1}{\PYGZsq{}\PYGZdl{}\PYGZbs{}Omega(E) e\PYGZca{}\PYGZob{}\PYGZhy{}}\PYG{l+s+se}{\PYGZbs{}\PYGZbs{}}\PYG{l+s+s1}{beta E\PYGZcb{}/Z(}\PYG{l+s+se}{\PYGZbs{}\PYGZbs{}}\PYG{l+s+s1}{beta)\PYGZdl{}\PYGZsq{}}\PYG{p}{,}
+                        \PYG{l+s+s1}{\PYGZsq{}legend\PYGZus{}title\PYGZsq{}}\PYG{p}{:} \PYG{l+s+s1}{\PYGZsq{}Metrópolis. \PYGZdl{}T=}\PYG{l+s+si}{\PYGZpc{}.3f}\PYG{l+s+s1}{\PYGZdl{}\PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{n}{T}\PYG{p}{,}
+                        \PYG{p}{\PYGZcb{}}
+
+    \PYG{c+c1}{\PYGZsh{} Corre algoritmo metrópolis con parámetros dados e imprime tiempo de cómputo}
+    \PYG{n}{t\PYGZus{}0} \PYG{o}{=} \PYG{n}{time}\PYG{p}{()}
+    \PYG{n}{energies}\PYG{p}{,} \PYG{n}{microstate}\PYG{p}{,} \PYG{n}{avg\PYGZus{}energy\PYGZus{}per\PYGZus{}spin} \PYG{o}{=} \PYG{n}{ising\PYGZus{}metropolis\PYGZus{}energies}\PYG{p}{(}\PYG{o}{*}\PYG{n}{metropolis\PYGZus{}args}\PYG{p}{)}
+    \PYG{n}{t\PYGZus{}1} \PYG{o}{=} \PYG{n}{time}\PYG{p}{()}
+
+    \PYG{c+c1}{\PYGZsh{} Imprime información relevante}
+    \PYG{k}{if} \PYG{n}{print\PYGZus{}log}\PYG{p}{:}
+        \PYG{n}{comp\PYGZus{}time} \PYG{o}{=} \PYG{n}{t\PYGZus{}1} \PYG{o}{\PYGZhy{}} \PYG{n}{t\PYGZus{}0}
+        \PYG{n}{print\PYGZus{}params} \PYG{o}{=} \PYG{p}{(}\PYG{n}{L}\PYG{p}{,} \PYG{n}{T}\PYG{p}{,} \PYG{n}{N\PYGZus{}steps}\PYG{p}{,} \PYG{n}{N\PYGZus{}transient}\PYG{p}{)}
+        \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZsq{}}
+            \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{}Ising 2D Metropolis:}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZsq{}}
+            \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{}L = }\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{,  T = }\PYG{l+s+si}{\PYGZpc{}.3f}\PYG{l+s+s1}{,  N\PYGZus{}steps = }\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{,  N\PYGZus{}transient = }\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{n}{print\PYGZus{}params}
+            \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{}\PYGZlt{}E\PYGZgt{}/N = }\PYG{l+s+si}{\PYGZpc{}.4f}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{n}{avg\PYGZus{}energy\PYGZus{}per\PYGZus{}spin}
+            \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZgt{} computation time = }\PYG{l+s+si}{\PYGZpc{}.3f}\PYG{l+s+s1}{ }\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{n}{comp\PYGZus{}time}
+            \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+
+    \PYG{c+c1}{\PYGZsh{} Guarda datos de energías muestreadas o microestado final en archivo CSV}
+    \PYG{k}{if} \PYG{n}{save\PYGZus{}energy\PYGZus{}data}\PYG{p}{:}
+        \PYG{k}{if} \PYG{o+ow}{not} \PYG{n}{energy\PYGZus{}data\PYGZus{}file\PYGZus{}name}\PYG{p}{:}
+            \PYG{n}{energy\PYGZus{}data\PYGZus{}file\PYGZus{}name} \PYG{o}{=} \PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}ising\PYGZhy{}metropolis\PYGZhy{}energy\PYGZhy{}data\PYGZhy{}L\PYGZus{}}\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{\PYGZhy{}temp\PYGZus{}}\PYG{l+s+si}{\PYGZpc{}.3f}\PYG{l+s+s1}{\PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{p}{(}\PYG{n}{L}\PYG{p}{,} \PYG{n}{T}\PYG{p}{)}
+                                     \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}N\PYGZus{}steps\PYGZus{}}\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{\PYGZhy{}N\PYGZus{}transient\PYGZus{}}\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{.csv\PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{p}{(}\PYG{n}{N\PYGZus{}steps}\PYG{p}{,} \PYG{n}{N\PYGZus{}transient}\PYG{p}{))}
+        \PYG{n}{energy\PYGZus{}data\PYGZus{}file\PYGZus{}name} \PYG{o}{=} \PYG{n}{script\PYGZus{}dir} \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{}/\PYGZsq{}} \PYG{o}{+} \PYG{n}{energy\PYGZus{}data\PYGZus{}file\PYGZus{}name}
+        \PYG{n}{relevant\PYGZus{}info} \PYG{o}{=} \PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}2D Ising ENERGIES, metropolis algorithm: L=}\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{   T=}\PYG{l+s+si}{\PYGZpc{}.4f}\PYG{l+s+s1}{\PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{p}{(}\PYG{n}{L}\PYG{p}{,} \PYG{n}{T}\PYG{p}{)}
+                         \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{}   N\PYGZus{}steps=}\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{   N\PYGZus{}transient=}\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{\PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{p}{(}\PYG{n}{N\PYGZus{}steps}\PYG{p}{,} \PYG{n}{N\PYGZus{}transient}\PYG{p}{)]}
+        \PYG{n}{headers} \PYG{o}{=} \PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}energy\PYGZsq{}}\PYG{p}{]}
+        \PYG{n}{save\PYGZus{}csv}\PYG{p}{(}\PYG{n}{energies}\PYG{p}{,} \PYG{n}{data\PYGZus{}headers}\PYG{o}{=}\PYG{n}{headers}\PYG{p}{,} \PYG{n}{file\PYGZus{}name}\PYG{o}{=}\PYG{n}{energy\PYGZus{}data\PYGZus{}file\PYGZus{}name}\PYG{p}{,} 
+                 \PYG{n}{relevant\PYGZus{}info}\PYG{o}{=}\PYG{n}{relevant\PYGZus{}info}\PYG{p}{,} \PYG{n}{print\PYGZus{}data}\PYG{o}{=}\PYG{n+nb+bp}{False}\PYG{p}{)}
+    \PYG{k}{if} \PYG{n}{save\PYGZus{}final\PYGZus{}microstate\PYGZus{}data}\PYG{p}{:}
+        \PYG{n}{relevant\PYGZus{}info} \PYG{o}{=} \PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}2D Ising FINAL MICROSTATE, metropolis algorithm: L=}\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{  \PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{p}{(}\PYG{n}{L}\PYG{p}{)}
+                         \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{}T=}\PYG{l+s+si}{\PYGZpc{}.4f}\PYG{l+s+s1}{  N\PYGZus{}steps=}\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{  N\PYGZus{}transient=}\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{\PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{p}{(}\PYG{n}{T}\PYG{p}{,} \PYG{n}{N\PYGZus{}steps}\PYG{p}{,} \PYG{n}{N\PYGZus{}transient}\PYG{p}{)]}
+        \PYG{n}{headers} \PYG{o}{=} \PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}spin\PYGZsq{}}\PYG{p}{]}
+        \PYG{n}{save\PYGZus{}csv}\PYG{p}{(}\PYG{n}{microstate}\PYG{p}{,} \PYG{n}{data\PYGZus{}headers}\PYG{o}{=}\PYG{n}{headers}\PYG{p}{,} \PYG{n}{file\PYGZus{}name}\PYG{o}{=}\PYG{n}{microstate\PYGZus{}data\PYGZus{}file\PYGZus{}name}\PYG{p}{,}
+                 \PYG{n}{relevant\PYGZus{}info}\PYG{o}{=}\PYG{n}{relevant\PYGZus{}info}\PYG{p}{,} \PYG{n}{print\PYGZus{}data}\PYG{o}{=}\PYG{n+nb+bp}{False}\PYG{p}{)}
+
+    \PYG{c+c1}{\PYGZsh{} Grafica microestado final. }
+    \PYG{k}{if} \PYG{n}{plot\PYGZus{}microstate}\PYG{p}{:}
+        \PYG{n}{mstate\PYGZus{}plot\PYGZus{}args} \PYG{o}{=} \PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{(}\PYG{n}{microstate}\PYG{p}{),} \PYG{n}{L}\PYG{p}{,} \PYG{n}{beta}\PYG{p}{,} \PYG{n}{J}\PYG{p}{,} \PYG{n}{N\PYGZus{}steps}\PYG{p}{,} \PYG{n}{N\PYGZus{}transient}\PYG{p}{,}
+                            \PYG{n}{show\PYGZus{}microstate\PYGZus{}plot}\PYG{p}{,} \PYG{n}{save\PYGZus{}microstate\PYGZus{}plot}\PYG{p}{,} \PYG{n}{microstate\PYGZus{}plot\PYGZus{}file\PYGZus{}name}\PYG{p}{)}
+        \PYG{n}{ising\PYGZus{}metropolis\PYGZus{}microstate\PYGZus{}plot}\PYG{p}{(}\PYG{o}{*}\PYG{n}{mstate\PYGZus{}plot\PYGZus{}args}\PYG{p}{)}
+
+    \PYG{k}{if} \PYG{n}{plot\PYGZus{}energy\PYGZus{}hist}\PYG{p}{:}
+        \PYG{n}{energy\PYGZus{}plot\PYGZus{}kwargs}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}microstate\PYGZus{}energies\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{(}\PYG{n}{energies}\PYG{p}{)}
+        \PYG{n}{ising\PYGZus{}energy\PYGZus{}plot}\PYG{p}{(}\PYG{o}{**}\PYG{n}{energy\PYGZus{}plot\PYGZus{}kwargs}\PYG{p}{)}
+    
+    \PYG{k}{del} \PYG{n}{energies}
+
+
+\PYG{c+c1}{\PYGZsh{} Algoritmo de termalización}
+\PYG{k}{if} \PYG{n}{run\PYGZus{}thermalization\PYGZus{}algorithm}\PYG{p}{:}
+
+    \PYG{c+c1}{\PYGZsh{} Decide si imprime info del algoritmo}
+    \PYG{n}{print\PYGZus{}log} \PYG{o}{=} \PYG{n+nb+bp}{True}
+
+    \PYG{c+c1}{\PYGZsh{} Parámetros de algoritmo de termalización}
+    \PYG{n}{beta} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{([}\PYG{l+m+mi}{1} \PYG{o}{/}\PYG{l+m+mf}{10.}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{o}{/}\PYG{l+m+mf}{3.}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{o}{/}\PYG{l+m+mf}{2.}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{o}{/}\PYG{l+m+mf}{1.}\PYG{p}{])}
+    \PYG{n}{L} \PYG{o}{=} \PYG{l+m+mi}{2}
+    \PYG{n}{microstates\PYGZus{}ini} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{ones}\PYG{p}{(} \PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{beta}\PYG{p}{),} \PYG{n}{L} \PYG{o}{*} \PYG{n}{L}\PYG{p}{),} \PYG{n}{dtype}\PYG{o}{=}\PYG{n}{np}\PYG{o}{.}\PYG{n}{int64}\PYG{p}{)}
+    \PYG{n}{read\PYGZus{}ini\PYGZus{}microstate\PYGZus{}data} \PYG{o}{=} \PYG{n+nb+bp}{False}
+    \PYG{n}{J} \PYG{o}{=} \PYG{l+m+mi}{1}
+    \PYG{n}{N\PYGZus{}steps} \PYG{o}{=} \PYG{n+nb}{int}\PYG{p}{(}\PYG{n}{L} \PYG{o}{*} \PYG{n}{L} \PYG{o}{*} \PYG{l+m+mf}{1e4}\PYG{p}{)}
+    \PYG{n}{N\PYGZus{}transient} \PYG{o}{=} \PYG{l+m+mi}{0}
+
+    \PYG{n}{thermalization\PYGZus{}args} \PYG{o}{=} \PYGZbs{}
+        \PYG{p}{(}\PYG{n}{microstates\PYGZus{}ini}\PYG{p}{,} \PYG{n}{read\PYGZus{}ini\PYGZus{}microstate\PYGZus{}data}\PYG{p}{,} \PYG{n}{L}\PYG{p}{,} \PYG{n}{beta}\PYG{p}{,} \PYG{n}{J}\PYG{p}{,} \PYG{n}{N\PYGZus{}steps}\PYG{p}{,} \PYG{n}{N\PYGZus{}transient}\PYG{p}{)}
+
+    \PYG{c+c1}{\PYGZsh{} Corre algoritmo de termalización}
+    \PYG{n}{t\PYGZus{}0} \PYG{o}{=} \PYG{n}{time}\PYG{p}{()}
+    \PYG{n}{avg\PYGZus{}energy\PYGZus{}per\PYGZus{}spin\PYGZus{}array}\PYG{p}{,} \PYG{n}{beta}\PYG{p}{,} \PYG{o}{*}\PYG{n}{dont\PYGZus{}need} \PYG{o}{=} \PYG{n}{thermalization\PYGZus{}demo}\PYG{p}{(}\PYG{o}{*}\PYG{n}{thermalization\PYGZus{}args}\PYG{p}{)}
+    \PYG{n}{t\PYGZus{}1} \PYG{o}{=} \PYG{n}{time}\PYG{p}{()}
+    
+    \PYG{k}{if} \PYG{n}{print\PYGZus{}log}\PYG{p}{:}
+        \PYG{n}{comp\PYGZus{}time} \PYG{o}{=} \PYG{n}{t\PYGZus{}1} \PYG{o}{\PYGZhy{}} \PYG{n}{t\PYGZus{}0}
+        \PYG{n}{print\PYGZus{}params} \PYG{o}{=} \PYG{p}{(}\PYG{n}{L}\PYG{p}{,} \PYG{n}{N\PYGZus{}steps}\PYG{p}{,} \PYG{n}{N\PYGZus{}transient}\PYG{p}{)}
+        \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZsq{}}
+            \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{}Ising 2D Metropolis thermalization:}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZsq{}}
+            \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{}T = \PYGZsq{}} \PYG{o}{+} \PYG{n+nb}{str}\PYG{p}{(}\PYG{n+nb}{list}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{o}{/}\PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{(}\PYG{n}{beta}\PYG{p}{)))} \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZsq{}}
+            \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{}L = }\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{,  N\PYGZus{}steps = }\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{,  N\PYGZus{}transient = }\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{n}{print\PYGZus{}params}
+            \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{}\PYGZlt{}E\PYGZgt{}/N = \PYGZsq{}} \PYG{o}{+} \PYG{n+nb}{str}\PYG{p}{([}\PYG{n}{E\PYGZus{}over\PYGZus{}N}\PYG{p}{[}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{]} \PYG{k}{for} \PYG{n}{E\PYGZus{}over\PYGZus{}N} \PYG{o+ow}{in} \PYG{n}{avg\PYGZus{}energy\PYGZus{}per\PYGZus{}spin\PYGZus{}array}\PYG{p}{])} \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZsq{}}
+            \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZgt{} computation time = }\PYG{l+s+si}{\PYGZpc{}.3f}\PYG{l+s+s1}{ }\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{n}{comp\PYGZus{}time}
+            \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+    
+    \PYG{c+c1}{\PYGZsh{} Parámetros de figura de termalización}
+    \PYG{n}{thermaization\PYGZus{}data\PYGZus{}file\PYGZus{}name} \PYG{o}{=} \PYG{n+nb+bp}{None}
+    \PYG{n}{show\PYGZus{}plot} \PYG{o}{=} \PYG{n+nb+bp}{True}
+    \PYG{n}{save\PYGZus{}plot} \PYG{o}{=} \PYG{n+nb+bp}{True}
+    \PYG{n}{plot\PYGZus{}file\PYGZus{}Name} \PYG{o}{=} \PYG{n+nb+bp}{None}
+
+    \PYG{n}{thermalization\PYGZus{}plot\PYGZus{}args} \PYG{o}{=} \PYG{p}{(}\PYG{n}{avg\PYGZus{}energy\PYGZus{}per\PYGZus{}spin\PYGZus{}array}\PYG{p}{,} \PYG{n}{beta}\PYG{p}{,} \PYG{n}{L}\PYG{p}{,} \PYG{n}{J}\PYG{p}{,} \PYG{n}{N\PYGZus{}steps}\PYG{p}{,}
+                                \PYG{n}{N\PYGZus{}transient}\PYG{p}{,} \PYG{n}{thermaization\PYGZus{}data\PYGZus{}file\PYGZus{}name}\PYG{p}{,} \PYG{n}{show\PYGZus{}plot}\PYG{p}{,}
+                                \PYG{n}{save\PYGZus{}plot}\PYG{p}{,} \PYG{n}{plot\PYGZus{}file\PYGZus{}Name}\PYG{p}{)}
+
+    \PYG{n}{plot\PYGZus{}thermalization\PYGZus{}demo}\PYG{p}{(}\PYG{o}{*}\PYG{n}{thermalization\PYGZus{}plot\PYGZus{}args}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Algoritmo de calor específico}
+\PYG{k}{if} \PYG{n}{run\PYGZus{}specific\PYGZus{}heat\PYGZus{}algorithm}\PYG{p}{:}
+    
+    \PYG{c+c1}{\PYGZsh{} Si read\PYGZus{}cv\PYGZus{}data=True, el algoritmo no corre, sino que se leen los datos de un archivo.}
+    \PYG{n}{read\PYGZus{}cv\PYGZus{}data} \PYG{o}{=} \PYG{n+nb+bp}{True}
+    \PYG{n}{save\PYGZus{}cv\PYGZus{}data} \PYG{o}{=} \PYG{n+nb+bp}{True}
+    \PYG{n}{cv\PYGZus{}data\PYGZus{}file\PYGZus{}name} \PYG{o}{=} \PYG{n+nb+bp}{None}
+
+
+    \PYG{c+c1}{\PYGZsh{} Decide si imprime info del algoritmo}
+    \PYG{n}{print\PYGZus{}log} \PYG{o}{=} \PYG{n+nb+bp}{True}
+    \PYG{c+c1}{\PYGZsh{} Parámetros del algoritmo}
+    \PYG{n}{L\PYGZus{}array} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{([}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{,} \PYG{l+m+mi}{4}\PYG{p}{,} \PYG{l+m+mi}{5}\PYG{p}{,} \PYG{l+m+mi}{8}\PYG{p}{,} \PYG{l+m+mi}{16}\PYG{p}{,} \PYG{l+m+mi}{32}\PYG{p}{,} \PYG{l+m+mi}{64}\PYG{p}{])}
+    \PYG{n}{N\PYGZus{}steps\PYGZus{}factor} \PYG{o}{=} \PYG{n+nb}{int}\PYG{p}{(}\PYG{l+m+mf}{8e4}\PYG{p}{)}
+    \PYG{n}{N\PYGZus{}transient\PYGZus{}factor} \PYG{o}{=} \PYG{l+m+mf}{0.7}
+    \PYG{n}{J} \PYG{o}{=} \PYG{l+m+mi}{1}
+    \PYG{n}{T\PYGZus{}min} \PYG{o}{=} \PYG{l+m+mf}{1.0}
+    \PYG{n}{T\PYGZus{}max} \PYG{o}{=} \PYG{l+m+mf}{5.0}
+    \PYG{n}{N\PYGZus{}temp} \PYG{o}{=} \PYG{l+m+mi}{100}
+
+    \PYG{n}{several\PYGZus{}cv\PYGZus{}args} \PYG{o}{=} \PYG{p}{(}\PYG{n}{L\PYGZus{}array}\PYG{p}{,} \PYG{n}{N\PYGZus{}steps\PYGZus{}factor}\PYG{p}{,} \PYG{n}{N\PYGZus{}transient\PYGZus{}factor}\PYG{p}{,}
+                       \PYG{n}{J}\PYG{p}{,} \PYG{n}{T\PYGZus{}min}\PYG{p}{,} \PYG{n}{T\PYGZus{}max}\PYG{p}{,} \PYG{n}{N\PYGZus{}temp}\PYG{p}{)}
+
+    \PYG{c+c1}{\PYGZsh{} Corre el algoritmo}
+    \PYG{n}{t\PYGZus{}0} \PYG{o}{=} \PYG{n}{time}\PYG{p}{()}
+    \PYG{k}{if} \PYG{o+ow}{not} \PYG{n}{read\PYGZus{}cv\PYGZus{}data}\PYG{p}{:}
+        \PYG{n}{cv\PYGZus{}arrays}\PYG{p}{,} \PYG{n}{T\PYGZus{}arrays}\PYG{p}{,} \PYG{n}{L\PYGZus{}array}\PYG{p}{,} \PYG{n}{N\PYGZus{}steps\PYGZus{}factor} \PYG{o}{=} \PYGZbs{}
+                                     \PYG{n}{several\PYGZus{}specific\PYGZus{}heats}\PYG{p}{(}\PYG{o}{*}\PYG{n}{several\PYGZus{}cv\PYGZus{}args}\PYG{p}{)}
+    \PYG{k}{else}\PYG{p}{:} 
+        \PYG{n}{cv\PYGZus{}arrays}\PYG{p}{,} \PYG{n}{T\PYGZus{}arrays} \PYG{o}{=} \PYG{n+nb+bp}{None}\PYG{p}{,} \PYG{n+nb+bp}{None}
+    \PYG{n}{t\PYGZus{}1} \PYG{o}{=} \PYG{n}{time}\PYG{p}{()}
+    
+    \PYG{c+c1}{\PYGZsh{} Imprime info del algoritmo}
+    \PYG{k}{if} \PYG{n}{print\PYGZus{}log} \PYG{o+ow}{or} \PYG{n}{save\PYGZus{}energy\PYGZus{}data}\PYG{p}{:}
+        \PYG{n}{comp\PYGZus{}time} \PYG{o}{=} \PYG{n}{t\PYGZus{}1} \PYG{o}{\PYGZhy{}} \PYG{n}{t\PYGZus{}0}
+        \PYG{n}{line0} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZsq{}}
+        \PYG{n}{line1} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}Ising 2D Metropolis specific heat (cv) plot:\PYGZsq{}}
+        \PYG{n}{line2} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}T\PYGZus{}min = }\PYG{l+s+si}{\PYGZpc{}.3f}\PYG{l+s+s1}{,  T\PYGZus{}max = }\PYG{l+s+si}{\PYGZpc{}.3f}\PYG{l+s+s1}{,  N\PYGZus{}temp = }\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{\PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{p}{(}\PYG{n}{T\PYGZus{}min}\PYG{p}{,} \PYG{n}{T\PYGZus{}max}\PYG{p}{,} \PYG{n}{N\PYGZus{}temp}\PYG{p}{)}
+        \PYG{n}{line3} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}L = \PYGZsq{}} \PYG{o}{+} \PYG{n+nb}{str}\PYG{p}{(}\PYG{n+nb}{list}\PYG{p}{(}\PYG{n}{L\PYGZus{}array}\PYG{p}{))}
+        \PYG{n}{line4} \PYG{o}{=} \PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}N\PYGZus{}steps\PYGZus{}factor = }\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{ \PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{n}{N\PYGZus{}steps\PYGZus{}factor}
+                 \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{}(N\PYGZus{}steps = L*L*N\PYGZus{}steps\PYGZus{}factor, \PYGZsq{}}
+                 \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{}N\PYGZus{}transient = }\PYG{l+s+si}{\PYGZpc{}.2f}\PYG{l+s+s1}{ N\PYGZus{}steps)\PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{n}{N\PYGZus{}transient\PYGZus{}factor}\PYG{p}{)}
+        \PYG{n}{line5} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZgt{} computation time = }\PYG{l+s+si}{\PYGZpc{}.3f}\PYG{l+s+s1}{\PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{n}{comp\PYGZus{}time}
+        \PYG{k}{if} \PYG{n}{print\PYGZus{}log} \PYG{o+ow}{and} \PYG{o+ow}{not} \PYG{n}{read\PYGZus{}cv\PYGZus{}data}\PYG{p}{:}
+            \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZsq{}} \PYG{o}{+} \PYG{n}{line0} \PYG{o}{+} \PYG{n}{line1} \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZsq{}} \PYG{o}{+} \PYG{n}{line2} \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZsq{}} \PYG{o}{+} \PYG{n}{line3} \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZsq{}} \PYG{o}{+} \PYG{n}{line4} \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZsq{}}
+                  \PYG{o}{+} \PYG{n}{line5} \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZsq{}} \PYG{o}{+} \PYG{n}{line0}\PYG{p}{)}
+        \PYG{k}{if} \PYG{n}{print\PYGZus{}log} \PYG{o+ow}{and} \PYG{n}{read\PYGZus{}cv\PYGZus{}data}\PYG{p}{:}
+            \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Los datos se leyeron de un archivo, no se generaron en este momento.\PYGZsq{}}\PYG{p}{)}
+
+    \PYG{c+c1}{\PYGZsh{} Guarda datos de energías muestreadas o microestado final en archivo CSV}
+    \PYG{k}{if} \PYG{n}{save\PYGZus{}cv\PYGZus{}data} \PYG{o+ow}{and} \PYG{o+ow}{not} \PYG{n}{read\PYGZus{}cv\PYGZus{}data}\PYG{p}{:}
+        \PYG{k}{if} \PYG{o+ow}{not} \PYG{n}{cv\PYGZus{}data\PYGZus{}file\PYGZus{}name}\PYG{p}{:}
+            \PYG{n}{L\PYGZus{}string} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}\PYGZus{}\PYGZsq{}}\PYG{o}{.}\PYG{n}{join}\PYG{p}{([}\PYG{n+nb}{str}\PYG{p}{(}\PYG{n}{L}\PYG{p}{)} \PYG{k}{for} \PYG{n}{L} \PYG{o+ow}{in} \PYG{n}{L\PYGZus{}array}\PYG{p}{])}
+            \PYG{n}{cv\PYGZus{}data\PYGZus{}file\PYGZus{}name} \PYG{o}{=} \PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}ising\PYGZhy{}metropolis\PYGZhy{}specific\PYGZus{}heat\PYGZhy{}plot\PYGZhy{}L\PYGZus{}\PYGZsq{}} \PYG{o}{+} \PYG{n}{L\PYGZus{}string}
+                \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}N\PYGZus{}steps\PYGZus{}factor\PYGZus{}}\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{\PYGZhy{}N\PYGZus{}transient\PYGZus{}factor\PYGZus{}}\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{\PYGZhy{}T\PYGZus{}min\PYGZus{}}\PYG{l+s+si}{\PYGZpc{}.3f}\PYG{l+s+s1}{\PYGZhy{}T\PYGZus{}max\PYGZus{}}\PYG{l+s+si}{\PYGZpc{}.3f}\PYG{l+s+s1}{\PYGZhy{}N\PYGZus{}temp\PYGZus{}}\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{.csv\PYGZsq{}}
+                \PYG{o}{\PYGZpc{}} \PYG{p}{(}\PYG{n}{N\PYGZus{}steps\PYGZus{}factor}\PYG{p}{,} \PYG{n}{N\PYGZus{}transient\PYGZus{}factor}\PYG{p}{,} \PYG{n}{T\PYGZus{}min}\PYG{p}{,} \PYG{n}{T\PYGZus{}max}\PYG{p}{,} \PYG{n}{N\PYGZus{}temp}\PYG{p}{))}
+        \PYG{n}{cv\PYGZus{}data\PYGZus{}file\PYGZus{}name} \PYG{o}{=} \PYG{n}{script\PYGZus{}dir} \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{}/\PYGZsq{}} \PYG{o}{+} \PYG{n}{cv\PYGZus{}data\PYGZus{}file\PYGZus{}name}
+        \PYG{n}{relevant\PYGZus{}info} \PYG{o}{=} \PYG{p}{[}\PYG{n}{line1}\PYG{p}{,} \PYG{n}{line2} \PYG{p}{,} \PYG{n}{line3}\PYG{p}{,} \PYG{n}{line4}\PYG{p}{,} \PYG{n}{line5}\PYG{p}{]}
+        \PYG{n}{headers} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{([} \PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Temperature\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}cv (L=}\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{)\PYGZsq{}}\PYG{o}{\PYGZpc{}}\PYG{n}{L}\PYG{p}{]} \PYG{k}{for} \PYG{n}{L} \PYG{o+ow}{in} \PYG{n}{L\PYGZus{}array}\PYG{p}{])}\PYG{o}{.}\PYG{n}{flatten}\PYG{p}{()}
+        \PYG{n}{shape} \PYG{o}{=} \PYG{p}{(}\PYG{l+m+mi}{2}\PYG{o}{*}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{L\PYGZus{}array}\PYG{p}{),} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{cv\PYGZus{}arrays}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]))}
+        \PYG{n}{cv\PYGZus{}data} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{([[}\PYG{n}{T}\PYG{p}{,} \PYG{n}{cv\PYGZus{}arrays}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]]} \PYG{k}{for} \PYG{n}{i}\PYG{p}{,} \PYG{n}{T} \PYG{o+ow}{in} \PYG{n+nb}{enumerate}\PYG{p}{(}\PYG{n}{T\PYGZus{}arrays}\PYG{p}{)])}\PYG{o}{.}\PYG{n}{reshape}\PYG{p}{(}\PYG{n}{shape}\PYG{p}{)}
+        \PYG{n}{save\PYGZus{}csv}\PYG{p}{(}\PYG{n}{cv\PYGZus{}data}\PYG{o}{.}\PYG{n}{transpose}\PYG{p}{(),} \PYG{n}{data\PYGZus{}headers}\PYG{o}{=}\PYG{n}{headers}\PYG{p}{,} \PYG{n}{file\PYGZus{}name}\PYG{o}{=}\PYG{n}{cv\PYGZus{}data\PYGZus{}file\PYGZus{}name}\PYG{p}{,}
+                 \PYG{n}{relevant\PYGZus{}info}\PYG{o}{=}\PYG{n}{relevant\PYGZus{}info}\PYG{p}{,} \PYG{n}{print\PYGZus{}data}\PYG{o}{=}\PYG{n+nb+bp}{False}\PYG{p}{)}
+    \PYG{k}{if} \PYG{n}{save\PYGZus{}cv\PYGZus{}data} \PYG{o+ow}{and} \PYG{n}{read\PYGZus{}cv\PYGZus{}data}\PYG{p}{:}
+        \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Se escogió leer los datos del calor específico de un archivo de texto.\PYGZsq{}}\PYG{p}{)}
+
+    \PYG{c+c1}{\PYGZsh{} Parámetros de la gráfica}
+    \PYG{n}{show\PYGZus{}plot} \PYG{o}{=} \PYG{n+nb+bp}{True}
+    \PYG{n}{save\PYGZus{}plot} \PYG{o}{=} \PYG{n+nb+bp}{True}
+    \PYG{n}{read\PYGZus{}cv\PYGZus{}data\PYGZus{}part\PYGZus{}1} \PYG{o}{=} \PYG{n+nb+bp}{True}
+    \PYG{n}{plot\PYGZus{}file\PYGZus{}Name} \PYG{o}{=} \PYG{n+nb+bp}{None}
+
+    \PYG{n}{cv\PYGZus{}plot\PYGZus{}args} \PYG{o}{=} \PYG{p}{(}\PYG{n}{cv\PYGZus{}arrays}\PYG{p}{,} \PYG{n}{T\PYGZus{}arrays}\PYG{p}{,} \PYG{n}{L\PYGZus{}array}\PYG{p}{,} \PYG{n}{N\PYGZus{}steps\PYGZus{}factor}\PYG{p}{,} \PYG{n}{N\PYGZus{}transient\PYGZus{}factor}\PYG{p}{,}
+                    \PYG{n}{T\PYGZus{}min}\PYG{p}{,} \PYG{n}{T\PYGZus{}max}\PYG{p}{,} \PYG{n}{N\PYGZus{}temp}\PYG{p}{,} \PYG{n}{J}\PYG{p}{,} \PYG{n}{read\PYGZus{}cv\PYGZus{}data\PYGZus{}part\PYGZus{}1}\PYG{p}{,} \PYG{n}{read\PYGZus{}cv\PYGZus{}data}\PYG{p}{,}
+                    \PYG{n}{cv\PYGZus{}data\PYGZus{}file\PYGZus{}name}\PYG{p}{,} \PYG{n}{show\PYGZus{}plot}\PYG{p}{,} \PYG{n}{save\PYGZus{}plot}\PYG{p}{,} \PYG{n}{plot\PYGZus{}file\PYGZus{}Name}\PYG{p}{)}
+
+    \PYG{n}{specific\PYGZus{}heat\PYGZus{}plot}\PYG{p}{(}\PYG{o}{*}\PYG{n}{cv\PYGZus{}plot\PYGZus{}args}\PYG{p}{)}
+
+    \PYG{k}{pass}
+\end{Verbatim}

@@ -1,19 +1,25 @@
-from matrix_squaring import *
-
+from ising2d_microstates import *
 
 
 ################################################################################################
 # PANEL DE CONTROL
 ################################################################################################
 
-# Decide si corre algoritmo matrix squaring con aproximación de trotter
-run_ms_algorithm = True
+# Decide si corre algoritmo para calcular microestados de energía
+run_microstates_algorithm = False
 
-# Decide si corre algoritmo para cálculo de energía interna
-run_avg_energy = True
+# Decide si corre algoritmo para cálculo de contribuciones a la función partición
+# por cada valor de energía 
+run_Z_contributions_algorithm = True
+
+# Decide si corre algoritmo de aproximación de función partición
+run_Z_approx_algorithm = False
 
 # Decide si corre algoritmo para optimización de dx y beta_ini
-run_optimization = False
+run_specific_heat_algorithm = False
+
+# Decide si corre demostración de asimetría para L impares
+run_odd_asymmetry = False
 
 
 
@@ -29,125 +35,137 @@ plt.rcParams.update({'font.size':15,'text.latex.unicode':True})
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
 
+# Algoritmo para calcular microestados
+if run_microstates_algorithm:
+    # Tamaño del sistema
+    L = 2
+    # Decide si pone condiciones de frontera libres
+    free_boundary_conditions = False
+    energy_plot_kwargs = {
+                          'microstate_energies': None,
+                          'L': L,
+                          'read_data': True,
+                          'energy_data_file_name': None,
+                          'interpolate_energies': False,
+                          'show_plot': True,
+                          'save_plot': False,
+                          'plot_file_Name': None,
+                          }
 
-################################################################################################
-# CORRE ALGORITMO MATRIX SQUARING
-################################################################################################
+    print('--------------------------------------')
+    print('--------------------------------------')
+    print('Microstates algorithm')
+    print('--------------------------------------\n')
+    print('--------------------------------------------')
+    print('Grid: L x L = %d x %d'%(L, L))
+    print('--------------------------------------------')
 
-if run_ms_algorithm:
-    
-    # Parámetros físicos del algoritmo
-    physical_kwargs = {
-        'beta_fin': 4,
-        'x_max': 5.,
-        'nx': 201,
-        'N_iter': 9,
-        'potential': harmonic_potential,
-        'potential_string': 'harmonic_potential',
-        }
+    # Calcula los microestados del sistema solo si read_data=False.
+    if not energy_plot_kwargs['read_data']:
+        
+        # Genera todos los microestados posibles 
+        microstates = ising_microstates(L)
+        
+        # Calcula los vecinos
+        neighbours = ising_neighbours_free(L) if free_boundary_conditions \
+                                            else ising_neighbours(L)
+        
+        # Cálculo de energía para cada microestado
+        t_0 = time()    
+        energies = ising_energy(microstates, neighbours,
+                                save_data = not free_boundary_conditions)
+        t_1 = time()
+        comp_time = t_1-t_0
+        # Imprime log del algoritmo
+        print('--------------------------------------------------------\n'
+            + 'Explicit energies:  L = %d --> computation time = %.3f \n'%(L,comp_time)
+            + '--------------------------------------------------------\n')
+        
+        energy_plot_kwargs['microstate_energies'] = energies
+        print('--------------------------------------')
+        print('All microstates, each in a single row:')
+        print('--------------------------------------')
+        print(pd.concat([pd.DataFrame(microstates),
+                        pd.DataFrame({'Energy': energies})],
+                        axis=1, 
+                        sort=False
+                        ),
+              '\n')
 
-    # Parámetros técnicos (generar archivos y figuras, etc.)
-    technical_kwargs = {
-        'print_steps': False,
-        'save_data': True,
-        'csv_file_name': None,
-        'relevant_info': None,
-        'plot': True,
-        'plot_QHO_theory': True,
+    # Grafica histograma de energías \Omega(E)
+    ising_energy_plot(**energy_plot_kwargs)
+
+    microstate_rand = np.random.choice([-1,1], L*L)
+    print('-----------------------------------')
+    print('One random microstate as a 2D grid:')
+    print('-----------------------------------')
+    print(pd.DataFrame(microstate_rand.reshape((L,L))), '\n')
+
+    # Grafica un microestado aleatorio
+    ising_microstate_plot(microstate_rand, save_plot=True)
+
+
+# Algoritmo para calcular contribuciones a la función partición: 
+# Omega(E)*e^{-beta E}, que es proporcional a p_E
+if run_Z_contributions_algorithm:
+    print('--------------------------------------')
+    print('--------------------------------------')
+    print('Z contributions algorithm')
+    print('--------------------------------------')
+    kwargs = {
+        'microstate_energies': None,
+        'L': 5,
+        'beta': 1.,
+        'beta_max': None,
+        'N_beta': 100,
+        'read_data': True,
+        'energy_data_file_name': None,
+        'plot_histogram': True,
+        'show_plot': True,
         'save_plot': True,
-        'show_plot': False,
-        'plot_file_name': None,
+        'plot_file_Name': None,
+        } 
+    
+    Z_array, statistical_weights_array, beta_array, energies, omegas = \
+        partition_func_stat_weights(**kwargs)
+
+# Algoritmo de aproximación de la función partición: equivalencia con ensamble
+# microcanónico
+if run_Z_approx_algorithm:
+    print('--------------------------------------')
+    print('--------------------------------------')
+    print('Z approximation algorithm')
+    print('--------------------------------------')
+    approx_partition_func(read_data=True, save_plot=True)
+
+# Algoritmo para graficar calor específico
+if run_specific_heat_algorithm:
+    print('--------------------------------------')
+    print('--------------------------------------')
+    print('Specific Heat algorithm')
+    print('--------------------------------------\n')
+    kwargs = {
+        'microstate_energies_array': [None, None, None, None],
+        'L_array': [2, 3, 4, 5],
+        'beta_min': 1/5,
+        'beta_max': 1.,
+        'N_beta': 1000,
+        'read_data': True,
+        'energy_data_file_name': None,
+        'show_plot': True,
+        'save_plot': True,
+        'plot_file_Name': None,
+        'save_cv_data': True,
         }
 
-    kwargs = {**physical_kwargs, **technical_kwargs}
+    plot_specific_heat_cv(**kwargs)
 
-    rho, trace_rho, grid_x = run_pi_x_sq_trotter(**kwargs)
-
-
-
-################################################################################################
-# CORRE ALGORITMO PARA CÁLCULO DE ENERGÍA INTERNA
-################################################################################################
-
-if run_avg_energy:
-
-    # Parámetros técnicos función partición y cálculo de energía 
-    technical_Z_kwargs = {
-        'read_Z_data': False,
-        'generate_Z_data': True,
-        'Z_file_name': None,
-        'plot_energy': True,
-        'save_plot_E': True,
-        'show_plot_E': False,
-        'E_plot_name': None,
-        }
-
-    # Parámetros físicos para calcular Z y <E>
-    physical_kwargs = {
-        'temp_min': 1./10,
-        'temp_max': 1./2,
-        'N_temp': 300,
-        'potential': harmonic_potential,
-        'potential_string': 'harmonic_potential',
-        }
-
-    # Más parámetros técnicos
-    more_technical_kwargs = {
-        'save_Z_csv': True,
-        'relevant_info_Z': None,
-        'print_Z_data': False,
-        'x_max': 5.,
-        'nx': 201,
-        'N_iter': 9,
-        'print_steps': False,
-        'save_pi_x_data': False,
-        'pi_x_file_name': None,
-        'relevant_info_pi_x': None,
-        'plot_pi_x': False,
-        'save_plot_pi_x': False,
-        'show_plot_pi_x': False,
-        'plot_pi_x_file_name': None,
-        }
-
-    kwargs = {**technical_Z_kwargs, **physical_kwargs, **more_technical_kwargs}
-
-    average_energy(**kwargs)
-
-
-
-################################################################################################
-# CORRE ALGORITMO PARA OPTIMIZACIÓN DE DX Y BETA_INI
-################################################################################################
-
-if run_optimization:
-
-    # Parámetros físicos
-    physical_kwargs = {
-        'beta_fin': 4,
-        'x_max': 5,
-        'potential': harmonic_potential,
-        'potential_string': 'harmonic_potential',
-        'nx_min': 20,
-        'nx_max': 1121,
-        'nx_sampling': 50,
-        'N_iter_min': 9,
-        'N_iter_max': 20,
-        }
-
-    # Parámetros técnicos
-    technical_kwargs = {
-        'generate_opt_data': True,
-        'read_opt_data': False,
-        'save_opt_data': True,
-        'opt_data_file_name': None,
-        'opt_relevant_info': None,
-        'plot_opt': True,
-        'show_plot_opt': True,
-        'save_plot_opt': True,
-        'opt_plot_file_name': None,
-        'print_summary': True,
-        }
-
-    kwargs = {**physical_kwargs, **technical_kwargs}
-
-    error, dx_grid, beta_ini_grid, comp_time = optimization(**kwargs)
+# Algoritmo para mostrar que la asimetría en histograma de Omega para L impar 
+# se debe a las condiciones de frontera periódicas
+if run_odd_asymmetry:
+    print('--------------------------------------')
+    print('--------------------------------------')
+    print('L odd energy asymmetry demonstration')
+    print('--------------------------------------\n')
+    L = 3
+    ising_odd_L_energy_asymmetry(L, save_plot=True)
