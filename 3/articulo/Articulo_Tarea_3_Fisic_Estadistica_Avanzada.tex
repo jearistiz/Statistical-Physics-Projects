@@ -181,11 +181,26 @@ Presentamos en este artículo un estudio medianamente detallado del modelo de Is
 		\begin{figure}[!ht]
 			\centering
 			\includegraphics[width=0.6\linewidth]{{{figures/ising-Z_approx-plot-L_2_3_4_5}}}
-			\caption{En líneas punteadas se muestra $\log Z_\mathrm{appx}$ calculado con el método descrito en el artículo y en líneas continuas $\log Z$ calculado directamente por enumeración exacta. Ésto muestra la equivalencia. Esto muestra la equivalencia a bajas temperaturas entre ensambles microcanónico y macrocanónico en el caso de bajo valor $L$, expresada por la ecuación ()\ref{eq:equiv-micro-macro}).}
+			\caption{En líneas punteadas se muestra $\log Z_\mathrm{appx}$ calculado con el método descrito en el artículo y en líneas continuas $\log Z$ calculado directamente por enumeración exacta. Esto muestra la equivalencia a bajas temperaturas entre ensambles microcanónico y macrocanónico en el caso de bajo valor $L$, expresada por la ecuación (\ref{eq:equiv-micro-macro}).}
 			\label{fig:micro-macro-equivalence}
 		\end{figure}
 
 	\subsection{Calor específico\label{subsec:teoria-calor-especifico}}
+	
+	\begin{figure}[!ht]
+		\centering
+		\includegraphics[width=0.6\linewidth]{{{figures/ising-specific_heat-plot-L_2_3_4_5}}}
+		\caption{Calor específico $c_v$ dado por (\ref{eq:cv-fluctuation}) en función de la temperatura para diferentes valores de $L$. Los picos corresponden con la `temperatura crítica', que para $L$ grande se convierten en puntos discontinuos, demostrando así una transición de fase de segundo orden en el sistema.}
+		\label{fig:specific-heat}
+	\end{figure}
+
+	\begin{figure}[!ht]
+		\centering
+		\includegraphics[width=0.6\linewidth]{{{figures/ising-cv-computation_time}}}
+		\caption{Tiempo de cómputo para las gráficas de calor específico y ajuste exponencial para predecir tiempo de cómputo para el sistema $N = 8 \times 8$. Suponiendo que se tiene la memoria RAM necesaria, el proceso de obtención de la gráfica $c_v(T)$ para dicho sistema sería aproximadamente 47 mil días o 128 años.}
+		\label{fig:cv-comp-time}
+	\end{figure}
+
 	Con las probabilidades para las energías del sistema dadas por (\ref{eq:energy_prob}) es fácil calcular el valor medio de $E$ y el valor medio de $E^2$
 		\begin{eqnarray}
 			\langle E \rangle &=& \sum_E E p_E = \sum_E E \frac{\Omega(E) e^{-\beta E}}{Z} \\
@@ -195,18 +210,11 @@ Presentamos en este artículo un estudio medianamente detallado del modelo de Is
 		\begin{equation}
 			c_v = \frac{\beta ^ 2}{N} \left(\langle E^2 \rangle - \langle E \rangle^2 \right). \label{eq:cv-fluctuation}
 		\end{equation}
-	
-	
-	De los cálculos en las secciones anteriores tenemos todos los elementos para calcular este calor específico para $L = 2,\,\,\, 3,\,\,\, 4,\,\,\, 5$. La figura \ref{fig:specific-heat} muestra dichos valores en función de la temperatura, T. Como nos encontramos aún en valores relativamente bajos de $L$, no se presenta una discontinuidad evidente en el calor específico. Sin embargo, conforme se aumenta $L$, notamos que el pico de $c_v$ se va haciendo más puntiagudo. Para valores más altos de $L$, como se verá en la sección \ref{sec:metropolis}, el pico se convierte en el punto de discontinuidad, demostrando así una transición de fase de segundo orden, para la cual, en el límite $L\rightarrow\infty$, la temperatura crítica es $T_c = 2/\log(1 + \sqrt{2})$. En las gráficas se muestran los valores $T_c$ para cada $L$, asociados a los picos de las gráficas.
 
-		\begin{figure}[!ht]
-			\centering
-			\includegraphics[width=0.6\linewidth]{{{figures/ising-specific_heat-plot-L_2_3_4_5}}}
-			\caption{Calor específico $c_v$ dado por (\ref{eq:cv-fluctuation}) en función de la temperatura para diferentes valores de $L$. Los picos corresponden con la `temperatura crítica', que para $L$ grande se convierten en puntos discontinuos, demostrando así una transición de fase de segundo orden en el sistema.}
-			\label{fig:specific-heat}
-		\end{figure}
+	De los cálculos en las secciones anteriores tenemos todos los elementos para calcular este calor específico para $L = 2,\,\,\, 3,\,\,\, 4,\,\,\, 5$. La figura \ref{fig:specific-heat} muestra dichos valores en función de la temperatura, T. Como nos encontramos aún en valores relativamente bajos de $L$, no se presenta una discontinuidad evidente en el calor específico. Sin embargo, conforme se aumenta $L$, notamos que el pico de $c_v$ se va haciendo más puntiagudo. Para valores más altos de $L$, como se verá en la sección \ref{sec:metropolis}, el pico se convierte en el punto de discontinuidad, demostrando así una transición de fase de segundo orden, para la cual, en el límite $L\rightarrow\infty$, la temperatura crítica es $T_c = 2/\log(1 + \sqrt{2})$. En las gráficas se muestran los valores $T_c$ para cada $L$, asociados a los picos de las gráficas.
 	
-	\hl{......................TIEMPO DE CÓMPUTO 8x8......................}
+	En la última figura de esta sección, \ref{fig:cv-comp-time}, presentamos un ajuste exponencial para los tiempos de cómputo de las gráficas $c_v(L)$ para cada $L$. El ajuste predice un tiempo de cómputo de 47000 días para el sistema $8 \times 8$. Aquí notamos la inminencia de la complejidad computacional de este problema, que es de tipo exponencial y la incapacidad de tratarlo de forma directa `contando microestados' como lo hemos hestado haciendo hasta ahora. En la siguiente sección presentaremos el algoritmo metrópolis que nos ayudará a aproximarnos a las soluciones de este problema para sistemas más grandes.
+		
 
 \section{Modelo de Ising y Algoritmo Metrópolis\label{sec:metropolis}}
 
@@ -248,9 +256,7 @@ En trabajos anteriores ya hemos estudiado el algoritmo Metrópolis, el cual cons
 
 	Para entender mejor lo anterior, en la figura \ref{fig:thermalization-energy} se muestra $\langle E \rangle / N$ en función del número de iteraciones \mintinline{python}{N_steps}. Como en este caso estamos interesados en ver direectamente la termalización, se escoge \mintinline{python}{N_transient} igual a cero. En la izquierda se muestra la termalización para el caso $N = 6 \times 6$, en el cual se puede hacer la comparación de $\langle E \rangle / N$ para diferentes teperaturas por enumeración exacta, ya que en el enunciado de la parte 1 se dio el histograma $\Omega(E)$ para este caso y eso basta para calcular $\langle E \rangle / N$. En dicha figura se muestran los valores para cada temperatura y notamos que la termalización se da en escalas diferentes, dependiendo de la temperatura. Así, para temperaturas altas, el sistema se termaliza mucho más rápido que para temperaturas bajas, pero esto es más evidente en sistemas con $L$ más grande. Es interesante notar que los límites están bien definidos. Para temperaturas bajas, el sistema tiende a estados ferromagnéticos que implican  $\langle E \rangle / N \approx -2$, mientras que para temperaturas altas el sistema se termaliza en $\langle E \rangle / N$ cada vez más cercano a cero, como se espera, según los histogramas de $\Omega(E)$ y $e^{-\beta E}\Omega(E)$ mostrados en la sección \ref{subsec:teoria-contribuciones-Z}.
 	
-	En el centro de la figura \ref{fig:thermalization-energy} encontramos la termalización para $L=32$ y diferentes temperaturas. Notamos que en general la termalización demora más que para el caso anterior ($N = 6 \times 6$). Esto es esperable, ya que el número de configuraciones posibles en este caso ($\Omega = 2^{32 \times 32}$ !!!) es muchísimo mayor que el número de configuraciones en el caso anterior, por lo cual, el sistema debe pasar primero por muchos más estados antes de llegar al equilibrio. Sucede de forma similar con el caso $N=64 \times 64$, el cual necesita muchas más iteraciones para llegar al equilibrio. \linebreak
-	
-	Para ilustrar un poco mejor el tema de la termalización, en la figura \ref{fig:thermalization-configs} mostramos los microestados por los cuales pasa el sistema de $N=128 \times 128$ en el principio del transiente ($\mathrm{N_{steps}}=10^3$), en medio del transiente ($\mathrm{N_{steps}}=10^5$) y cuando el sistema ya está termalizado ($\mathrm{N_{steps}}=10^8$), todo para temperatura baja $T=1$ y, como queremos ver explícitamente la termalización, se usó $\mathrm{N_{transient}}=0$. Vemos que el sistema pasa de una configuración prácticamente aleatoria ($\langle E \rangle / N \approx 0$), luego una configuración con pequeños parches con dominio ferromagnético ($\langle E \rangle / N \approx -1$) y finalmente a una configuración casi completamente ferromagnética donde ($\langle E \rangle / N \approx -2$), estos valores se deducen aproximadamente a partir de la figura \ref{fig:thermalization-energy} (derecha) que muestra la termalización para el caso más cercano al $N = 128 \times 128$ que se pudo obtener.
+	En el centro de la figura \ref{fig:thermalization-energy} encontramos la termalización para $L=32$ y diferentes temperaturas. Notamos que en general la termalización demora más que para el caso anterior ($N = 6 \times 6$). Esto es esperable, ya que el número de configuraciones posibles en este caso ($\Omega = 2^{32 \times 32}$ !!!) es muchísimo mayor que el número de configuraciones en el caso anterior, por lo cual, el sistema debe pasar primero por muchos más estados antes de llegar al equilibrio. Sucede de forma similar con el caso $N=64 \times 64$, el cual necesita muchas más iteraciones para llegar al equilibrio.
 
 	\begin{figure}[!ht]
 		\centering
@@ -258,6 +264,8 @@ En trabajos anteriores ya hemos estudiado el algoritmo Metrópolis, el cual cons
 		\caption{Microestados por los cuales pasa el sistema de $N=128 \times 128$ en el principio del transiente ($\mathrm{N_{steps}}=10^3$, izquierda), en medio del transiente ($\mathrm{N_{steps}}=10^5$, centro) y cuando el sistema ya está termalizado ($\mathrm{N_{steps}}=10^8$, derecha).}
 		\label{fig:thermalization-configs}
 	\end{figure}
+	
+	Para ilustrar un poco mejor el tema de la termalización, en la figura \ref{fig:thermalization-configs} mostramos los microestados por los cuales pasa el sistema de $N=128 \times 128$ en el principio del transiente ($\mathrm{N_{steps}}=10^3$), en medio del transiente ($\mathrm{N_{steps}}=10^5$) y cuando el sistema ya está termalizado ($\mathrm{N_{steps}}=10^8$), todo para temperatura baja $T=1$ y, como queremos ver explícitamente la termalización, se usó $\mathrm{N_{transient}}=0$. Vemos que el sistema pasa de una configuración prácticamente aleatoria ($\langle E \rangle / N \approx 0$), luego una configuración con pequeños parches con dominio ferromagnético ($\langle E \rangle / N \approx -1$) y finalmente a una configuración casi completamente ferromagnética donde ($\langle E \rangle / N \approx -2$), estos valores se deducen aproximadamente a partir de la figura \ref{fig:thermalization-energy} (derecha) que muestra la termalización para el caso más cercano al $N = 128 \times 128$ que se pudo obtener.
 
 	\subsection{Microestados finales y temperatura crítica\label{subsec:metropolis-microestados-temp-critica}}
 
@@ -274,7 +282,8 @@ En trabajos anteriores ya hemos estudiado el algoritmo Metrópolis, el cual cons
 
 	El caso $T=2.5$ es más cercano a la temperatura crítica del sistema con $L$ infinito. Aquí observamos que hay pequeños pero muchos más dominios ferromagnéticos (pequeños parches blancos o negros), que corresponden con un sistema típico de temperatura que no es muy alta ni muy baja.
 
-	Finalmente, el caso de alta temperatura, $T=10$ es casi completamente aleatorio, aunque aún se notan algunos dominios ferromagnéticos son casi imperceptibles. Este es un microestado típico de alta temperatura, donde todos los microestados son casi igualmente probables y en el que predominan energías promedio $\langle E \rangle / N$ cercanas a cero, como se puede ver en la figura \ref{fig:thermalization-energy} (derecha). \linebreak
+	Finalmente, el caso de alta temperatura, $T=10$ es casi completamente aleatorio, aunque aún se notan algunos dominios ferromagnéticos son casi imperceptibles. Este es un microestado típico de alta temperatura, donde todos los microestados son casi igualmente probables y en el que predominan energías promedio $\langle E \rangle / N$ cercanas a cero, como se puede ver en la figura \ref{fig:thermalization-energy} (derecha). \newline
+	
 
 	Un caso interesante de estudio son las configuraciones típicas de un sistema relativamente grande a temperatura cercana a la temperatura crítica. Para entender qué sucede en este caso, en la figura \ref{fig:final-critical-temp-128x128} se muestran tres configuraciones típicas para el sistema $L=128$ a tempreatura $T_c \approx 2.27$. Encontramos que a esta temperatura hay grandes dominios ferromagnéticos que ya están prácticamente formados pero contienen ``ruido'' en su interior, es decir, grandes regiones blancas o negras que en su interior contienen esporádicamente el color (espín) contrario. Esta es la manifestación del cambio de fase de segundo orden, de la cual ya hablamos en la sección \ref{subsec:teoria-calor-especifico}. Para temperaturas menores a la temperatura crítica esperamos obtener menos ruido en esos dominios ferromagnéticos bien formados, paulatinamente hasta llegar a un estado totalmente ferromagnético en el límite $T \rightarrow 0$. Para temperaturas más altas, esperamos tener estados un poco más aleatorios con dominios ferromagnéticos cada vez menos evidentes. 
 
@@ -295,7 +304,7 @@ En trabajos anteriores ya hemos estudiado el algoritmo Metrópolis, el cual cons
 	\begin{figure}[!ht]
 		\centering
 		\includegraphics[width=0.6\linewidth]{{{figures/ising-metropolis-specific_heat-plot-L_2_3_4_5_8_16_32_64-N_steps_factor_80000}}}
-		\caption{Calor específico en función de la temperatura para varios tamaños $L$ del sistema calculados con el algoritmo metrópolis. Se nota que cuanto mayor es $L$, la discontinuidad en la derivada del pico es más evidente, característica propia de una transición de fase de segundo orden. Los parámetros usados fueron $\mathrm{N_{steps}}= 80000 L \times L$, $\mathrm{N_{transient}}= 0.7 \mathrm{N_{steps}}$ y se graficaron 100 datos de $c_v$ para valores entre $T=1$ y $T=5$. El tiempo de cómputo fue de $12000 \mathrm{s}$.}
+		\caption{Calor específico en función de la temperatura para varios tamaños $L$ del sistema calculados con el algoritmo metrópolis. Se nota que cuanto mayor es $L$, la discontinuidad en la curva $c_v(T)$ comienza a formarse, característica propia de una transición de fase de segundo orden. Los parámetros usados fueron $\mathrm{N_{steps}}= 80000 L \times L$, $\mathrm{N_{transient}}= 0.7 \mathrm{N_{steps}}$ y se graficaron 100 datos de $c_v$ para valores entre $T=1$ y $T=5$. El tiempo de cómputo fue de $12000 \mathrm{s}$.}
 		\label{fig:metropolis-cv}
 	\end{figure}
 
@@ -328,13 +337,13 @@ Agradezco a mis compañeros de clase con los que tuve discusiones que ayudaron e
 
 \section{Código 1: enumeración exacta de microestados\label{appx:microestados}}
 
-A continuación se muestra el código . Éste código está disponible en \href{https://github.com/jearistiz/Statistical-Physics-Projects/blob/master/2/matrix_squaring.py}{este link}
+A continuación se muestra el código usado para generar las gráficas de la sección \ref{sec:teoria-microestados}. Éste código usa el módulo \mintinline{python}{ising2d_microstates} en el que están todas las funciones que realizan los algoritmos. Éste último código está disponible en \href{https://github.com/jearistiz/Statistical-Physics-Projects/blob/master/3/ising2d_microstates.py}{este link}.
 
 \inputminted[linenos,breaklines]{python}{code_1.py}
 
 \section{Código 2: algoritmo Montecarlo\label{appx:montecarlo}}
 
-A continuación se muestra el código que está disponible en \href{https://github.com/jearistiz/Statistical-Physics-Projects/blob/master/2/path_integral_naive_sampling.py}{este link}.
+A continuación se muestra el código usado para generar las gráficas de la sección \ref{sec:metropolis}. Éste código usa el módulo \mintinline{python}{ising2d_metropolis} en el que están todas las funciones que realizan los algoritmos. Éste último código está disponible en \href{https://github.com/jearistiz/Statistical-Physics-Projects/blob/master/3/ising2d_metropolis.py}{este link}.
 
 \inputminted[linenos,breaklines]{python}{code_2.py}
 
